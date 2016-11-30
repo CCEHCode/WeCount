@@ -5,19 +5,16 @@ namespace PITCSurveyLib.Models
 {
 	/// <summary>
 	/// Client-side response model for the survey response from a given interviewee.
+	/// Contains only identifiers needed for the responses.
 	/// </summary>
 	public class SurveyResponseModel
 	{
-		/*
-		 * Shorter response body, only send info that's needed.
-		 */
-
 		public int SurveyID { get; set; }
 
 		public String InterviewerID { get; set; }
 
+		// While most questions only allow one answer, this will allow multiple-choice responses.
 		public IList<SurveyQuestionResponseModel> QuestionResponses { get; set; } = new List<SurveyQuestionResponseModel>();
-
 	}
 
 	/// <summary>

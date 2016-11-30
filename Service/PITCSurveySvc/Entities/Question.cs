@@ -16,6 +16,8 @@ namespace PITCSurveySvc.Entities
 		public String QuestionText { get; set; }
 		public String ClarificationText { get; set; }
 
+		public bool AllowMultipleAnswers { get; set; }
+
 		public IList<AnswerChoice> AnswerChoices { get; set; }
 	}
 }

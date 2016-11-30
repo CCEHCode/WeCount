@@ -195,6 +195,10 @@
     <Compile Include="Migrations\201611301450049_AddFKPropertyIDs.Designer.cs">
       <DependentUpon>201611301450049_AddFKPropertyIDs.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201611302028288_EnableMultipleAnswers.cs" />
+    <Compile Include="Migrations\201611302028288_EnableMultipleAnswers.Designer.cs">
+      <DependentUpon>201611302028288_EnableMultipleAnswers.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
@@ -225,6 +229,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201611301450049_AddFKPropertyIDs.resx">
       <DependentUpon>201611301450049_AddFKPropertyIDs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611302028288_EnableMultipleAnswers.resx">
+      <DependentUpon>201611302028288_EnableMultipleAnswers.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
