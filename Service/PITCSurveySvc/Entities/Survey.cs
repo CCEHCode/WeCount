@@ -11,6 +11,8 @@ namespace PITCSurveySvc.Entities
 		[Key]
 		public int ID { get; set; }
 
+		public bool Active { get; set; }
+
 		public String Name { get; set; }
 
 		public int SurveyYear { get; set; }

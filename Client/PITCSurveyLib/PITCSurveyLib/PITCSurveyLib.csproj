@@ -37,7 +37,9 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Address.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="GPSLocation.cs" />
     <Compile Include="Models\SurveyModels.cs" />
     <Compile Include="Models\SurveyResponseModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

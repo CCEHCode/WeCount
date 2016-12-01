@@ -11,8 +11,10 @@ namespace PITCSurveyLib.Models
 		// TODO: Will string replacements be handled client-side, or server-side?
 		
 		public int SurveyID { get; set; }
-		
+
+		public String Name { get; set; }
 		public String Description { get; set; }
+		public String IntroText { get; set; }
 
 		public IList<SurveyQuestionModel> Questions { get; set; } = new List<SurveyQuestionModel>();
 	}

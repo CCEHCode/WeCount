@@ -7,14 +7,14 @@ namespace WeCountSvc.Migrations
     using System.Linq;
 	using PITCSurveySvc.Entities;
 
-	internal sealed class Configuration : DbMigrationsConfiguration<PITCSurveySvc.Entities.WeCountContext>
+	internal sealed class Configuration : DbMigrationsConfiguration<PITCSurveySvc.Entities.PITCSurveyContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 		
-        protected override void Seed(PITCSurveySvc.Entities.WeCountContext context)
+        protected override void Seed(PITCSurveySvc.Entities.PITCSurveyContext context)
         {
 			//  This method will be called after migrating to the latest version.
 

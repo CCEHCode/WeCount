@@ -8,7 +8,7 @@ using Swashbuckle.Swagger.Annotations;
 
 namespace WeCountSvc.Controllers
 {
-	public class ValuesController : ApiController
+	internal class ValuesController : ApiController
 	{
 		// GET api/values
 		[SwaggerOperation("GetAll")]

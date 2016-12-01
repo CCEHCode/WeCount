@@ -14,8 +14,6 @@ namespace PITCSurveySvc.Entities
 
 		public String AnswerText { get; set; }
 
-		public string AdditionalAnswerData { get; set; }
-
 		public AnswerFormat AdditionalAnswerDataFormat { get; set; }
 	}
 }

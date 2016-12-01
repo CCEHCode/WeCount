@@ -26,5 +26,7 @@ namespace PITCSurveySvc.Entities
 		[ForeignKey("AnswerChoice_ID")]
 		public AnswerChoice AnswerChoice { get; set; }
 		public int AnswerChoice_ID { get; set; }
+
+		public string AdditionalAnswerData { get; set; }
 	}
 }

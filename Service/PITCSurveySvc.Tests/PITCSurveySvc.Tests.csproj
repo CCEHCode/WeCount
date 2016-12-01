@@ -67,9 +67,9 @@
   <ItemGroup>
     <Compile Include="EffortProviderFactory.cs" />
     <Compile Include="Initialization.cs" />
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="SurveyResponsesControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UnitTest2.cs" />
+    <Compile Include="SurveysControllerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Client\PITCSurveyLib\PITCSurveyLib\PITCSurveyLib.csproj">

@@ -9,110 +9,84 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using PITCSurveySvc.Entities;
+using PITCSurveyLib.Models;
+using Swashbuckle.Swagger.Annotations;
+using PITCSurveySvc.Models;
 
 namespace WeCountSvc.Controllers
 {
     public class SurveyResponsesController : ApiController
     {
-        private WeCountContext db = new WeCountContext();
-
-        // GET: api/SurveyResponses
-        public IQueryable<SurveyResponse> GetSurveyResponses()
-        {
-            return db.SurveyResponses;
-        }
-
-        // GET: api/SurveyResponses/5
-        [ResponseType(typeof(SurveyResponse))]
-        public IHttpActionResult GetSurveyResponse(int id)
-        {
-            SurveyResponse surveyResponse = db.SurveyResponses.Find(id);
-            if (surveyResponse == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(surveyResponse);
-        }
-
-        // PUT: api/SurveyResponses/5
-        [ResponseType(typeof(void))]
-        public IHttpActionResult PutSurveyResponse(int id, SurveyResponse surveyResponse)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != surveyResponse.ID)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(surveyResponse).State = EntityState.Modified;
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!SurveyResponseExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
-        }
+        private PITCSurveyContext db = new PITCSurveyContext();
 
         // POST: api/SurveyResponses
-        [ResponseType(typeof(SurveyResponse))]
-        public IHttpActionResult PostSurveyResponse(SurveyResponse surveyResponse)
+        [ResponseType(typeof(void))]
+		[SwaggerOperation("Create")]
+		[SwaggerResponse(HttpStatusCode.BadRequest, "The survey data wasn't acceptable (improper formatting, etc.).")]
+		[SwaggerResponse(HttpStatusCode.Conflict, "A SurveyResponse with the same ResponseIdentifier is already uploaded.")]
+		[SwaggerResponse(HttpStatusCode.NoContent, "SurveyResponse uploaded successfully.")]
+		public IHttpActionResult PostSurveyResponse(SurveyResponseModel surveyResponse)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.SurveyResponses.Add(surveyResponse);
-            db.SaveChanges();
+			SurveyResponse sr = db.SurveyResponses.Where(r => r.ResponseIdentifier == surveyResponse.ResponseIdentifier).SingleOrDefault();
+			if (sr != null)
+			{
+				//return BadRequest("Survey already uploaded.");
+				return StatusCode(HttpStatusCode.Conflict);
+			}
 
-            return CreatedAtRoute("DefaultApi", new { id = surveyResponse.ID }, surveyResponse);
-        }
+			Volunteer sv = db.Volunteers.Where(v => v.AuthID == surveyResponse.InterviewerID).SingleOrDefault();
+			if (sv == null)
+			{
+				return BadRequest("The specified InterviewerID is not recognized. User not logged in?");
+				// TODO: Store and accept, figure out who it is later? Need to have way to "see" auth ID from within client app, or fill in volunteer info.
 
-        // DELETE: api/SurveyResponses/5
-        [ResponseType(typeof(SurveyResponse))]
-        public IHttpActionResult DeleteSurveyResponse(int id)
-        {
-            SurveyResponse surveyResponse = db.SurveyResponses.Find(id);
-            if (surveyResponse == null)
-            {
-                return NotFound();
-            }
+				// TODO: Create Interviewer / Volunteer db entry here and go with it? Or make this happen at app login? Probablty the latter makes morwe sense. Simpler logic & workflow.
+			}
 
-            db.SurveyResponses.Remove(surveyResponse);
-            db.SaveChanges();
+			try
+			{
+				ModelConverter Converter = new ModelConverter(db);
 
-            return Ok(surveyResponse);
-        }
+				SurveyResponse Response = Converter.ConvertToEntity(surveyResponse);
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+				db.SurveyResponses.Add(Response);
 
-        private bool SurveyResponseExists(int id)
+				db.SaveChanges();
+
+				return StatusCode(HttpStatusCode.NoContent);
+			}
+			catch (Exception ex)
+			{
+				return InternalServerError(ex);
+			}
+
+		}
+
+		#region "Private Methods"
+
+		private bool SurveyResponseExists(int id)
         {
             return db.SurveyResponses.Count(e => e.ID == id) > 0;
         }
-    }
+
+		#endregion
+
+		#region "IDisposable"
+
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+				db.Dispose();
+			}
+			base.Dispose(disposing);
+		}
+
+		#endregion
+	}
 }

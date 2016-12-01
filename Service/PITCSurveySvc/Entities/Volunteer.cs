@@ -24,11 +24,4 @@ namespace PITCSurveySvc.Entities
 		public virtual IList<SurveyResponse> SurveyResponses { get; set; }
 	}
 
-	public class Address
-	{
-		public String Street { get; set; }
-		public String City { get; set; }
-		public String State { get; set; }
-		public String ZipCode { get; set; }
-	}
 }

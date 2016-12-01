@@ -175,7 +175,7 @@
     <Compile Include="Entities\SurveyResponse.cs" />
     <Compile Include="Entities\SurveyResponseAnswer.cs" />
     <Compile Include="Entities\Volunteer.cs" />
-    <Compile Include="Entities\WeCountContext.cs" />
+    <Compile Include="Entities\PITCSurveyContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -199,13 +199,23 @@
     <Compile Include="Migrations\201611302028288_EnableMultipleAnswers.Designer.cs">
       <DependentUpon>201611302028288_EnableMultipleAnswers.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201612011620435_Tweaks3.cs" />
+    <Compile Include="Migrations\201612011620435_Tweaks3.Designer.cs">
+      <DependentUpon>201612011620435_Tweaks3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612011718397_FixDataTypeTypo.cs" />
+    <Compile Include="Migrations\201612011718397_FixDataTypeTypo.Designer.cs">
+      <DependentUpon>201612011718397_FixDataTypeTypo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\ModelConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="ApplicationInsights.config" />
+    <None Include="Properties\PublishProfiles\Dev.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -215,7 +225,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201611300328437_Initial.resx">
@@ -232,6 +241,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201611302028288_EnableMultipleAnswers.resx">
       <DependentUpon>201611302028288_EnableMultipleAnswers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612011620435_Tweaks3.resx">
+      <DependentUpon>201612011620435_Tweaks3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612011718397_FixDataTypeTypo.resx">
+      <DependentUpon>201612011718397_FixDataTypeTypo.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
