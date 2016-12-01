@@ -17,14 +17,14 @@ namespace PITCSurveySvc.Tests
 		public SurveyResponsesControllerTests()
 		{
 			//DbConnection conn = DbConnectionFactory.CreateTransient();
-			//_db = new WeCountContext(conn);
+			//_db = new PITCSurveyContext(conn);
 			_db = new PITCSurveyContext();
 		}
 
 		[TestMethod]
 		public void PostSurveyResponse()
 		{
-			using (var db = new PITCSurveyContext("WeCountContext"))
+			using (var db = new PITCSurveyContext("PITCSurveyContext"))
 			{
 				//
 			}

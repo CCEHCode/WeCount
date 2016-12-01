@@ -207,6 +207,10 @@
     <Compile Include="Migrations\201612011718397_FixDataTypeTypo.Designer.cs">
       <DependentUpon>201612011718397_FixDataTypeTypo.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201612011923234_ExpandAddressField.cs" />
+    <Compile Include="Migrations\201612011923234_ExpandAddressField.Designer.cs">
+      <DependentUpon>201612011923234_ExpandAddressField.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ModelConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -247,6 +251,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201612011718397_FixDataTypeTypo.resx">
       <DependentUpon>201612011718397_FixDataTypeTypo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612011923234_ExpandAddressField.resx">
+      <DependentUpon>201612011923234_ExpandAddressField.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

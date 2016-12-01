@@ -17,7 +17,7 @@ namespace PITCSurveySvc.Tests
 		public SurveysControllerTests()
 		{
 			//DbConnection conn = DbConnectionFactory.CreateTransient();
-			//_db = new WeCountContext(conn);
+			//_db = new PITCSurveyContext(conn);
 			_db = new PITCSurveyContext();
 		}
 
