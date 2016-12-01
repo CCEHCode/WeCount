@@ -7,20 +7,20 @@ using System.Data.Common;
 
 namespace PITCSurveySvc.Entities
 {
-    public class WeCountContext: DbContext
+    public class PITCSurveyContext: DbContext
     {
 
-		public WeCountContext()
+		public PITCSurveyContext()
 			: base()
 		{
 		}
 
-		public WeCountContext(String NameOrConnectionString)
+		public PITCSurveyContext(String NameOrConnectionString)
 			: base(NameOrConnectionString)
 		{
 		}
 
-		public WeCountContext(DbConnection Connection)
+		public PITCSurveyContext(DbConnection Connection)
 			: base(Connection, true)
 		{
 		}
