@@ -15,6 +15,21 @@ namespace PITCSurveyApp
         public static string AzureMobileAppUrl = "https://pitcsurveyapi.azurewebsites.net";
         public static IDictionary<string, string> LoginParameters => null;
 
+        public static NavigationPage NavigationPage { get; private set; }
+        private static RootPage RootPage;
+
+        public static bool MenuIsPresented
+        {
+            get
+            {
+                return RootPage.IsPresented;
+            }
+            set
+            {
+                RootPage.IsPresented = value;
+            }
+        }
+
         public App ()
 		{
 			InitializeComponent();
@@ -40,7 +55,14 @@ namespace PITCSurveyApp
 
         public static void GoToMainPage()
         {
-            Current.MainPage = new MainPage();
+            //Current.MainPage = new MainPage();
+
+            var menuPage = new MenuPage();
+            NavigationPage = new NavigationPage(new HomePage());
+            RootPage = new RootPage();
+            RootPage.Master = menuPage;
+            RootPage.Detail = NavigationPage;
+            Current.MainPage = RootPage;
         }
 
         protected override void OnStart ()

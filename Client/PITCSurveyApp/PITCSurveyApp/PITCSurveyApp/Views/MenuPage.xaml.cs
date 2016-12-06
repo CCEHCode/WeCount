@@ -6,13 +6,16 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 
+using PITCSurveyApp.ViewModels;
+
 namespace PITCSurveyApp.Views
 {
-	public partial class MainPage : ContentPage
+	public partial class MenuPage : ContentPage
 	{
-		public MainPage ()
+		public MenuPage ()
 		{
-			InitializeComponent ();
+            BindingContext = new MenuPageViewModel();
+            InitializeComponent ();
 		}
 	}
 }
