@@ -5,18 +5,45 @@ using System.Text;
 
 using Xamarin.Forms;
 
+using PITCSurveyApp.Helpers;
+using PITCSurveyApp.Views;
+
 namespace PITCSurveyApp
 {
 	public partial class App : Application
 	{
-		public App ()
+        public static string AzureMobileAppUrl = "https://pitcsurveyapi.azurewebsites.net";
+        public static IDictionary<string, string> LoginParameters => null;
+
+        public App ()
 		{
 			InitializeComponent();
 
-			MainPage = new PITCSurveyApp.MainPage();
-		}
+            SetMainPage();
+        }
 
-		protected override void OnStart ()
+        public static void SetMainPage()
+        {
+            if (!Settings.IsLoggedIn)
+            {
+                Current.MainPage = new NavigationPage(new LoginPage())
+                {
+                    BarBackgroundColor = (Color)Current.Resources["Primary"],
+                    BarTextColor = Color.White
+                };
+            }
+            else
+            {
+                GoToMainPage();
+            }
+        }
+
+        public static void GoToMainPage()
+        {
+            Current.MainPage = new MainPage();
+        }
+
+        protected override void OnStart ()
 		{
 			// Handle when your app starts
 		}

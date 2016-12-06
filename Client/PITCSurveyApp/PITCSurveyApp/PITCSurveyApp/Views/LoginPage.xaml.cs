@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Xamarin.Forms;
-using PITCSurveyApp.Lib;
 
-namespace PITCSurveyApp
+using Xamarin.Forms;
+
+namespace PITCSurveyApp.Views
 {
-	public partial class MainPage : ContentPage
+	public partial class LoginPage : ContentPage
 	{
-		public MainPage()
+		public LoginPage ()
 		{
-			InitializeComponent();
+			InitializeComponent ();
 		}
 	}
 }
