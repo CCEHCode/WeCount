@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using PITCSurveyLib.Models;
+using PITCSurveyEntities.Entities;
+using PITCSurveySvc.Models;
+using Swashbuckle.Swagger.Annotations;
+using System;
 using System.Data;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
-using PITCSurveySvc.Entities;
-using PITCSurveyLib.Models;
-using Swashbuckle.Swagger.Annotations;
-using PITCSurveySvc.Models;
 
 namespace WeCountSvc.Controllers
 {
-    public class SurveyResponsesController : ApiController
+	public class SurveyResponsesController : ApiController
     {
         private PITCSurveyContext db = new PITCSurveyContext();
 

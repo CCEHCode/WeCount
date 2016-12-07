@@ -50,8 +50,12 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.0.5\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
+    <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.0.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.0.6\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights.TraceListener, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.TraceListener.2.1.0\lib\net45\Microsoft.ApplicationInsights.TraceListener.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -167,59 +171,21 @@
     <Compile Include="Controllers\SurveysController.cs" />
     <Compile Include="Controllers\SurveyResponsesController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
-    <Compile Include="Entities\AnswerChoice.cs" />
-    <Compile Include="Entities\Survey.cs" />
-    <Compile Include="Entities\SurveyNavigation.cs" />
-    <Compile Include="Entities\Question.cs" />
-    <Compile Include="Entities\SurveyQuestion.cs" />
-    <Compile Include="Entities\SurveyResponse.cs" />
-    <Compile Include="Entities\SurveyResponseAnswer.cs" />
-    <Compile Include="Entities\Volunteer.cs" />
-    <Compile Include="Entities\PITCSurveyContext.cs" />
+    <Compile Include="Controllers\VolunteersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201611300328437_Initial.cs" />
-    <Compile Include="Migrations\201611300328437_Initial.Designer.cs">
-      <DependentUpon>201611300328437_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201611300510294_Tweaks.cs" />
-    <Compile Include="Migrations\201611300510294_Tweaks.Designer.cs">
-      <DependentUpon>201611300510294_Tweaks.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201611301424031_Tweaks2.cs" />
-    <Compile Include="Migrations\201611301424031_Tweaks2.Designer.cs">
-      <DependentUpon>201611301424031_Tweaks2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201611301450049_AddFKPropertyIDs.cs" />
-    <Compile Include="Migrations\201611301450049_AddFKPropertyIDs.Designer.cs">
-      <DependentUpon>201611301450049_AddFKPropertyIDs.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201611302028288_EnableMultipleAnswers.cs" />
-    <Compile Include="Migrations\201611302028288_EnableMultipleAnswers.Designer.cs">
-      <DependentUpon>201611302028288_EnableMultipleAnswers.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201612011620435_Tweaks3.cs" />
-    <Compile Include="Migrations\201612011620435_Tweaks3.Designer.cs">
-      <DependentUpon>201612011620435_Tweaks3.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201612011718397_FixDataTypeTypo.cs" />
-    <Compile Include="Migrations\201612011718397_FixDataTypeTypo.Designer.cs">
-      <DependentUpon>201612011718397_FixDataTypeTypo.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201612011923234_ExpandAddressField.cs" />
-    <Compile Include="Migrations\201612011923234_ExpandAddressField.Designer.cs">
-      <DependentUpon>201612011923234_ExpandAddressField.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ModelConverter.cs" />
+    <Compile Include="Models\ModelConverterHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="ApplicationInsights.config" />
+    <None Include="Properties\PublishProfiles\Azure.pubxml" />
     <None Include="Properties\PublishProfiles\Dev.pubxml" />
+    <Content Include="Service Capabilities\Application Insights\ConnectedService.json" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -231,36 +197,17 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201611300328437_Initial.resx">
-      <DependentUpon>201611300328437_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201611300510294_Tweaks.resx">
-      <DependentUpon>201611300510294_Tweaks.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201611301424031_Tweaks2.resx">
-      <DependentUpon>201611301424031_Tweaks2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201611301450049_AddFKPropertyIDs.resx">
-      <DependentUpon>201611301450049_AddFKPropertyIDs.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201611302028288_EnableMultipleAnswers.resx">
-      <DependentUpon>201611302028288_EnableMultipleAnswers.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201612011620435_Tweaks3.resx">
-      <DependentUpon>201612011620435_Tweaks3.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201612011718397_FixDataTypeTypo.resx">
-      <DependentUpon>201612011718397_FixDataTypeTypo.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201612011923234_ExpandAddressField.resx">
-      <DependentUpon>201612011923234_ExpandAddressField.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\Client\PITCSurveyLib\PITCSurveyLib\PITCSurveyLib.csproj">
       <Project>{7af89069-6241-4905-81c8-0898d40d4a1d}</Project>
       <Name>PITCSurveyLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PITCSurveyEntities\PITCSurveyEntities.csproj">
+      <Project>{7d19d060-584a-4a7d-8e1d-87c274011c48}</Project>
+      <Name>PITCSurveyEntities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service Capabilities\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -1,5 +1,5 @@
 ﻿using PITCSurveyLib.Models;
-using PITCSurveySvc.Entities;
+using PITCSurveyEntities.Entities;
 using PITCSurveySvc.Models;
 using Swashbuckle.Swagger.Annotations;
 using System;
@@ -9,6 +9,8 @@ using System.Linq;
 using System.Net;
 using System.Web.Http;
 using System.Web.Http.Description;
+using System.Data.Entity.Validation;
+using System.Text;
 
 namespace WeCountSvc.Controllers
 {
@@ -41,7 +43,7 @@ namespace WeCountSvc.Controllers
 		[SwaggerResponse(HttpStatusCode.OK, "U can haz Survey", typeof(SurveyModel))]
 		public IHttpActionResult GetSurvey(int id)
 		{
-			Survey Survey = db.Surveys.Find(id);
+			Survey Survey = db.Surveys.Where(s => s.ID == id).SingleOrDefault();
 			if (Survey == null)
 			{
 				return NotFound();
@@ -69,93 +71,37 @@ namespace WeCountSvc.Controllers
 		{
 			try
 			{
-				Survey Svy = new Survey
-				{
-					// For now, ignore ID - assume is new. We can delete existing if re-importing.
-					Name = Model.Name,
-					Description = Model.Description,
-					IntroText = Model.IntroText,
-					SurveyQuestions = new List<SurveyQuestion>()
-				};
 
-				// Map the provided IDs to the existing or db-generated questions, to preserve navigation mapping
-				Dictionary<int, Question> QuestionsByModelID = new Dictionary<int, Question>();
-				Dictionary<int, AnswerChoice> AnswerChoicesByModelID = new Dictionary<int, AnswerChoice>();
+				ModelConverter Converter = new ModelConverter(db);
 
-				foreach (SurveyQuestionModel qm in Model.Questions)
-				{
-					// See if question already exists. Remember, questions are reusable, and can be shared across surveys.
+				Survey Survey = Converter.ConvertToEntity(Model);
 
-					Question q = db.Questions.Where(eq => eq.QuestionText == qm.QuestionText).SingleOrDefault();
-
-					if (q == null)
-					{
-						q = new Question
-						{
-							QuestionText = qm.QuestionText,
-							ClarificationText = qm.QuestionHelpText,
-							AllowMultipleAnswers = qm.AllowMultipleAnswers,
-							AnswerChoices = new List<AnswerChoice>()
-						};
-
-						db.Questions.Add(q);
-						QuestionsByModelID.Add(qm.QuestionID, q);
-					}
-
-					foreach (SurveyQuestionAnswerChoiceModel acm in qm.AnswerChoices)
-					{
-						// See if answer choice already exists. Remember, answer choices are reusable, and can be shared across questions and surveys.
-
-						AnswerChoice a = db.AnswerChoices.Where(ac => ac.AnswerText == acm.AnswerChoiceText).SingleOrDefault();
-
-						if (a == null)
-						{
-							a = new AnswerChoice
-							{
-								AnswerText = acm.AnswerChoiceText,
-								AdditionalAnswerDataFormat = acm.AdditionalAnswerDataFormat
-							};
-
-							db.AnswerChoices.Add(a);
-							AnswerChoicesByModelID.Add(acm.AnswerChoiceID, a);
-						}
-
-						q.AnswerChoices.Add(a);
-					}
-
-					Svy.SurveyQuestions.Add(new SurveyQuestion
-					{
-						Question = q
-					});
-				}
-
-				// Save changes to get DB IDs for new items, so we can process navigation
+				db.Surveys.Add(Survey);
 
 				db.SaveChanges();
 
-				// Now process navigation, mapping the model IDs to the actual DB IDs
+				return Ok();
+			}
+			catch (DbEntityValidationException eve)
+			{
+				List<String> Errors = new List<string>();
 
-				foreach (SurveyQuestionModel qm in Model.Questions)
+				//StringBuilder sb = new StringBuilder();
+
+				foreach (DbEntityValidationResult vr in eve.EntityValidationErrors)
 				{
-					Question q = db.Questions.Where(eq => eq.QuestionText == qm.QuestionText).Single();
+					//sb.AppendLine(vr.Entry.Entity.GetType().Name);
 
-					foreach (SurveyQuestionAnswerChoiceModel acm in qm.AnswerChoices)
+					foreach (DbValidationError ve in vr.ValidationErrors)
 					{
-						if (acm.NextQuestionID.HasValue)
-						{
-							AnswerChoice a = db.AnswerChoices.Where(ac => ac.AnswerText == acm.AnswerChoiceText).Single();
-							SurveyQuestion sq = Svy.SurveyQuestions.Where(nsq => nsq.Question_ID == QuestionsByModelID[qm.QuestionID].ID).Single();
-
-							SurveyNavigation nav = new SurveyNavigation { AnswerChoice_ID = a.ID, NextSurveyQuestion_ID = QuestionsByModelID[acm.NextQuestionID.Value].ID };
-
-							db.SurveyNavigation.Add(nav);
-							sq.Navigation.Add(nav);
-						}
-
+						string Error = $"{vr.Entry.Entity.GetType().Name}.{ve.PropertyName}: {ve.ErrorMessage}";
+						//sb.AppendLine($"    {ve.PropertyName}: {ve.ErrorMessage}");
+						if (!Errors.Contains(Error))
+							Errors.Add(Error);
 					}
 				}
 
-				return Ok();
+				return InternalServerError(new InvalidOperationException(eve.Message + "\r\n" + String.Join("\r\n", Errors.ToArray()), eve));
 			}
 			catch (Exception ex)
 			{

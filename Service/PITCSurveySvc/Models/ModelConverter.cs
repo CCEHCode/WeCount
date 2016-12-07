@@ -1,9 +1,10 @@
 ﻿using PITCSurveyLib.Models;
-using PITCSurveySvc.Entities;
+using PITCSurveyEntities.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Diagnostics;
 
 namespace PITCSurveySvc.Models
 {
@@ -59,6 +60,7 @@ namespace PITCSurveySvc.Models
 					if (sn != null)
 						acm.NextQuestionID = sn.NextSurveyQuestion_ID;
 
+					qm.AnswerChoices.Add(acm);
 				}
 
 				Model.Questions.Add(qm);
@@ -72,6 +74,115 @@ namespace PITCSurveySvc.Models
 		#region "Model-to-Entity Conversion"
 
 		// These methods are not static, as they need the DbContext to pull in data for mapping.
+		public Survey ConvertToEntity(SurveyModel Model)
+		{
+			Survey Survey = new Survey
+			{
+				// For now, ignore ID - assume is new. We can delete existing if re-importing.
+				Name = Model.Name,
+				Description = Model.Description,
+				IntroText = Model.IntroText,
+				SurveyQuestions = new List<SurveyQuestion>()
+			};
+
+			// Map the provided IDs to the existing or db-generated questions, to preserve navigation mapping
+			Dictionary<int, Question> QuestionsByModelID = new Dictionary<int, Question>();
+			Dictionary<int, AnswerChoice> AnswerChoicesByModelID = new Dictionary<int, AnswerChoice>();
+
+			foreach (SurveyQuestionModel qm in Model.Questions)
+			{
+				// See if question already exists. Remember, questions are reusable, and can be shared across surveys.
+
+				Question q = _db.Questions.WhereEx(eq => eq.QuestionText == qm.QuestionText).SingleOrDefault();
+
+				if (q == null)
+				{
+					q = new Question
+					{
+						QuestionText = qm.QuestionText,
+						ClarificationText = qm.QuestionHelpText,
+						AllowMultipleAnswers = qm.AllowMultipleAnswers,
+						AnswerChoices = new List<AnswerChoice>()
+					};
+
+					_db.Questions.Add(q);
+					QuestionsByModelID.Add(qm.QuestionID, q);
+
+					Trace.WriteLine($"+ Q {q.QuestionText}");
+				}
+				else
+				{
+					Trace.WriteLine($"- Q {q.QuestionText}");
+				}
+
+				foreach (SurveyQuestionAnswerChoiceModel acm in qm.AnswerChoices)
+				{
+					// See if answer choice already exists. Remember, answer choices are reusable, and can be shared across questions and surveys.
+
+					AnswerChoice a = null;
+
+					if (AnswerChoicesByModelID.ContainsKey(acm.AnswerChoiceID))
+					{
+						a = AnswerChoicesByModelID[acm.AnswerChoiceID];
+
+						Trace.WriteLine($"    - AC {a.AnswerText}");
+					}
+					else
+					{
+						a = _db.AnswerChoices.WhereEx(ac => ac.AnswerText == acm.AnswerChoiceText).SingleOrDefault();
+
+						if (a == null)
+						{
+							a = new AnswerChoice
+							{
+								AnswerText = acm.AnswerChoiceText,
+								AdditionalAnswerDataFormat = acm.AdditionalAnswerDataFormat
+							};
+
+							_db.AnswerChoices.Add(a);
+							AnswerChoicesByModelID.Add(acm.AnswerChoiceID, a);
+
+							Trace.WriteLine($"    + AC {a.AnswerText}");
+						}
+					}
+
+					q.AnswerChoices.Add(a);
+				}
+
+				Survey.SurveyQuestions.Add(new SurveyQuestion
+				{
+					Question = q
+				});
+			}
+
+			// Save changes to get DB IDs for new items, so we can process navigation
+
+			//_db.SaveChanges();
+
+			// Now process navigation, mapping the model IDs to the actual DB IDs
+
+			foreach (SurveyQuestionModel qm in Model.Questions)
+			{
+				Question q = _db.Questions.WhereEx(eq => eq.QuestionText == qm.QuestionText).Single();
+
+				foreach (SurveyQuestionAnswerChoiceModel acm in qm.AnswerChoices)
+				{
+					if (acm.NextQuestionID.HasValue)
+					{
+						AnswerChoice a = _db.AnswerChoices.WhereEx(ac => ac.AnswerText == acm.AnswerChoiceText).Single();
+						SurveyQuestion sq = Survey.SurveyQuestions.Where(qq => qq.Question == QuestionsByModelID[qm.QuestionID]).Single();
+
+						SurveyNavigation nav = new SurveyNavigation { SurveyQuestion = sq, AnswerChoice = a, NextSurveyQuestion = sq};
+
+						_db.SurveyNavigation.Add(nav);
+						sq.Navigation.Add(nav);
+					}
+
+				}
+			}
+
+			return Survey;
+		}
 
 		public SurveyResponse ConvertToEntity(SurveyResponseModel Model)
 		{

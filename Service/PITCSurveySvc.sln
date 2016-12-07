@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.25920.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PITCSurveySvc", "PITCSurveySvc\PITCSurveySvc.csproj", "{8C5B2370-757E-44D7-A848-5693BC0D6468}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PITCSurveySvc.Tests", "PITCSurveySvc.Tests\PITCSurveySvc.Tests.csproj", "{C0724A63-8DA4-4D67-A835-797B2280197B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PITCSurveyLib", "..\Client\PITCSurveyLib\PITCSurveyLib\PITCSurveyLib.csproj", "{7AF89069-6241-4905-81C8-0898D40D4A1D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PITCSurveyEntities", "PITCSurveyEntities\PITCSurveyEntities.csproj", "{7D19D060-584A-4A7D-8E1D-87C274011C48}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +57,18 @@ Global
 		{7AF89069-6241-4905-81C8-0898D40D4A1D}.Release|x64.Build.0 = Release|Any CPU
 		{7AF89069-6241-4905-81C8-0898D40D4A1D}.Release|x86.ActiveCfg = Release|Any CPU
 		{7AF89069-6241-4905-81C8-0898D40D4A1D}.Release|x86.Build.0 = Release|Any CPU
+		{7D19D060-584A-4A7D-8E1D-87C274011C48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D19D060-584A-4A7D-8E1D-87C274011C48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D19D060-584A-4A7D-8E1D-87C274011C48}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7D19D060-584A-4A7D-8E1D-87C274011C48}.Debug|x64.Build.0 = Debug|Any CPU
+		{7D19D060-584A-4A7D-8E1D-87C274011C48}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7D19D060-584A-4A7D-8E1D-87C274011C48}.Debug|x86.Build.0 = Debug|Any CPU
+		{7D19D060-584A-4A7D-8E1D-87C274011C48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D19D060-584A-4A7D-8E1D-87C274011C48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D19D060-584A-4A7D-8E1D-87C274011C48}.Release|x64.ActiveCfg = Release|Any CPU
+		{7D19D060-584A-4A7D-8E1D-87C274011C48}.Release|x64.Build.0 = Release|Any CPU
+		{7D19D060-584A-4A7D-8E1D-87C274011C48}.Release|x86.ActiveCfg = Release|Any CPU
+		{7D19D060-584A-4A7D-8E1D-87C274011C48}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

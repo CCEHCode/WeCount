@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PITCSurveySvc.Entities;
+using PITCSurveyEntities.Entities;
 
 namespace PITCSurveySvc.Tests
 {
