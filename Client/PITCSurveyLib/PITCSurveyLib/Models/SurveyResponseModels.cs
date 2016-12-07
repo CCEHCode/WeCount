@@ -17,8 +17,8 @@ namespace PITCSurveyLib.Models
 
 		/// <summary>
 		/// Identifier of the Interviewer conducting this survey.
-		/// TODO: TBD whether this is client-generated on first run, or something else.
 		/// </summary>
+		[Obsolete("User's auth token handled by App Service Authentication, no need to pass.")]
 		public String InterviewerID { get; set; }
 
 		public DateTimeOffset StartTime { get; set; }
