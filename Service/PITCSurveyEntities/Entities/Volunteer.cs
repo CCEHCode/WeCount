@@ -18,7 +18,11 @@ namespace PITCSurveyEntities.Entities
 		public String MobilePhone { get; set; }
 		public String HomePhone { get; set; }
 		public Address Address { get; set; }
+
+		[Obsolete("This is longer used, in favor of AuthProvider.")]
 		public AuthMethod AuthMethod { get; set; }
+
+		public string AuthProvider { get; set; }
 		public String AuthID { get; set; }
 
 		public virtual IList<SurveyResponse> SurveyResponses { get; set; }
