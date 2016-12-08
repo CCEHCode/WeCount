@@ -168,6 +168,7 @@
   <ItemGroup>
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\SurveysController.cs" />
     <Compile Include="Controllers\SurveyResponsesController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />

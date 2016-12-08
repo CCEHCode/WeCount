@@ -1,10 +1,8 @@
-﻿using PITCSurveyLib.Models;
-using PITCSurveyEntities.Entities;
-using System;
+﻿using PITCSurveyEntities.Entities;
+using PITCSurveyLib.Models;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Diagnostics;
+using System.Linq;
 
 namespace PITCSurveySvc.Models
 {
@@ -66,6 +64,25 @@ namespace PITCSurveySvc.Models
 				Model.Questions.Add(qm);
 			}
 			
+			return Model;
+		}
+
+		public static VolunteerModel ConvertToModel(Volunteer Volunteer)
+		{
+			VolunteerModel Model = new VolunteerModel()
+			{
+				FirstName = Volunteer.FirstName,
+				LastName = Volunteer.LastName,
+				Email = Volunteer.Email,
+				HomePhone = Volunteer.HomePhone,
+				MobilePhone = Volunteer.MobilePhone
+			};
+
+			Model.Address.Street = Volunteer.Address.Street;
+			Model.Address.City = Volunteer.Address.City;
+			Model.Address.State = Volunteer.Address.State;
+			Model.Address.ZipCode = Volunteer.Address.ZipCode;
+
 			return Model;
 		}
 
@@ -192,7 +209,7 @@ namespace PITCSurveySvc.Models
 			SurveyResponse Response = new SurveyResponse()
 			{
 				Survey_ID = Model.SurveyID,
-				Volunteer_ID = _db.Volunteers.Where(v => v.AuthID == Model.InterviewerID).Single().ID,
+				//Volunteer_ID = _db.Volunteers.Where(v => v.AuthID == Model.InterviewerID).Single().ID,
 				GPSLocation = System.Data.Entity.Spatial.DbGeography.PointFromText($"POINT({Model.GPSLocation.Lon} {Model.GPSLocation.Lat}", CoordinateSystemID),
 				LocationNotes = Model.LocationNotes,
 				NearestAddress = Model.NearestAddress,

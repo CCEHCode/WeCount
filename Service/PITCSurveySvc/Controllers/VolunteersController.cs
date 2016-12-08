@@ -1,106 +1,60 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
+﻿using PITCSurveyEntities.Entities;
+using PITCSurveyLib.Models;
+using PITCSurveySvc.Models;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
-using PITCSurveyEntities.Entities;
-using PITCSurveyLib;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 
 namespace PITCSurveySvc.Controllers
 {
-    public class VolunteersController : ApiController
+	public class VolunteersController : BaseController
     {
-        private PITCSurveyContext db = new PITCSurveyContext();
 
-		// GET: api/Volunteers/5
-		[ResponseType(typeof(Volunteer))]
-        public IHttpActionResult GetVolunteer(int id)
+		// GET: api/Volunteers
+		[ResponseType(typeof(VolunteerModel))]
+        public IHttpActionResult GetVolunteer()
         {
-            Volunteer volunteer = db.Volunteers.Find(id);
+            Volunteer volunteer = GetAuthenticatedVolunteer();
+
             if (volunteer == null)
             {
                 return NotFound();
             }
 
-            return Ok(volunteer);
+            return Ok(ModelConverter.ConvertToModel(volunteer));
         }
 
-        // PUT: api/Volunteers/5
+        // PUT: api/Volunteers
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutVolunteer(int id, Volunteer volunteer)
+        public IHttpActionResult PutVolunteer(VolunteerModel Model)
         {
-            if (!ModelState.IsValid)
+			Volunteer sv = GetAuthenticatedVolunteer();
+
+			if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != volunteer.ID)
-            {
-                return BadRequest();
-            }
+			if (sv == null)
+			{
+				return BadRequest("The specified InterviewerID is not recognized. User not logged in?");
+			}
 
-            db.Entry(volunteer).State = EntityState.Modified;
+			sv.FirstName = Model.FirstName;
+			sv.LastName = Model.LastName;
+			sv.Email = Model.Email;
+			sv.HomePhone = Model.HomePhone;
+			sv.MobilePhone = Model.MobilePhone;
 
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!VolunteerExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+			sv.Address.Street = Model.Address.Street;
+			sv.Address.City = Model.Address.City;
+			sv.Address.State = Model.Address.State;
+			sv.Address.ZipCode = Model.Address.ZipCode;
+
+            db.SaveChanges();
 
             return StatusCode(HttpStatusCode.NoContent);
         }
-
-        // POST: api/Volunteers
-        [ResponseType(typeof(Volunteer))]
-        public IHttpActionResult PostVolunteer(Volunteer volunteer)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            db.Volunteers.Add(volunteer);
-            db.SaveChanges();
-
-            return CreatedAtRoute("DefaultApi", new { id = volunteer.ID }, volunteer);
-        }
-
-		#region "Private Methods"
-
-		private bool VolunteerExists(int id)
-		{
-			return db.Volunteers.Count(e => e.ID == id) > 0;
-		}
-
-		#endregion
-
-		#region "IDisposable"
-
-		protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-		#endregion
 
 	}
 }

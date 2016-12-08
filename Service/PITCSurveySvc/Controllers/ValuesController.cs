@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Swashbuckle.Swagger.Annotations;
 
-namespace WeCountSvc.Controllers
+namespace PITCSurveySvc.Controllers
 {
 	internal class ValuesController : ApiController
 	{

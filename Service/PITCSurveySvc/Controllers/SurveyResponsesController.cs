@@ -1,5 +1,5 @@
-﻿using PITCSurveyLib.Models;
-using PITCSurveyEntities.Entities;
+﻿using PITCSurveyEntities.Entities;
+using PITCSurveyLib.Models;
 using PITCSurveySvc.Models;
 using Swashbuckle.Swagger.Annotations;
 using System;
@@ -9,13 +9,12 @@ using System.Net;
 using System.Web.Http;
 using System.Web.Http.Description;
 
-namespace WeCountSvc.Controllers
+namespace PITCSurveySvc.Controllers
 {
-	public class SurveyResponsesController : ApiController
+	public class SurveyResponsesController : BaseController
     {
-        private PITCSurveyContext db = new PITCSurveyContext();
-
-        // POST: api/SurveyResponses
+        
+		// POST: api/SurveyResponses
         [ResponseType(typeof(void))]
 		[SwaggerOperation("Create")]
 		[SwaggerResponse(HttpStatusCode.BadRequest, "The survey data wasn't acceptable (improper formatting, etc.).")]
@@ -23,7 +22,9 @@ namespace WeCountSvc.Controllers
 		[SwaggerResponse(HttpStatusCode.NoContent, "SurveyResponse uploaded successfully.")]
 		public IHttpActionResult PostSurveyResponse(SurveyResponseModel surveyResponse)
         {
-            if (!ModelState.IsValid)
+			Volunteer sv = GetAuthenticatedVolunteer();
+
+			if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
@@ -35,13 +36,9 @@ namespace WeCountSvc.Controllers
 				return StatusCode(HttpStatusCode.Conflict);
 			}
 
-			Volunteer sv = db.Volunteers.Where(v => v.AuthID == surveyResponse.InterviewerID).SingleOrDefault();
 			if (sv == null)
 			{
 				return BadRequest("The specified InterviewerID is not recognized. User not logged in?");
-				// TODO: Store and accept, figure out who it is later? Need to have way to "see" auth ID from within client app, or fill in volunteer info.
-
-				// TODO: Create Interviewer / Volunteer db entry here and go with it? Or make this happen at app login? Probablty the latter makes morwe sense. Simpler logic & workflow.
 			}
 
 			try
@@ -49,6 +46,8 @@ namespace WeCountSvc.Controllers
 				ModelConverter Converter = new ModelConverter(db);
 
 				SurveyResponse Response = Converter.ConvertToEntity(surveyResponse);
+
+				Response.Volunteer = sv;
 
 				db.SurveyResponses.Add(Response);
 
@@ -72,17 +71,5 @@ namespace WeCountSvc.Controllers
 
 		#endregion
 
-		#region "IDisposable"
-
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing)
-			{
-				db.Dispose();
-			}
-			base.Dispose(disposing);
-		}
-
-		#endregion
 	}
 }
