@@ -4,7 +4,7 @@
              x:Class="PITCSurveyApp.Views.HomePage"
              Title="{Binding UserGreeting}">
 	<StackLayout Padding="12">
-    <Image Source="ccehlogo.jpg" HorizontalOptions="Center" />
+    <Image Source="{Binding BannerImage}" HorizontalOptions="Center" />
     <Label Text="We Count Survey App" Margin="0,12,0,0" HorizontalOptions="Center" />
   </StackLayout>
 </ContentPage>

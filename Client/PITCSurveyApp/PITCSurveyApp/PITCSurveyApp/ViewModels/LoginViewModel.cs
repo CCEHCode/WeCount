@@ -25,6 +25,11 @@ namespace PITCSurveyApp.ViewModels
             set { message = value; OnPropertyChanged(); }
         }
 
+        public ImageSource UserImage
+        {
+            get { return ImageSource.FromFile(CrossHelper.GetOSFullImagePath("profile_generic.png")); }
+        }
+
         public ICommand NotNowCommand { get; }
         public ICommand SignInCommand { get; }
 

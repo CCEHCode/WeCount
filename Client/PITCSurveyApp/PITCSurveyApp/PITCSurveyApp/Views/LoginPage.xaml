@@ -22,7 +22,7 @@
         <Image  HorizontalOptions="Center"
                 VerticalOptions="Center"
                 WidthRequest="95" HeightRequest="95"
-                Source="profile_generic.png"
+                Source="{Binding UserImage}"
                 Aspect="AspectFill"
                 x:Name="CircleImageAvatar"/>
 

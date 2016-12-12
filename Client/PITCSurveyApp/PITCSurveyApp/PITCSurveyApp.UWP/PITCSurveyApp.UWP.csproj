@@ -109,8 +109,8 @@
     <None Include="Windows_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ccehlogo.jpg" />
-    <Content Include="profile_generic.png" />
+    <Content Include="Assets\ccehlogo.jpg" />
+    <Content Include="Assets\profile_generic.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
