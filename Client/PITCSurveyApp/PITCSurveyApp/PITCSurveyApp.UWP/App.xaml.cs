@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
@@ -14,6 +15,10 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+
+using Microsoft.HockeyApp;
+
+using PITCSurveyApp.Helpers;
 
 namespace PITCSurveyApp.UWP
 {
@@ -30,6 +35,8 @@ namespace PITCSurveyApp.UWP
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+
+            Microsoft.HockeyApp.HockeyClient.Current.Configure(Settings.HockeyAppId);
         }
 
         /// <summary>
@@ -43,7 +50,7 @@ namespace PITCSurveyApp.UWP
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)
             {
-                this.DebugSettings.EnableFrameRateCounter = false;
+                this.DebugSettings.EnableFrameRateCounter = false;  // Not needed in this app, no intensive graphics
             }
 #endif
 

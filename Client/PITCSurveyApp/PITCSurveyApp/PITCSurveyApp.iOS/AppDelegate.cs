@@ -5,6 +5,10 @@ using System.Linq;
 using Foundation;
 using UIKit;
 
+using HockeyApp.iOS;
+
+using PITCSurveyApp.Helpers;
+
 namespace PITCSurveyApp.iOS
 {
 	// The UIApplicationDelegate for the application. This class is responsible for launching the 
@@ -22,7 +26,12 @@ namespace PITCSurveyApp.iOS
 		//
 		public override bool FinishedLaunching(UIApplication app, NSDictionary options)
 		{
-			global::Xamarin.Forms.Forms.Init ();
+            var manager = BITHockeyManager.SharedHockeyManager;
+            manager.Configure(Settings.HockeyAppId);
+            manager.StartManager();
+            manager.Authenticator.AuthenticateInstallation(); // This line is obsolete in crash only builds (do we need it then?)
+
+            global::Xamarin.Forms.Forms.Init ();
 			LoadApplication (new PITCSurveyApp.App ());
 
 			return base.FinishedLaunching (app, options);

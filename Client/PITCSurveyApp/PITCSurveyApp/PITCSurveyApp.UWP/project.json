@@ -1,5 +1,6 @@
 ﻿{
   "dependencies": {
+    "HockeySDK.UWP": "4.1.5",
     "Microsoft.Azure.Mobile.Client": "3.0.3",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
     "Newtonsoft.Json": "9.0.1",

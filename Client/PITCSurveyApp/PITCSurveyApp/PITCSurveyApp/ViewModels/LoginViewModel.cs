@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
 using System.Windows.Input;
 
-//using PITCSurveyApp.Models;
+using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Helpers;
+//using PITCSurveyApp.Models;
 //using PITCSurveyApp.Services;
 
 using Xamarin.Forms;
@@ -72,6 +73,8 @@ namespace PITCSurveyApp.ViewModels
             //    Settings.AuthToken = user?.MobileServiceAuthenticationToken ?? string.Empty;
             //    Settings.UserId = user?.UserId ?? string.Empty;
             //}
+
+            DependencyService.Get<IMetricsManagerService>().TrackEvent("UserLogin");
 
             return true;
         }

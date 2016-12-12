@@ -5,6 +5,7 @@ using System.Text;
 
 using Xamarin.Forms;
 
+using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Helpers;
 using PITCSurveyApp.Views;
 
@@ -34,6 +35,8 @@ namespace PITCSurveyApp
 		{
 			InitializeComponent();
 
+            DependencyService.Get<IMetricsManagerService>().TrackEvent("AppStarted");
+
             SetMainPage();
         }
 
@@ -55,8 +58,6 @@ namespace PITCSurveyApp
 
         public static void GoToMainPage()
         {
-            //Current.MainPage = new MainPage();
-
             var menuPage = new MenuPage();
             NavigationPage = new NavigationPage(new HomePage());
             RootPage = new RootPage();

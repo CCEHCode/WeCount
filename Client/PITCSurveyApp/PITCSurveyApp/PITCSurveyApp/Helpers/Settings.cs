@@ -10,6 +10,15 @@ namespace PITCSurveyApp.Helpers
     /// </summary>
     public static class Settings
     {
+        // HockeyApp App IDs, we have one for each supported platform
+#if WINDOWS_UWP
+        public static string HockeyAppId = "hockeyAppId";
+#elif __ANDROID__
+        public static string HockeyAppId = "hockeyAppId";
+#elif __IOS__
+        public static string HockeyAppId = "hockeyAppId";
+#endif
+
         private static ISettings AppSettings
         {
             get

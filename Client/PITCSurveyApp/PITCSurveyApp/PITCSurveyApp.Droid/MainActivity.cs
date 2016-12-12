@@ -7,6 +7,11 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 
+using HockeyApp.Android;
+using HockeyApp.Android.Metrics;
+
+using PITCSurveyApp.Helpers;
+
 namespace PITCSurveyApp.Droid
 {
 	[Activity (Label = "PITC Survey App", Theme = "@style/MainTheme", Icon = "@drawable/icon", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
@@ -19,7 +24,12 @@ namespace PITCSurveyApp.Droid
 
             base.OnCreate (bundle);
 
-			global::Xamarin.Forms.Forms.Init (this, bundle);
+            CrashManager.Register(this, Settings.HockeyAppId);
+
+            MetricsManager.Register(Application, Settings.HockeyAppId);
+            MetricsManager.EnableUserMetrics();
+
+            global::Xamarin.Forms.Forms.Init (this, bundle);
 			LoadApplication (new PITCSurveyApp.App ());
 		}
 	}

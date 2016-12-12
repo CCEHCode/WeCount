@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
 
+using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Views;
 
 namespace PITCSurveyApp.ViewModels
