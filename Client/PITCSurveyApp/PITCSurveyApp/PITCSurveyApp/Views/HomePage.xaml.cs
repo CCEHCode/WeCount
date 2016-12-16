@@ -17,5 +17,18 @@ namespace PITCSurveyApp.Views
             BindingContext = new HomePageViewModel();
             InitializeComponent ();
 		}
-	}
+
+	    protected override async void OnAppearing()
+	    {
+            // We're loading the survey here to avoid async contructors in SurveyViewModel
+	        await App.SurveyVM.GetSurvey();
+
+            // Since we're loading this only once on app start it's acceptable to do this
+            // here in code instead of using Data Binding in XAML
+	        LblSurveyVersionCloud.Text = App.SurveyVM.SurveyVersionCloud;
+	        LblSurveyVersionLocal.Text = App.SurveyVM.SurveyVersionLocal;
+	        LblSurveyQuestionsCount.Text = App.SurveyVM.SurveyQuestionsCount.ToString();
+	    }
+
+    }
 }

@@ -17,11 +17,15 @@
       <Label Text="We Count Survey App" Margin="0,12,0,0" HorizontalOptions="Center" />
       <StackLayout Orientation="Horizontal" Margin="0,24,0,0" >
         <Label Text="Latest Survey Version: "/>
-        <Label x:Name="LblSurveyVersionCloud" Text="{Binding SurveyVersionCloud}"/>
+        <Label x:Name="LblSurveyVersionCloud" Text="Loading..."/>
       </StackLayout>
       <StackLayout Orientation="Horizontal">
         <Label Text="Local Survey Version: "/>
-        <Label x:Name="LblSurveyVersionLocal" Text="{Binding SurveyVersionLocal}"/>
+        <Label x:Name="LblSurveyVersionLocal" Text="Loading..."/>
+      </StackLayout>
+      <StackLayout Orientation="Horizontal">
+        <Label Text="No of Questions: "/>
+        <Label x:Name="LblSurveyQuestionsCount" Text="Loading..."/>
       </StackLayout>
     </StackLayout>
     <Button x:Name="BtnNewSurvey"

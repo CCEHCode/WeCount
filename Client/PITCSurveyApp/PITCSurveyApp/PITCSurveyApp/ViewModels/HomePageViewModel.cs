@@ -4,14 +4,22 @@ using System.Text;
 
 using Xamarin.Forms;
 
+using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Helpers;
+using PITCSurveyApp.Lib.Services;
+using PITCSurveyApp.Lib.ViewModels;
+using PITCSurveyLib.Models;
 
 namespace PITCSurveyApp.ViewModels
 {
     class HomePageViewModel
     {
+        private SurveyViewModel vm { get; set; }
+
         public HomePageViewModel()
         {
+            App.SurveyVM = new SurveyViewModel();      
+
             // TO DO: Need to populate this from the authentication service
             UserFullname = "Volunteer";
         }
@@ -30,14 +38,17 @@ namespace PITCSurveyApp.ViewModels
 
         public string SurveyVersionCloud
         {
-            // TO DO: Get the actual version from the survey in Azure
-            get { return "1.0"; }
+            get { return App.SurveyVM.SurveyVersionCloud; }
         }
 
         public string SurveyVersionLocal
         {
-            // TO DO: Get the actual version from the survey store locally
-            get { return "1.0"; }
+            get { return App.SurveyVM.SurveyVersionLocal; }
+        }
+
+        public int SurveyQuestionsCount
+        {
+            get { return App.SurveyVM.SurveyQuestionsCount; }
         }
     }
 }

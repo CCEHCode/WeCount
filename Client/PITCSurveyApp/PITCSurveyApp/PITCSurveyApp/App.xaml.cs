@@ -3,17 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Microsoft.WindowsAzure.MobileServices;
+
 using Xamarin.Forms;
 
 using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Helpers;
+using PITCSurveyApp.Lib.Services;
+using PITCSurveyApp.Lib.ViewModels;
 using PITCSurveyApp.Views;
+using PITCSurveyLib.Models;
 
 namespace PITCSurveyApp
 {
 	public partial class App : Application
 	{
-        public static string AzureMobileAppUrl = "https://pitcsurveyapi.azurewebsites.net";
+        public static SurveyViewModel SurveyVM { get; set; }
+
         public static IDictionary<string, string> LoginParameters => null;
 
         public static NavigationPage NavigationPage { get; private set; }
@@ -33,7 +39,7 @@ namespace PITCSurveyApp
 
         public App ()
 		{
-			InitializeComponent();
+            InitializeComponent();
 
             DependencyService.Get<IMetricsManagerService>().TrackEvent("AppStarted");
 
