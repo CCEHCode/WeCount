@@ -3,8 +3,36 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PITCSurveyApp.Views.HomePage"
              Title="{Binding UserGreeting}">
-	<StackLayout Padding="12">
-    <Image Source="{Binding BannerImage}" HorizontalOptions="Center" />
-    <Label Text="We Count Survey App" Margin="0,12,0,0" HorizontalOptions="Center" />
-  </StackLayout>
+  <Grid Padding="20,40,20,20" ColumnSpacing="10" RowSpacing="20">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="100"/>
+      <RowDefinition Height="100"/>
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+	  <StackLayout Grid.Row="0" Padding="12">
+      <Image Source="{Binding BannerImage}" HorizontalOptions="Center" />
+      <Label Text="We Count Survey App" Margin="0,12,0,0" HorizontalOptions="Center" />
+      <StackLayout Orientation="Horizontal" Margin="0,24,0,0" >
+        <Label Text="Latest Survey Version: "/>
+        <Label x:Name="LblSurveyVersionCloud" Text="{Binding SurveyVersionCloud}"/>
+      </StackLayout>
+      <StackLayout Orientation="Horizontal">
+        <Label Text="Local Survey Version: "/>
+        <Label x:Name="LblSurveyVersionLocal" Text="{Binding SurveyVersionLocal}"/>
+      </StackLayout>
+    </StackLayout>
+    <Button x:Name="BtnNewSurvey"
+            Grid.Row="1"
+            Text="New Survey"
+            BackgroundColor="{StaticResource DarkBackgroundColor}"
+            HorizontalOptions="FillAndExpand"/>
+    <Button x:Name="BtnLoadSurvey"
+            Grid.Row="2"
+            Text="Load Survey"
+            BackgroundColor="{StaticResource DarkBackgroundColor}"
+            HorizontalOptions="FillAndExpand"/>
+  </Grid>
 </ContentPage>

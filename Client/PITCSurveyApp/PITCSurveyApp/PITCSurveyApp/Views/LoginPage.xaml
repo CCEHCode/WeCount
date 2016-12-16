@@ -39,7 +39,7 @@
           Grid.Column="0"
           Text="Not Now"
           Command="{Binding NotNowCommand}"
-          x:Name="ButtonNowNow"
+          x:Name="ButtonNotNow"
           HorizontalOptions="FillAndExpand"
           IsEnabled="{Binding IsNotBusy}"/>
 

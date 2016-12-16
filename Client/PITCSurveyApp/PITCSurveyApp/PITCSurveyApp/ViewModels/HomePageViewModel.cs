@@ -10,6 +10,12 @@ namespace PITCSurveyApp.ViewModels
 {
     class HomePageViewModel
     {
+        public HomePageViewModel()
+        {
+            // TO DO: Need to populate this from the authentication service
+            UserFullname = "Volunteer";
+        }
+
         public string UserFullname { get; set; }
 
         public string UserGreeting
@@ -17,15 +23,21 @@ namespace PITCSurveyApp.ViewModels
             get { return "Welcome " + UserFullname; }
         }
 
-        public HomePageViewModel()
-        {
-            // TO DO: Need to populate this from the authentication service
-            UserFullname = "Volunteer";
-        }
-
         public ImageSource BannerImage
         {
             get { return ImageSource.FromFile(CrossHelper.GetOSFullImagePath("ccehlogo.jpg")); }
+        }
+
+        public string SurveyVersionCloud
+        {
+            // TO DO: Get the actual version from the survey in Azure
+            get { return "1.0"; }
+        }
+
+        public string SurveyVersionLocal
+        {
+            // TO DO: Get the actual version from the survey store locally
+            get { return "1.0"; }
         }
     }
 }
