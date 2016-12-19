@@ -62,14 +62,5 @@ namespace PITCSurveySvc.Controllers
 
 		}
 
-		#region "Private Methods"
-
-		private bool SurveyResponseExists(int id)
-        {
-            return db.SurveyResponses.Count(e => e.ID == id) > 0;
-        }
-
-		#endregion
-
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using PITCSurveyEntities.Entities;
 using PITCSurveyLib.Models;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -53,7 +54,7 @@ namespace PITCSurveySvc.Models
 						AdditionalAnswerDataFormat = ac.AdditionalAnswerDataFormat
 					};
 
-					SurveyNavigation sn = sq.Navigation.Where(n => n.AnswerChoice_ID == ac.ID).SingleOrDefault();
+					SurveyNavigation sn = sq.Navigation.Where(n => n.SurveyQuestion_ID == sq.ID && n.AnswerChoice_ID == ac.ID).SingleOrDefault();
 
 					if (sn != null)
 						acm.NextQuestionID = sn.NextSurveyQuestion_ID;
@@ -93,14 +94,22 @@ namespace PITCSurveySvc.Models
 		// These methods are not static, as they need the DbContext to pull in data for mapping.
 		public Survey ConvertToEntity(SurveyModel Model)
 		{
-			Survey Survey = new Survey
+			Survey Survey = _db.Surveys.Where(s => s.Description == Model.Description).SingleOrDefault();
+
+			if (Survey == null)
 			{
-				// For now, ignore ID - assume is new. We can delete existing if re-importing.
-				Name = Model.Name,
-				Description = Model.Description,
-				IntroText = Model.IntroText,
-				SurveyQuestions = new List<SurveyQuestion>()
-			};
+				Survey = new Survey()
+				{
+					SurveyQuestions = new List<SurveyQuestion>()
+				};
+
+				_db.Surveys.Add(Survey);
+			}
+
+			// For now, ignore ID - assume is new. We can delete existing if re-importing.
+			Survey.Name = Model.Name;
+			Survey.Description = Model.Description;
+			Survey.IntroText = Model.IntroText;
 
 			// Map the provided IDs to the existing or db-generated questions, to preserve navigation mapping
 			Dictionary<int, Question> QuestionsByModelID = new Dictionary<int, Question>();
@@ -123,7 +132,6 @@ namespace PITCSurveySvc.Models
 					};
 
 					_db.Questions.Add(q);
-					QuestionsByModelID.Add(qm.QuestionID, q);
 
 					Trace.WriteLine($"+ Q {q.QuestionText}");
 				}
@@ -131,6 +139,7 @@ namespace PITCSurveySvc.Models
 				{
 					Trace.WriteLine($"- Q {q.QuestionText}");
 				}
+				QuestionsByModelID.Add(qm.QuestionID, q);
 
 				foreach (SurveyQuestionAnswerChoiceModel acm in qm.AnswerChoices)
 				{
@@ -157,19 +166,23 @@ namespace PITCSurveySvc.Models
 							};
 
 							_db.AnswerChoices.Add(a);
-							AnswerChoicesByModelID.Add(acm.AnswerChoiceID, a);
 
 							Trace.WriteLine($"    + AC {a.AnswerText}");
 						}
+
+						AnswerChoicesByModelID.Add(acm.AnswerChoiceID, a);
 					}
 
 					q.AnswerChoices.Add(a);
 				}
 
-				Survey.SurveyQuestions.Add(new SurveyQuestion
+				if (Survey.SurveyQuestions.Where(sq => sq.Question == q).Count() == 0)
 				{
-					Question = q
-				});
+					Survey.SurveyQuestions.Add(new SurveyQuestion
+					{
+						Question = q
+					});
+				}
 			}
 
 			// Save changes to get DB IDs for new items, so we can process navigation
@@ -186,13 +199,26 @@ namespace PITCSurveySvc.Models
 				{
 					if (acm.NextQuestionID.HasValue)
 					{
-						AnswerChoice a = _db.AnswerChoices.WhereEx(ac => ac.AnswerText == acm.AnswerChoiceText).Single();
-						SurveyQuestion sq = Survey.SurveyQuestions.Where(qq => qq.Question == QuestionsByModelID[qm.QuestionID]).Single();
+						try
+						{
+							AnswerChoice a = _db.AnswerChoices.WhereEx(ac => ac.AnswerText == acm.AnswerChoiceText).Single();
+							SurveyQuestion sq = Survey.SurveyQuestions.Where(qq => qq.Question == QuestionsByModelID[qm.QuestionID]).Single();
 
-						SurveyNavigation nav = new SurveyNavigation { SurveyQuestion = sq, AnswerChoice = a, NextSurveyQuestion = sq};
+							SurveyNavigation nav = new SurveyNavigation { SurveyQuestion = sq, AnswerChoice = a };
 
-						_db.SurveyNavigation.Add(nav);
-						sq.Navigation.Add(nav);
+							if (acm.NextQuestionID != -1)
+							{
+								SurveyQuestion nsq = (acm.NextQuestionID == -1) ? null : Survey.SurveyQuestions.Where(qq => qq.Question == QuestionsByModelID[acm.NextQuestionID.Value]).Single();
+								nav.NextSurveyQuestion = nsq;
+							}
+
+							_db.SurveyNavigation.Add(nav);
+							sq.Navigation.Add(nav);
+						}
+						catch (Exception ex)
+						{
+							throw new InvalidOperationException($"Error processing navigation for Q{qm.QuestionID}: '{qm.QuestionText}', AC: '{acm.AnswerChoiceText}', NQID: {acm.NextQuestionID}", ex);
+						}
 					}
 
 				}

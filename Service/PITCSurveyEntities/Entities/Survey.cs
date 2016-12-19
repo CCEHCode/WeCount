@@ -21,6 +21,10 @@ namespace PITCSurveyEntities.Entities
 
 		public String IntroText { get; set; }
 
+		public int Version { get; set; }
+
+		public DateTimeOffset LastUpdated { get; set; }
+
 		public virtual IList<SurveyQuestion> SurveyQuestions { get; set; }
 	}
 }

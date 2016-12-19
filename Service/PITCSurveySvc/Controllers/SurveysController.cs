@@ -20,18 +20,24 @@ namespace PITCSurveySvc.Controllers
 		[SwaggerOperation("GetAll")]
 		[ResponseType(typeof(IEnumerable<SurveyModel>))]
 		[SwaggerResponse(HttpStatusCode.OK, "All mai Survey are belong 2 u <3", typeof(IEnumerable<SurveyModel>))]
-		public IEnumerable<SurveyModel> GetSurveys(bool ActiveOnly)
+		public IEnumerable<SurveySummaryModel> GetSurveys(bool ActiveOnly)
         {
 			// We don't use this here, but it ensures the volunteer record is created if it doesn't exist yet.
 			Volunteer sv = GetAuthenticatedVolunteer();
 
 			var Surveys = db.Surveys.Where(s => !ActiveOnly || s.Active);
 
-			var Models = new List<SurveyModel>();
+			var Models = new List<SurveySummaryModel>();
 
 			foreach (Survey Survey in Surveys)
 			{
-				Models.Add(ModelConverter.ConvertToModel(Survey));
+				Models.Add(new SurveySummaryModel()
+				{
+					ID = Survey.ID,
+					Description = Survey.Description,
+					Version = Survey.Version,
+					LastUpdated = Survey.LastUpdated
+				});
 			}
 
 			return Models;
@@ -89,7 +95,8 @@ namespace PITCSurveySvc.Controllers
 
 					Survey Survey = Converter.ConvertToEntity(Model);
 
-					db.Surveys.Add(Survey);
+					// Handle this like we do for child objects in converter, allows update not just insert.
+					//db.Surveys.Add(Survey);
 
 					db.SaveChanges();
 

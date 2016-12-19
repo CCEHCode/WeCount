@@ -66,6 +66,14 @@
     <Compile Include="Migrations\201612070054070_Initial.Designer.cs">
       <DependentUpon>201612070054070_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201612131744194_AddAuthProvider.cs" />
+    <Compile Include="Migrations\201612131744194_AddAuthProvider.Designer.cs">
+      <DependentUpon>201612131744194_AddAuthProvider.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612191438599_EnableVersioning.cs" />
+    <Compile Include="Migrations\201612191438599_EnableVersioning.Designer.cs">
+      <DependentUpon>201612191438599_EnableVersioning.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
@@ -102,6 +110,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201612070054070_Initial.resx">
       <DependentUpon>201612070054070_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612131744194_AddAuthProvider.resx">
+      <DependentUpon>201612131744194_AddAuthProvider.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612191438599_EnableVersioning.resx">
+      <DependentUpon>201612191438599_EnableVersioning.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

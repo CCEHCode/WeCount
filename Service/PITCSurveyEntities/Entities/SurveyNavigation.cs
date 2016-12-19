@@ -27,9 +27,9 @@ namespace PITCSurveyEntities.Entities
 		public virtual AnswerChoice AnswerChoice { get; set; }
 		public int AnswerChoice_ID { get; set; }
 
-		[Required]
+		//[Required]
 		[ForeignKey("NextSurveyQuestion_ID")]
 		public virtual SurveyQuestion NextSurveyQuestion { get; set; }
-		public int NextSurveyQuestion_ID { get; set; }
+		public int? NextSurveyQuestion_ID { get; set; }
 	}
 }

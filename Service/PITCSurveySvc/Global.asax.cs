@@ -13,6 +13,8 @@ namespace PITCSurveySvc
 		{
 			SqlServerTypes.Utilities.LoadNativeAssemblies(Server.MapPath("~/bin"));
 			GlobalConfiguration.Configure(WebApiConfig.Register);
+
+			Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration.Active.DisableTelemetry = true;
 		}
 	}
 }
