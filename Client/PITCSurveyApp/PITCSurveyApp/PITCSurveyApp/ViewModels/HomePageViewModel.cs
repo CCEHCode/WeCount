@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
+using System.Windows.Input;
 using Xamarin.Forms;
 
 using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Helpers;
 using PITCSurveyApp.Lib.Services;
 using PITCSurveyApp.Lib.ViewModels;
+using PITCSurveyApp.Views;
 using PITCSurveyLib.Models;
 
 namespace PITCSurveyApp.ViewModels
@@ -16,12 +17,23 @@ namespace PITCSurveyApp.ViewModels
     {
         private SurveyViewModel vm { get; set; }
 
+        public ICommand NewSurveyCommand { get; set; }
+
         public HomePageViewModel()
         {
+            NewSurveyCommand = new Command(NewSurvey);
+
             App.SurveyVM = new SurveyViewModel();      
 
             // TO DO: Need to populate this from the authentication service
             UserFullname = "Volunteer";
+        }
+
+        // Commands
+        void NewSurvey(object obj)
+        {
+            App.NavigationPage.Navigation.PushAsync(new SurveyPage());
+            App.MenuIsPresented = false;
         }
 
         public string UserFullname { get; set; }
