@@ -44,20 +44,17 @@ namespace PITCSurveySvc.Models
 					AllowMultipleAnswers = sq.Question.AllowMultipleAnswers
 				};
 
-				foreach (AnswerChoice ac in sq.Question.AnswerChoices)
+				foreach (SurveyAnswerChoice ac in sq.AnswerChoices)
 				{
 					SurveyQuestionAnswerChoiceModel acm = new SurveyQuestionAnswerChoiceModel()
 					{
-						AnswerChoiceID = ac.ID,
-						AnswerChoiceNum = ac.ID.ToString(),
-						AnswerChoiceText = ac.AnswerText,
-						AdditionalAnswerDataFormat = ac.AdditionalAnswerDataFormat
+						AnswerChoiceID = ac.AnswerChoice_ID,
+						AnswerChoiceNum = ac.AnswerChoiceNum,
+						AnswerChoiceText = ac.AnswerChoice.AnswerText,
+						AdditionalAnswerDataFormat = ac.AnswerChoice.AdditionalAnswerDataFormat,
+						NextQuestionID = (ac.EndSurvey) ? SurveyQuestionAnswerChoiceModel.END_SURVEY : ac.NextSurveyQuestion_ID,
+						EndSurvey = ac.EndSurvey
 					};
-
-					SurveyNavigation sn = sq.Navigation.Where(n => n.SurveyQuestion_ID == sq.ID && n.AnswerChoice_ID == ac.ID).SingleOrDefault();
-
-					if (sn != null)
-						acm.NextQuestionID = sn.NextSurveyQuestion_ID;
 
 					qm.AnswerChoices.Add(acm);
 				}
@@ -111,9 +108,14 @@ namespace PITCSurveySvc.Models
 			Survey.Description = Model.Description;
 			Survey.IntroText = Model.IntroText;
 
+			Survey.LastUpdated = DateTime.UtcNow;
+			Survey.Version += 1;
+
 			// Map the provided IDs to the existing or db-generated questions, to preserve navigation mapping
 			Dictionary<int, Question> QuestionsByModelID = new Dictionary<int, Question>();
 			Dictionary<int, AnswerChoice> AnswerChoicesByModelID = new Dictionary<int, AnswerChoice>();
+
+			// Process all questions and answer choices first, so we have them in the db and indexed by model ID.
 
 			foreach (SurveyQuestionModel qm in Model.Questions)
 			{
@@ -126,9 +128,8 @@ namespace PITCSurveySvc.Models
 					q = new Question
 					{
 						QuestionText = qm.QuestionText,
-						ClarificationText = qm.QuestionHelpText,
-						AllowMultipleAnswers = qm.AllowMultipleAnswers,
-						AnswerChoices = new List<AnswerChoice>()
+						ClarificationText = qm.QuestionHelpText,            // Move to SurveyQuestion?
+						AllowMultipleAnswers = qm.AllowMultipleAnswers      // Move to SurveyQuestion?
 					};
 
 					_db.Questions.Add(q);
@@ -139,89 +140,112 @@ namespace PITCSurveySvc.Models
 				{
 					Trace.WriteLine($"- Q {q.QuestionText}");
 				}
+
 				QuestionsByModelID.Add(qm.QuestionID, q);
 
 				foreach (SurveyQuestionAnswerChoiceModel acm in qm.AnswerChoices)
 				{
 					// See if answer choice already exists. Remember, answer choices are reusable, and can be shared across questions and surveys.
 
-					AnswerChoice a = null;
+					AnswerChoice a = _db.AnswerChoices.WhereEx(ac => ac.AnswerText == acm.AnswerChoiceText).SingleOrDefault();
 
-					if (AnswerChoicesByModelID.ContainsKey(acm.AnswerChoiceID))
+					if (a == null)
 					{
-						a = AnswerChoicesByModelID[acm.AnswerChoiceID];
+						a = new AnswerChoice
+						{
+							AnswerText = acm.AnswerChoiceText,
+							AdditionalAnswerDataFormat = acm.AdditionalAnswerDataFormat,
+						};
 
-						Trace.WriteLine($"    - AC {a.AnswerText}");
+						_db.AnswerChoices.Add(a);
+
+						Trace.WriteLine($"    + AC {a.AnswerText}");
 					}
 					else
 					{
-						a = _db.AnswerChoices.WhereEx(ac => ac.AnswerText == acm.AnswerChoiceText).SingleOrDefault();
-
-						if (a == null)
-						{
-							a = new AnswerChoice
-							{
-								AnswerText = acm.AnswerChoiceText,
-								AdditionalAnswerDataFormat = acm.AdditionalAnswerDataFormat
-							};
-
-							_db.AnswerChoices.Add(a);
-
-							Trace.WriteLine($"    + AC {a.AnswerText}");
-						}
-
-						AnswerChoicesByModelID.Add(acm.AnswerChoiceID, a);
+						Trace.WriteLine($"    - AC {a.AnswerText}");
 					}
 
-					q.AnswerChoices.Add(a);
+					if (!AnswerChoicesByModelID.ContainsKey(acm.AnswerChoiceID))
+					{
+						AnswerChoicesByModelID.Add(acm.AnswerChoiceID, a);
+					}
 				}
 
-				if (Survey.SurveyQuestions.Where(sq => sq.Question == q).Count() == 0)
-				{
-					Survey.SurveyQuestions.Add(new SurveyQuestion
-					{
-						Question = q
-					});
-				}
 			}
 
-			// Save changes to get DB IDs for new items, so we can process navigation
+			// Now we can process the model into the survey-specific entities.
+			// TODO: This block can now be moved into previous
+			foreach (SurveyQuestionModel qm in Model.Questions)
+			{
 
-			//_db.SaveChanges();
+				Question q = QuestionsByModelID[qm.QuestionID];
 
-			// Now process navigation, mapping the model IDs to the actual DB IDs
+				SurveyQuestion sq = Survey.SurveyQuestions.Where(sq2 => sq2.Question == q).SingleOrDefault();
+
+				if (sq == null)
+				{
+					sq = new SurveyQuestion
+					{
+						Question = q,
+						AnswerChoices = new List<SurveyAnswerChoice>()
+					};
+
+					Survey.SurveyQuestions.Add(sq);
+
+					_db.SurveyQuestions.Add(sq);
+				}
+
+				sq.QuestionNum = qm.QuestionNum;
+			}
+
+			// Finally, with the SurveyQuestions all added and mapped, we can process AnswerChoices with forward-referenced NextQuestionID nav property
 
 			foreach (SurveyQuestionModel qm in Model.Questions)
 			{
-				Question q = _db.Questions.WhereEx(eq => eq.QuestionText == qm.QuestionText).Single();
+
+				Question q = QuestionsByModelID[qm.QuestionID];
+
+				SurveyQuestion sq = Survey.SurveyQuestions.Where(sq2 => sq2.Question == q).SingleOrDefault();
 
 				foreach (SurveyQuestionAnswerChoiceModel acm in qm.AnswerChoices)
 				{
-					if (acm.NextQuestionID.HasValue)
+					// See if survey answer choice already exists.
+
+					SurveyAnswerChoice sac = sq.AnswerChoices.Where(c => c.AnswerChoice == AnswerChoicesByModelID[acm.AnswerChoiceID]).SingleOrDefault();
+
+					if (sac == null)
+					{
+						sac = new SurveyAnswerChoice
+						{
+							AnswerChoice = AnswerChoicesByModelID[acm.AnswerChoiceID],
+						};
+
+						sq.AnswerChoices.Add(sac);
+
+						_db.SurveyAnswerChoices.Add(sac);
+					}
+
+					sac.AnswerChoiceNum = acm.AnswerChoiceNum;
+
+					if (acm.NextQuestionID.HasValue && acm.NextQuestionID.Value != -1)
 					{
 						try
 						{
-							AnswerChoice a = _db.AnswerChoices.WhereEx(ac => ac.AnswerText == acm.AnswerChoiceText).Single();
-							SurveyQuestion sq = Survey.SurveyQuestions.Where(qq => qq.Question == QuestionsByModelID[qm.QuestionID]).Single();
-
-							SurveyNavigation nav = new SurveyNavigation { SurveyQuestion = sq, AnswerChoice = a };
-
-							if (acm.NextQuestionID != -1)
-							{
-								SurveyQuestion nsq = (acm.NextQuestionID == -1) ? null : Survey.SurveyQuestions.Where(qq => qq.Question == QuestionsByModelID[acm.NextQuestionID.Value]).Single();
-								nav.NextSurveyQuestion = nsq;
-							}
-
-							_db.SurveyNavigation.Add(nav);
-							sq.Navigation.Add(nav);
+							sac.NextSurveyQuestion = Survey.SurveyQuestions.Where(ssq => ssq.Question == QuestionsByModelID[acm.NextQuestionID.Value]).Single();
 						}
 						catch (Exception ex)
 						{
-							throw new InvalidOperationException($"Error processing navigation for Q{qm.QuestionID}: '{qm.QuestionText}', AC: '{acm.AnswerChoiceText}', NQID: {acm.NextQuestionID}", ex);
+							throw new InvalidOperationException($"Couldn't find NSQ {acm.NextQuestionID} (Q='{q.QuestionText}', AC='{acm.AnswerChoiceText}')", ex);
 						}
+					}
+					else if (acm.NextQuestionID.HasValue && acm.NextQuestionID.Value == -1)
+					{
+						sac.EndSurvey = true;
 					}
 
 				}
+
 			}
 
 			return Survey;
