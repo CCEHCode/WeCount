@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace PITCSurveyEntities.Entities
 {
-	public class SurveyNavigation
+	public class SurveyAnswerChoice
 	{
 		[Key]
 		public int ID { get; set; }
@@ -22,9 +23,12 @@ namespace PITCSurveyEntities.Entities
 		public virtual AnswerChoice AnswerChoice { get; set; }
 		public int AnswerChoice_ID { get; set; }
 
-		//[Required]
+		public String AnswerChoiceNum { get; set; }
+
 		[ForeignKey("NextSurveyQuestion_ID")]
 		public virtual SurveyQuestion NextSurveyQuestion { get; set; }
 		public int? NextSurveyQuestion_ID { get; set; }
+
+		public bool EndSurvey { get; set; }
 	}
 }

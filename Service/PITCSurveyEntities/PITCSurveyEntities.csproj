@@ -57,7 +57,7 @@
     <Compile Include="Entities\PITCSurveyContext.cs" />
     <Compile Include="Entities\Question.cs" />
     <Compile Include="Entities\Survey.cs" />
-    <Compile Include="Entities\SurveyNavigation.cs" />
+    <Compile Include="Entities\SurveyAnswerChoice.cs" />
     <Compile Include="Entities\SurveyQuestion.cs" />
     <Compile Include="Entities\SurveyResponse.cs" />
     <Compile Include="Entities\SurveyResponseAnswer.cs" />
@@ -73,6 +73,22 @@
     <Compile Include="Migrations\201612191438599_EnableVersioning.cs" />
     <Compile Include="Migrations\201612191438599_EnableVersioning.Designer.cs">
       <DependentUpon>201612191438599_EnableVersioning.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612220146423_SurveyAnswerChoices.cs" />
+    <Compile Include="Migrations\201612220146423_SurveyAnswerChoices.Designer.cs">
+      <DependentUpon>201612220146423_SurveyAnswerChoices.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612220157105_SurveyAnswerChoices2.cs" />
+    <Compile Include="Migrations\201612220157105_SurveyAnswerChoices2.Designer.cs">
+      <DependentUpon>201612220157105_SurveyAnswerChoices2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612220444311_AnswerChoicesMappedOnlyThroughSurvey.cs" />
+    <Compile Include="Migrations\201612220444311_AnswerChoicesMappedOnlyThroughSurvey.Designer.cs">
+      <DependentUpon>201612220444311_AnswerChoicesMappedOnlyThroughSurvey.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612271605457_EndSurveyProperty.cs" />
+    <Compile Include="Migrations\201612271605457_EndSurveyProperty.Designer.cs">
+      <DependentUpon>201612271605457_EndSurveyProperty.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -116,6 +132,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201612191438599_EnableVersioning.resx">
       <DependentUpon>201612191438599_EnableVersioning.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612220146423_SurveyAnswerChoices.resx">
+      <DependentUpon>201612220146423_SurveyAnswerChoices.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612220157105_SurveyAnswerChoices2.resx">
+      <DependentUpon>201612220157105_SurveyAnswerChoices2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612220444311_AnswerChoicesMappedOnlyThroughSurvey.resx">
+      <DependentUpon>201612220444311_AnswerChoicesMappedOnlyThroughSurvey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612271605457_EndSurveyProperty.resx">
+      <DependentUpon>201612271605457_EndSurveyProperty.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

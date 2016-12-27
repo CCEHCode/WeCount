@@ -44,8 +44,10 @@ namespace PITCSurveyLib.Models
 		public AnswerFormat AdditionalAnswerDataFormat { get; set; }	// Format of additional answer data: none, int, string, etc.
 		public int? NextQuestionID { get; set; }                        // ID of next Question to display, if this AnswerChoice is selected.
 																		// If null, default to next question in sequence.
+		public bool EndSurvey { get; set; }                             // If selected, this answer choice ends the survey.
 
-		const int END_SURVEY = -1;										// If NextQuestionID is this value, then survey is complete.
+		[Obsolete("Use EndSurvey bool property instead.")]				// Deprecating this, to avoid use of "magic numbers".
+		public const int END_SURVEY = -1;								// If NextQuestionID is this value, then survey is complete.
 	}
 
 }

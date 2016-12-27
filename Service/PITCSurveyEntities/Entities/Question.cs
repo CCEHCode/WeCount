@@ -18,6 +18,6 @@ namespace PITCSurveyEntities.Entities
 
 		public bool AllowMultipleAnswers { get; set; }
 
-		public virtual IList<AnswerChoice> AnswerChoices { get; set; }
+		//public virtual IList<AnswerChoice> AnswerChoices { get; set; }
 	}
 }

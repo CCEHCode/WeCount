@@ -24,12 +24,12 @@ namespace PITCSurveyEntities.Entities
 
 		public String QuestionNum { get; set; }
 
+		public virtual IList<SurveyAnswerChoice> AnswerChoices { get; set; }
+
 		[ForeignKey("DependentQuestion_ID")]
 		public virtual Question DependentQuestion { get; set; }
 		public int? DependentQuestion_ID { get; set; }
 
 		public virtual IList<AnswerChoice> DependentQuestionAnswers { get; set; }
-
-		public virtual IList<SurveyNavigation> Navigation { get; set; }
 	}
 }
