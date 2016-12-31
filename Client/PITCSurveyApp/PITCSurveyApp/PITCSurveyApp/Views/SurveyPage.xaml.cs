@@ -50,7 +50,8 @@ namespace PITCSurveyApp.Views
                 foreach (SurveyQuestionAnswerChoiceModel answerOption in cq.AnswerChoices)
                 {
                     btn = new Button();
-                    btn.Text = $"{answerOption.AnswerChoiceNum} - {answerOption.AnswerChoiceText}";
+                    //btn.Text = $"{answerOption.AnswerChoiceNum} - {answerOption.AnswerChoiceText}";
+                    btn.Text = answerOption.AnswerChoiceText;
                     //btn.HorizontalOptions = LayoutOptions.StartAndExpand;
                     btn.Command = ButtonSelectedCommand;
                     btn.CommandParameter = btn;
