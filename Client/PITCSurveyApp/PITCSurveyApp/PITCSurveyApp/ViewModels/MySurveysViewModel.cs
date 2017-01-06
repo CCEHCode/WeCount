@@ -12,7 +12,7 @@ namespace PITCSurveyApp.ViewModels
     class MySurveysViewModel : BaseViewModel
     {
         private readonly INavigation _navigation;
-        private ObservableCollection<SurveyResponseViewModel> _surveys;
+        private ObservableCollection<MySurveysItemViewModel> _surveys;
 
         public MySurveysViewModel(INavigation navigation)
         {
@@ -21,7 +21,7 @@ namespace PITCSurveyApp.ViewModels
             Init();
         }
 
-        public ObservableCollection<SurveyResponseViewModel> Surveys
+        public ObservableCollection<MySurveysItemViewModel> Surveys
         {
             get { return _surveys; }
             private set { SetProperty(ref _surveys, value); }
@@ -32,10 +32,10 @@ namespace PITCSurveyApp.ViewModels
             var fileHelper = new FileHelper();
             var files = await fileHelper.GetFilesAsync();
             var surveyFiles = files.Where(f => f.EndsWith(".survey.json"));
-            var managers = new List<SurveyResponseViewModel>();
+            var managers = new List<MySurveysItemViewModel>();
             foreach (var surveyFile in surveyFiles)
             {
-                var manager = new SurveyResponseViewModel(surveyFile);
+                var manager = new MySurveysItemViewModel(surveyFile);
                 manager.Deleted += ResponseDeleted;
                 await manager.LoadAsync();
                 managers.Add(manager);
@@ -44,7 +44,7 @@ namespace PITCSurveyApp.ViewModels
             managers.Sort((x, y) => -CompareDateTime(x.LastModified, y.LastModified));
 
             IsBusy = false;
-            Surveys = new ObservableCollection<SurveyResponseViewModel>(managers);
+            Surveys = new ObservableCollection<MySurveysItemViewModel>(managers);
         }
 
         private int CompareDateTime(DateTime? x, DateTime? y)
@@ -69,7 +69,7 @@ namespace PITCSurveyApp.ViewModels
 
         private void ResponseDeleted(object sender, EventArgs args)
         {
-            Surveys.Remove((SurveyResponseViewModel) sender);
+            Surveys.Remove((MySurveysItemViewModel) sender);
         }
     }
 }

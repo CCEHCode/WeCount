@@ -25,8 +25,7 @@ namespace PITCSurveyApp.Views
 
             // Since we're loading this only once on app start it's acceptable to do this
             // here in code instead of using Data Binding in XAML
-	        LblSurveyVersionCloud.Text = App.SurveyVM.SurveyVersionCloud;
-	        LblSurveyVersionLocal.Text = App.SurveyVM.SurveyVersionLocal;
+	        LblSurveyVersionCloud.Text = App.SurveyVM.SurveyVersion;
 	        LblSurveyQuestionsCount.Text = App.SurveyVM.SurveyQuestionsCount.ToString();
 	    }
 

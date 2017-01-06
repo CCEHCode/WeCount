@@ -39,20 +39,5 @@ namespace PITCSurveyApp.ViewModels
         {
             get { return ImageSource.FromFile(CrossHelper.GetOSFullImagePath("ccehlogo.jpg")); }
         }
-
-        public string SurveyVersionCloud
-        {
-            get { return App.SurveyVM.SurveyVersionCloud; }
-        }
-
-        public string SurveyVersionLocal
-        {
-            get { return App.SurveyVM.SurveyVersionLocal; }
-        }
-
-        public int SurveyQuestionsCount
-        {
-            get { return App.SurveyVM.SurveyQuestionsCount; }
-        }
     }
 }

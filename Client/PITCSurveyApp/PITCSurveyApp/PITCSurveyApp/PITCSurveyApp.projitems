@@ -26,7 +26,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\LoginViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MenuPageViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MySurveysViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SurveyResponseViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MySurveysItemViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SurveyViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>

@@ -9,7 +9,7 @@ using Xamarin.Forms;
 
 namespace PITCSurveyApp.Models
 {
-    class SurveyResponseViewModel : BaseViewModel
+    class MySurveysItemViewModel : BaseViewModel
     {
         private readonly IFileHelper _fileHelper = new FileHelper();
         private readonly string _filename;
@@ -20,14 +20,14 @@ namespace PITCSurveyApp.Models
         private Color _textColor;
         private string _details;
 
-        public SurveyResponseViewModel(string filename, SurveyResponseModelWrapper response)
+        public MySurveysItemViewModel(string filename, SurveyResponseModelWrapper response)
             : this(filename)
         {
             _response = response;
             Update();
         }
 
-        public SurveyResponseViewModel(string filename)
+        public MySurveysItemViewModel(string filename)
         {
             _filename = filename;
             DeleteCommand = new Command(Delete);

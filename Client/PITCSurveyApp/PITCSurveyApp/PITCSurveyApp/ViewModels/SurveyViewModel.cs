@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using PITCSurveyApp.Helpers;
+using PITCSurveyApp.Models;
 using PITCSurveyApp.Services;
 using PITCSurveyLib.Models;
 
@@ -11,6 +15,8 @@ namespace PITCSurveyApp.ViewModels
     /// </summary>
     public class SurveyViewModel
     {
+        private const string SurveyFileName = "questions.json";
+
         //public NotifyTaskCompletion<SurveyModel> Survey { get; private set; }
         private SurveyModel Survey { get; set;  }
 
@@ -20,34 +26,33 @@ namespace PITCSurveyApp.ViewModels
         /// <returns></returns>
         public async Task GetSurvey()
         {
-            Exception error = null;
+            var fileHelper = new FileHelper();
+            if (await fileHelper.ExistsAsync(SurveyFileName))
+            {
+                var surveyText = await fileHelper.ReadTextAsync(SurveyFileName);
+                var surveyJson = JObject.Parse(surveyText);
+                Survey = surveyJson.ToObject<SurveyModel>();
+            }
+
             try
             {
-                // TO DO: Load the survey from JSON files in local storage, if not present
-                // then load them from Azure
-                Survey = await SurveyCloudService.GetLatestSurvey();
+                // TODO: add logic to only periodically check for survey updates
+                var azureSurvey = await SurveyCloudService.GetLatestSurvey();
+                if (Survey == null || Survey.Version < azureSurvey.Version)
+                {
+                    Survey = azureSurvey;
+                    var surveyJson = JObject.FromObject(Survey);
+                    var surveyText = surveyJson.ToString(Formatting.None);
+                    await fileHelper.WriteTextAsync(SurveyFileName, surveyText);
+                }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Error: " + ex);
-                error = ex;
+                // TODO: capture exception in HockeyApp
             }
         }
 
-        public string SurveyVersionCloud
-        {
-            // TO DO: Get the actual version from the survey in Azure
-            get
-            {
-                return "1.0";
-            }
-        }
-
-        public string SurveyVersionLocal
-        {
-            // TO DO: Get the actual version from the survey store locally
-            get { return "1.0"; }
-        }
+        public string SurveyVersion => Survey?.Version.ToString();
 
         public int SurveyQuestionsCount
         {
