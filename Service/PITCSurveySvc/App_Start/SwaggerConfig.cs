@@ -54,8 +54,8 @@ namespace PITCSurveySvc
                         // you'll need to implement a custom IDocumentFilter and/or IOperationFilter to set these properties
                         // according to your specific authorization implementation
                         //
-                        //c.BasicAuth("basic")
-                        //    .Description("Basic HTTP Authentication");
+                        c.BasicAuth("basic")
+                            .Description("Basic HTTP Authentication");
                         //
 						// NOTE: You must also configure 'EnableApiKeySupport' below in the SwaggerUI section
                         //c.ApiKey("apiKey")
@@ -97,7 +97,7 @@ namespace PITCSurveySvc
                         // those comments into the generated docs and UI. You can enable this by providing the path to one or
                         // more Xml comment files.
                         //
-                        //c.IncludeXmlComments(GetXmlCommentsPath());
+                        c.IncludeXmlComments($"{System.AppDomain.CurrentDomain.BaseDirectory}\\bin\\PITCSurveySvc.xml");
 
                         // Swashbuckle makes a best attempt at generating Swagger compliant JSON schemas for the various types
                         // exposed in your API. However, there may be occasions when more control of the output is needed.

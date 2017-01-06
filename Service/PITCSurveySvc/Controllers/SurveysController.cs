@@ -13,13 +13,22 @@ using System.Web.Http.Description;
 
 namespace PITCSurveySvc.Controllers
 {
+	/// <summary>
+	/// Controller for Surveys (blank forms).
+	/// </summary>
 	public class SurveysController : BaseController
     {
 
 		// GET: api/Surveys
+		/// <summary>
+		/// Get a list of available Surveys and metadata.
+		/// </summary>
+		/// <param name="ActiveOnly"></param>
+		/// <returns></returns>
 		[SwaggerOperation("GetAll")]
 		[ResponseType(typeof(IEnumerable<SurveyModel>))]
 		[SwaggerResponse(HttpStatusCode.OK, "All mai Survey are belong 2 u <3", typeof(IEnumerable<SurveyModel>))]
+		[AllowAnonymous]
 		public IEnumerable<SurveySummaryModel> GetSurveys(bool ActiveOnly)
         {
 			// We don't use this here, but it ensures the volunteer record is created if it doesn't exist yet.
@@ -44,10 +53,16 @@ namespace PITCSurveySvc.Controllers
         }
 
 		// GET: api/Surveys/5
+		/// <summary>
+		/// Get the full body of the specified Survey.
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 		[SwaggerOperation("GetByID")]
 		[ResponseType(typeof(SurveyModel))]
 		[SwaggerResponse(HttpStatusCode.NotFound, "A Survey with the specified ID was not found.")]
 		[SwaggerResponse(HttpStatusCode.OK, "U can haz Survey", typeof(SurveyModel))]
+		[AllowAnonymous]
 		public IHttpActionResult GetSurvey(int id)
 		{
 			// We don't use this here, but it ensures the volunteer record is created if it doesn't exist yet.
@@ -74,6 +89,11 @@ namespace PITCSurveySvc.Controllers
         }
 
 		// Import
+		/// <summary>
+		/// Import a new / updated Survey.
+		/// </summary>
+		/// <param name="Model"></param>
+		/// <returns></returns>
 		[SwaggerOperation("Create")]
 		[SwaggerResponse(HttpStatusCode.BadRequest)]
 		[SwaggerResponse(HttpStatusCode.NoContent)]
@@ -129,6 +149,5 @@ namespace PITCSurveySvc.Controllers
 				}
 			}
 		}
-
     }
 }

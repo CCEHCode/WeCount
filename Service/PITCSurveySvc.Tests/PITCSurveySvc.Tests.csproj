@@ -51,10 +51,14 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Runtime, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.4.1.0\lib\net462\System.Runtime.dll</HintPath>
+    </Reference>
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -88,10 +92,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Data\PITYouthCountSurveyResponse.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Data\PITYouthCountSurvey.json">
+    <None Include="Data\PITYouthCountSurvey_InitialImport.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

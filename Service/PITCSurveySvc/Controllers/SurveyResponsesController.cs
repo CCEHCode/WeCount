@@ -11,15 +11,24 @@ using System.Web.Http.Description;
 
 namespace PITCSurveySvc.Controllers
 {
+	/// <summary>
+	/// Controller for Survey Responses (filled-in forms).
+	/// </summary>
 	public class SurveyResponsesController : BaseController
     {
         
 		// POST: api/SurveyResponses
+		/// <summary>
+		/// Submit a completed Survey Response.
+		/// </summary>
+		/// <param name="surveyResponse"></param>
+		/// <returns></returns>
         [ResponseType(typeof(void))]
 		[SwaggerOperation("Create")]
 		[SwaggerResponse(HttpStatusCode.BadRequest, "The survey data wasn't acceptable (improper formatting, etc.).")]
 		[SwaggerResponse(HttpStatusCode.Conflict, "A SurveyResponse with the same ResponseIdentifier is already uploaded.")]
 		[SwaggerResponse(HttpStatusCode.NoContent, "SurveyResponse uploaded successfully.")]
+		[AllowAnonymous]
 		public IHttpActionResult PostSurveyResponse(SurveyResponseModel surveyResponse)
         {
 			Volunteer sv = GetAuthenticatedVolunteer();
@@ -59,8 +68,6 @@ namespace PITCSurveySvc.Controllers
 			{
 				return InternalServerError(ex);
 			}
-
 		}
-
 	}
 }

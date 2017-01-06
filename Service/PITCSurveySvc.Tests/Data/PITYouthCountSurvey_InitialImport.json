@@ -1,0 +1,1815 @@
+{
+	"SurveyID": 1,
+	"Description": "2017 PIT Youth Survey",
+  "Questions": [
+    {
+      "QuestionID": 1,
+      "QuestionNum": "1",
+      "QuestionText": "Have you already completed a survey?",
+      "QuestionHelpText": "",
+      "AllowMultipleAnswers": false,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 1,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "Yes",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": "",
+          "EndSurvey":  true
+        },
+        {
+          "AnswerChoiceID": 2,
+          "AnswerChoiceNum": "b",
+          "AnswerChoiceText": "No",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 2
+        }
+      ]
+    },
+    {
+      "QuestionID": 2,
+      "QuestionNum": "2",
+      "QuestionText": "How old are you?",
+      "QuestionHelpText": "",
+      "AllowMultipleAnswers": false,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 3,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "Age 0-12, Specify:",
+          "AdditionalAnswerDataFormat": 2,
+          "NextQuestionID": "",
+          "EndSurvey": true
+        },
+        {
+          "AnswerChoiceID": 4,
+          "AnswerChoiceNum": "b",
+          "AnswerChoiceText": "Age 13-24, Specify:",
+          "AdditionalAnswerDataFormat": 2,
+          "NextQuestionID": 3
+        },
+        {
+          "AnswerChoiceID": 5,
+          "AnswerChoiceNum": "c",
+          "AnswerChoiceText": "Age 25+, Specify:",
+          "AdditionalAnswerDataFormat": 2,
+          "NextQuestionID": "",
+          "EndSurvey": true
+        }
+      ]
+    },
+    {
+      "QuestionID": 3,
+      "QuestionNum": "3",
+      "QuestionText": "What are your initials?",
+      "QuestionHelpText": "",
+      "AllowMultipleAnswers": false,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 6,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "",
+          "AdditionalAnswerDataFormat": 1,
+          "NextQuestionID": 4
+        },
+        {
+          "AnswerChoiceID": 7,
+          "AnswerChoiceNum": "b",
+          "AnswerChoiceText": "Don't Know",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 4
+        },
+        {
+          "AnswerChoiceID": 8,
+          "AnswerChoiceNum": "c",
+          "AnswerChoiceText": "Refused",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 4
+        }
+      ]
+    },
+    {
+      "QuestionID": 4,
+      "QuestionNum": "4",
+      "QuestionText": "What is your date of birth?",
+      "QuestionHelpText": "MM/DD/YYYY",
+      "AllowMultipleAnswers": false,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 118,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "",
+          "AdditionalAnswerDataFormat": 3,
+          "NextQuestionID": 5
+        },
+        {
+          "AnswerChoiceID": 7,
+          "AnswerChoiceNum": "b",
+          "AnswerChoiceText": "Don't Know",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 5
+        },
+        {
+          "AnswerChoiceID": 8,
+          "AnswerChoiceNum": "c",
+          "AnswerChoiceText": "Refused",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 5
+        }
+      ]
+    },
+    {
+      "QuestionID": 5,
+      "QuestionNum": "5",
+      "QuestionText": "What city do you currently live/stay in?",
+      "QuestionHelpText": "",
+      "AllowMultipleAnswers": false,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 6,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "",
+          "AdditionalAnswerDataFormat": 1,
+          "NextQuestionID": 6
+        },
+        {
+          "AnswerChoiceID": 7,
+          "AnswerChoiceNum": "b",
+          "AnswerChoiceText": "Don't Know",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 6
+        },
+        {
+          "AnswerChoiceID": 8,
+          "AnswerChoiceNum": "c",
+          "AnswerChoiceText": "Refused",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 6
+        }
+      ]
+    },
+    {
+      "QuestionID": 6,
+      "QuestionNum": "6",
+      "QuestionText": "Where did you sleep on Tuesday, January 24th?",
+      "QuestionHelpText": "Check One Only - See Form for Responses",
+      "AllowMultipleAnswers": false,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 9,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "Shelter (emergengy, temporary) Specify:",
+          "AdditionalAnswerDataFormat": 1,
+          "NextQuestionID": 10
+        },
+        {
+          "AnswerChoiceID": 10,
+          "AnswerChoiceNum": "b",
+          "AnswerChoiceText": "Transitional Housing Specify:",
+          "AdditionalAnswerDataFormat": 1,
+          "NextQuestionID": 10
+        },
+        {
+          "AnswerChoiceID": 11,
+          "AnswerChoiceNum": "c",
+          "AnswerChoiceText": "Hotel or motel I'm paying for",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 10
+        },
+        {
+          "AnswerChoiceID": 12,
+          "AnswerChoiceNum": "d",
+          "AnswerChoiceText": "Hotel or motel a charity is paying for",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 10
+        },
+        {
+          "AnswerChoiceID": 13,
+          "AnswerChoiceNum": "e",
+          "AnswerChoiceText": "Friend's home",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 10
+        },
+        {
+          "AnswerChoiceID": 14,
+          "AnswerChoiceNum": "f",
+          "AnswerChoiceText": "Couch surfing (moving from one temporary housing arragement to another",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 10
+        },
+        {
+          "AnswerChoiceID": 15,
+          "AnswerChoiceNum": "g",
+          "AnswerChoiceText": "Hospital or emegency room",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 10
+        },
+        {
+          "AnswerChoiceID": 16,
+          "AnswerChoiceNum": "h",
+          "AnswerChoiceText": "Residential treatment facility",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 10
+        },
+        {
+          "AnswerChoiceID": 17,
+          "AnswerChoiceNum": "i",
+          "AnswerChoiceText": "Juvenile detention center or jail",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 10
+        },
+        {
+          "AnswerChoiceID": 18,
+          "AnswerChoiceNum": "j",
+          "AnswerChoiceText": "Car or other vehicle",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 7
+        },
+        {
+          "AnswerChoiceID": 19,
+          "AnswerChoiceNum": "k",
+          "AnswerChoiceText": "Abondoned building/vacant unit/squat",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 7
+        },
+        {
+          "AnswerChoiceID": 20,
+          "AnswerChoiceNum": "l",
+          "AnswerChoiceText": "On a train/bus or in a train/bus station",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 7
+        },
+        {
+          "AnswerChoiceID": 21,
+          "AnswerChoiceNum": "m",
+          "AnswerChoiceText": "24-hour restaurant/laundromat or other business/retail establishment",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 7
+        },
+        {
+          "AnswerChoiceID": 22,
+          "AnswerChoiceNum": "n",
+          "AnswerChoiceText": "Anywhere outside (street, park, viaduct)",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 7
+        },
+        {
+          "AnswerChoiceID": 23,
+          "AnswerChoiceNum": "o",
+          "AnswerChoiceText": "Parent's Home",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 10
+        },
+        {
+          "AnswerChoiceID": 24,
+          "AnswerChoiceNum": "p",
+          "AnswerChoiceText": "Other Relative's Home",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 10
+        },
+        {
+          "AnswerChoiceID": 25,
+          "AnswerChoiceNum": "q",
+          "AnswerChoiceText": "Foster Family Home",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 10
+        },
+        {
+          "AnswerChoiceID": 26,
+          "AnswerChoiceNum": "r",
+          "AnswerChoiceText": "Group Home",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 10
+        },
+        {
+          "AnswerChoiceID": 27,
+          "AnswerChoiceNum": "s",
+          "AnswerChoiceText": "Home of boyfriend/girlfriend",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 10
+        },
+        {
+          "AnswerChoiceID": 28,
+          "AnswerChoiceNum": "t",
+          "AnswerChoiceText": "Other Specify:",
+          "AdditionalAnswerDataFormat": 1,
+          "NextQuestionID": 10
+        },
+        {
+          "AnswerChoiceID": 7,
+          "AnswerChoiceNum": "u",
+          "AnswerChoiceText": "Don't Know",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 10
+        },
+        {
+          "AnswerChoiceID": 8,
+          "AnswerChoiceNum": "v",
+          "AnswerChoiceText": "Refused",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 10
+        }
+      ]
+    },
+    {
+      "QuestionID": 7,
+      "QuestionNum": "6a",
+      "QuestionText": "Did you try to get assistance at an emergency shelter?",
+      "QuestionHelpText": "",
+      "AllowMultipleAnswers": false,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 1,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "Yes",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 8
+        },
+        {
+          "AnswerChoiceID": 2,
+          "AnswerChoiceNum": "b",
+          "AnswerChoiceText": "No",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 9
+        }
+      ]
+    },
+    {
+      "QuestionID": 8,
+      "QuestionNum": "6a1",
+      "QuestionText": "Why were you not admitted to shelter?",
+      "QuestionHelpText": "",
+      "AllowMultipleAnswers": false,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 29,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "Specify:",
+          "AdditionalAnswerDataFormat": 1,
+          "NextQuestionID": 10
+        }
+      ]
+    },
+    {
+      "QuestionID": 9,
+      "QuestionNum": "6a2",
+      "QuestionText": "Why didn't you seek assistance?",
+      "QuestionHelpText": "Check ALL that apply - See Form for Responses",
+      "AllowMultipleAnswers": true,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 30,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "Shelter was full",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 10
+        },
+        {
+          "AnswerChoiceID": 31,
+          "AnswerChoiceNum": "b",
+          "AnswerChoiceText": "Did not know shelters were available for me",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 10
+        },
+        {
+          "AnswerChoiceID": 32,
+          "AnswerChoiceNum": "c",
+          "AnswerChoiceText": "Shelter has too many rules",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 10
+        },
+        {
+          "AnswerChoiceID": 33,
+          "AnswerChoiceNum": "d",
+          "AnswerChoiceText": "Did not know where to go",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 10
+        },
+        {
+          "AnswerChoiceID": 34,
+          "AnswerChoiceNum": "e",
+          "AnswerChoiceText": "Heard shelter was dirty",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 10
+        },
+        {
+          "AnswerChoiceID": 35,
+          "AnswerChoiceNum": "f",
+          "AnswerChoiceText": "Heard shelter was dangerous",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 10
+        },
+        {
+          "AnswerChoiceID": 36,
+          "AnswerChoiceNum": "g",
+          "AnswerChoiceText": "If minor-did not have local shelter for my age",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 10
+        },
+        {
+          "AnswerChoiceID": 37,
+          "AnswerChoiceNum": "h",
+          "AnswerChoiceText": "If minor-afraid of DCF involvment",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 10
+        },
+        {
+          "AnswerChoiceID": 38,
+          "AnswerChoiceNum": "i",
+          "AnswerChoiceText": "If pregnant or parenting-afraid of DCF involvment",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 10
+        },
+        {
+          "AnswerChoiceID": 39,
+          "AnswerChoiceNum": "j",
+          "AnswerChoiceText": "Had no transportation to the shelter",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 10
+        },
+        {
+          "AnswerChoiceID": 40,
+          "AnswerChoiceNum": "k",
+          "AnswerChoiceText": "Did not want others to know they were homeless",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 10
+        },
+        {
+          "AnswerChoiceID": 41,
+          "AnswerChoiceNum": "l",
+          "AnswerChoiceText": "Would stay if the shelter had a seperate space for my age group",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 10
+        },
+        {
+          "AnswerChoiceID": 42,
+          "AnswerChoiceNum": "m",
+          "AnswerChoiceText": "Would stay if the shelter had a seperate bathroom or bathroom hours for my age group",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 10
+        },
+        {
+          "AnswerChoiceID": 43,
+          "AnswerChoiceNum": "n",
+          "AnswerChoiceText": "Feel uncomfortable but would stay with a host family temporarily",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 10
+        },
+        {
+          "AnswerChoiceID": 44,
+          "AnswerChoiceNum": "o",
+          "AnswerChoiceText": "Feel uncomfortable but would stay in an emergency program that offered temporary stays in shared apartments with others in my age group",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 10
+        },
+        {
+          "AnswerChoiceID": 45,
+          "AnswerChoiceNum": "p",
+          "AnswerChoiceText": "Thought they could make it on their own",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 10
+        },
+        {
+          "AnswerChoiceID": 46,
+          "AnswerChoiceNum": "q",
+          "AnswerChoiceText": "Didn't like how shelter staff treated them",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 10
+        },
+        {
+          "AnswerChoiceID": 27,
+          "AnswerChoiceNum": "t",
+          "AnswerChoiceText": "Other Specify:",
+          "AdditionalAnswerDataFormat": 1,
+          "NextQuestionID": 10
+        }
+      ]
+    },
+    {
+      "QuestionID": 10,
+      "QuestionNum": "7a",
+      "QuestionText": "How long have you been staying where you currently are?",
+      "QuestionHelpText": "",
+      "AllowMultipleAnswers": false,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 47,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "Days",
+          "AdditionalAnswerDataFormat": 2,
+          "NextQuestionID": 11
+        },
+        {
+          "AnswerChoiceID": 48,
+          "AnswerChoiceNum": "b",
+          "AnswerChoiceText": "Weeks",
+          "AdditionalAnswerDataFormat": 2,
+          "NextQuestionID": 11
+        },
+        {
+          "AnswerChoiceID": 49,
+          "AnswerChoiceNum": "c",
+          "AnswerChoiceText": "Months",
+          "AdditionalAnswerDataFormat": 2,
+          "NextQuestionID": 11
+        },
+        {
+          "AnswerChoiceID": 50,
+          "AnswerChoiceNum": "d",
+          "AnswerChoiceText": "Years",
+          "AdditionalAnswerDataFormat": 2,
+          "NextQuestionID": 11
+        },
+        {
+          "AnswerChoiceID": 7,
+          "AnswerChoiceNum": "e",
+          "AnswerChoiceText": "Don't Know",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 11
+        },
+        {
+          "AnswerChoiceID": 8,
+          "AnswerChoiceNum": "f",
+          "AnswerChoiceText": "Refused",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 11
+        }
+      ]
+    },
+    {
+      "QuestionID": 11,
+      "QuestionNum": "7b",
+      "QuestionText": "Do you feel like you can stay where you slept for as long as you'd like without being asked to leave?",
+      "QuestionHelpText": "",
+      "AllowMultipleAnswers": false,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 1,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "Yes",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 12
+        },
+        {
+          "AnswerChoiceID": 2,
+          "AnswerChoiceNum": "b",
+          "AnswerChoiceText": "No",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 12
+        },
+        {
+          "AnswerChoiceID": 7,
+          "AnswerChoiceNum": "c",
+          "AnswerChoiceText": "Don't Know",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 12
+        },
+        {
+          "AnswerChoiceID": 8,
+          "AnswerChoiceNum": "d",
+          "AnswerChoiceText": "Refused",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 12
+        }
+      ]
+    },
+    {
+      "QuestionID": 12,
+      "QuestionNum": "7c",
+      "QuestionText": "Do you feel safe where you're currently staying?",
+      "QuestionHelpText": "",
+      "AllowMultipleAnswers": false,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 1,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "Yes",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 13
+        },
+        {
+          "AnswerChoiceID": 2,
+          "AnswerChoiceNum": "b",
+          "AnswerChoiceText": "No",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 13
+        },
+        {
+          "AnswerChoiceID": 7,
+          "AnswerChoiceNum": "c",
+          "AnswerChoiceText": "Don't Know",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 13
+        },
+        {
+          "AnswerChoiceID": 8,
+          "AnswerChoiceNum": "d",
+          "AnswerChoiceText": "Refused",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 13
+        }
+      ]
+    },
+    {
+      "QuestionID": 13,
+      "QuestionNum": "7d",
+      "QuestionText": "How many times have you moved in just the last 60 days?",
+      "QuestionHelpText": "",
+      "AllowMultipleAnswers": false,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 51,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "I didn't move",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 15
+        },
+        {
+          "AnswerChoiceID": 52,
+          "AnswerChoiceNum": "b",
+          "AnswerChoiceText": "1 Time",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 14
+        },
+        {
+          "AnswerChoiceID": 53,
+          "AnswerChoiceNum": "c",
+          "AnswerChoiceText": "2 Times",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 14
+        },
+        {
+          "AnswerChoiceID": 54,
+          "AnswerChoiceNum": "d",
+          "AnswerChoiceText": "3 Times",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 14
+        },
+        {
+          "AnswerChoiceID": 55,
+          "AnswerChoiceNum": "e",
+          "AnswerChoiceText": "More than 3 Times",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 14
+        },
+        {
+          "AnswerChoiceID": 7,
+          "AnswerChoiceNum": "f",
+          "AnswerChoiceText": "Don't Know",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 15
+        },
+        {
+          "AnswerChoiceID": 8,
+          "AnswerChoiceNum": "g",
+          "AnswerChoiceText": "Refused",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 15
+        }
+      ]
+    },
+    {
+      "QuestionID": 14,
+      "QuestionNum": "7d1",
+      "QuestionText": "Did you move with your parent or guardian?",
+      "QuestionHelpText": "",
+      "AllowMultipleAnswers": false,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 1,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "Yes",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 15
+        },
+        {
+          "AnswerChoiceID": 2,
+          "AnswerChoiceNum": "b",
+          "AnswerChoiceText": "No",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 15
+        },
+        {
+          "AnswerChoiceID": 7,
+          "AnswerChoiceNum": "c",
+          "AnswerChoiceText": "Don't Know",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 15
+        },
+        {
+          "AnswerChoiceID": 8,
+          "AnswerChoiceNum": "d",
+          "AnswerChoiceText": "Refused",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 15
+        }
+      ]
+    },
+    {
+      "QuestionID": 15,
+      "QuestionNum": "7e",
+      "QuestionText": "How many times have you not had a place to stay in the last 3 years?",
+      "QuestionHelpText": "",
+      "AllowMultipleAnswers": false,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 56,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "Three or fewer",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 17
+        },
+        {
+          "AnswerChoiceID": 57,
+          "AnswerChoiceNum": "b",
+          "AnswerChoiceText": "Four or more",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 16
+        },
+        {
+          "AnswerChoiceID": 7,
+          "AnswerChoiceNum": "c",
+          "AnswerChoiceText": "Don't Know",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 17
+        },
+        {
+          "AnswerChoiceID": 8,
+          "AnswerChoiceNum": "d",
+          "AnswerChoiceText": "Refused",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 17
+        }
+      ]
+    },
+    {
+      "QuestionID": 16,
+      "QuestionNum": "7e1",
+      "QuestionText": "How many total months were you in that situation?",
+      "QuestionHelpText": "",
+      "AllowMultipleAnswers": false,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 58,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "12 or less months - Specify:",
+          "AdditionalAnswerDataFormat": 2,
+          "NextQuestionID": 17
+        },
+        {
+          "AnswerChoiceID": 59,
+          "AnswerChoiceNum": "b",
+          "AnswerChoiceText": "More than 12 Months",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 17
+        },
+        {
+          "AnswerChoiceID": 7,
+          "AnswerChoiceNum": "c",
+          "AnswerChoiceText": "Don't Know",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 17
+        },
+        {
+          "AnswerChoiceID": 8,
+          "AnswerChoiceNum": "d",
+          "AnswerChoiceText": "Refused",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 17
+        }
+      ]
+    },
+    {
+      "QuestionID": 17,
+      "QuestionNum": "8",
+      "QuestionText": "Do you have a high school diploma or GED?",
+      "QuestionHelpText": "",
+      "AllowMultipleAnswers": false,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 1,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "Yes",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 18
+        },
+        {
+          "AnswerChoiceID": 2,
+          "AnswerChoiceNum": "b",
+          "AnswerChoiceText": "No",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 18
+        },
+        {
+          "AnswerChoiceID": 7,
+          "AnswerChoiceNum": "c",
+          "AnswerChoiceText": "Don't Know",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 18
+        },
+        {
+          "AnswerChoiceID": 8,
+          "AnswerChoiceNum": "d",
+          "AnswerChoiceText": "Refused",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 18
+        }
+      ]
+    },
+    {
+      "QuestionID": 18,
+      "QuestionNum": "9",
+      "QuestionText": "Are you currently attending school or another education program?",
+      "QuestionHelpText": "",
+      "AllowMultipleAnswers": false,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 1,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "Yes",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 19
+        },
+        {
+          "AnswerChoiceID": 2,
+          "AnswerChoiceNum": "b",
+          "AnswerChoiceText": "No",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 19
+        },
+        {
+          "AnswerChoiceID": 7,
+          "AnswerChoiceNum": "c",
+          "AnswerChoiceText": "Don't Know",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 19
+        },
+        {
+          "AnswerChoiceID": 8,
+          "AnswerChoiceNum": "d",
+          "AnswerChoiceText": "Refused",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 19
+        }
+      ]
+    },
+    {
+      "QuestionID": 19,
+      "QuestionNum": "10",
+      "QuestionText": "Are you currently employed at a job for which you receive a paycheck?",
+      "QuestionHelpText": "",
+      "AllowMultipleAnswers": false,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 1,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "Yes",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 20
+        },
+        {
+          "AnswerChoiceID": 2,
+          "AnswerChoiceNum": "b",
+          "AnswerChoiceText": "No",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 20
+        },
+        {
+          "AnswerChoiceID": 7,
+          "AnswerChoiceNum": "c",
+          "AnswerChoiceText": "Don't Know",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 20
+        },
+        {
+          "AnswerChoiceID": 8,
+          "AnswerChoiceNum": "d",
+          "AnswerChoiceText": "Refused",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 20
+        }
+      ]
+    },
+    {
+      "QuestionID": 20,
+      "QuestionNum": "11",
+      "QuestionText": "Do you currently receive any public or government benefits?",
+      "QuestionHelpText": "",
+      "AllowMultipleAnswers": false,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 1,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "Yes",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 21
+        },
+        {
+          "AnswerChoiceID": 2,
+          "AnswerChoiceNum": "b",
+          "AnswerChoiceText": "No",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 21
+        },
+        {
+          "AnswerChoiceID": 7,
+          "AnswerChoiceNum": "c",
+          "AnswerChoiceText": "Don't Know",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 21
+        },
+        {
+          "AnswerChoiceID": 8,
+          "AnswerChoiceNum": "d",
+          "AnswerChoiceText": "Refused",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 21
+        }
+      ]
+    },
+    {
+      "QuestionID": 21,
+      "QuestionNum": "12",
+      "QuestionText": "Have you ever had involvement with foster care or DCF?",
+      "QuestionHelpText": "",
+      "AllowMultipleAnswers": false,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 1,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "Yes",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 22
+        },
+        {
+          "AnswerChoiceID": 2,
+          "AnswerChoiceNum": "b",
+          "AnswerChoiceText": "No",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 22
+        },
+        {
+          "AnswerChoiceID": 7,
+          "AnswerChoiceNum": "c",
+          "AnswerChoiceText": "Don't Know",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 22
+        },
+        {
+          "AnswerChoiceID": 8,
+          "AnswerChoiceNum": "d",
+          "AnswerChoiceText": "Refused",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 22
+        }
+      ]
+    },
+    {
+      "QuestionID": 22,
+      "QuestionNum": "13",
+      "QuestionText": "Have you ever been in juvenile detention, prison, or jail?",
+      "QuestionHelpText": "",
+      "AllowMultipleAnswers": false,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 1,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "Yes",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 23
+        },
+        {
+          "AnswerChoiceID": 2,
+          "AnswerChoiceNum": "b",
+          "AnswerChoiceText": "No",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 23
+        },
+        {
+          "AnswerChoiceID": 7,
+          "AnswerChoiceNum": "c",
+          "AnswerChoiceText": "Don't Know",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 23
+        },
+        {
+          "AnswerChoiceID": 8,
+          "AnswerChoiceNum": "d",
+          "AnswerChoiceText": "Refused",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 23
+        }
+      ]
+    },
+    {
+      "QuestionID": 23,
+      "QuestionNum": "14",
+      "QuestionText": "Have you ever served in the US Armed Forces?",
+      "QuestionHelpText": "",
+      "AllowMultipleAnswers": false,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 1,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "Yes",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 24
+        },
+        {
+          "AnswerChoiceID": 2,
+          "AnswerChoiceNum": "b",
+          "AnswerChoiceText": "No",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 24
+        },
+        {
+          "AnswerChoiceID": 7,
+          "AnswerChoiceNum": "c",
+          "AnswerChoiceText": "Don't Know",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 24
+        },
+        {
+          "AnswerChoiceID": 8,
+          "AnswerChoiceNum": "d",
+          "AnswerChoiceText": "Refused",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 24
+        }
+      ]
+    },
+    {
+      "QuestionID": 24,
+      "QuestionNum": "15",
+      "QuestionText": "Are you pregnant or a parent?",
+      "QuestionHelpText": "",
+      "AllowMultipleAnswers": false,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 1,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "Yes",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 25
+        },
+        {
+          "AnswerChoiceID": 2,
+          "AnswerChoiceNum": "b",
+          "AnswerChoiceText": "No",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 26
+        }
+      ]
+    },
+    {
+      "QuestionID": 25,
+      "QuestionNum": "15a",
+      "QuestionText": "Do you have custody of your child(ren)?",
+      "QuestionHelpText": "",
+      "AllowMultipleAnswers": false,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 1,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "Yes",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 26
+        },
+        {
+          "AnswerChoiceID": 2,
+          "AnswerChoiceNum": "b",
+          "AnswerChoiceText": "No",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 26
+        },
+        {
+          "AnswerChoiceID": 7,
+          "AnswerChoiceNum": "c",
+          "AnswerChoiceText": "Don't Know",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 26
+        },
+        {
+          "AnswerChoiceID": 8,
+          "AnswerChoiceNum": "d",
+          "AnswerChoiceText": "Refused",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 26
+        }
+      ]
+    },
+    {
+      "QuestionID": 26,
+      "QuestionNum": "16",
+      "QuestionText": "Are you Hispanic or Latino?",
+      "QuestionHelpText": "",
+      "AllowMultipleAnswers": false,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 1,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "Yes",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 27
+        },
+        {
+          "AnswerChoiceID": 2,
+          "AnswerChoiceNum": "b",
+          "AnswerChoiceText": "No",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 27
+        }
+      ]
+    },
+    {
+      "QuestionID": 27,
+      "QuestionNum": "17",
+      "QuestionText": "What is your race?",
+      "QuestionHelpText": "(Choose all that apply)",
+      "AllowMultipleAnswers": true,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 60,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "White/Caucasian",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 28
+        },
+        {
+          "AnswerChoiceID": 61,
+          "AnswerChoiceNum": "b",
+          "AnswerChoiceText": "Black/African American",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 28
+        },
+        {
+          "AnswerChoiceID": 62,
+          "AnswerChoiceNum": "c",
+          "AnswerChoiceText": "Pacific Islander/Native Hawaiian",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 28
+        },
+        {
+          "AnswerChoiceID": 63,
+          "AnswerChoiceNum": "d",
+          "AnswerChoiceText": "American Indian/Alaskan Native",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 28
+        },
+        {
+          "AnswerChoiceID": 64,
+          "AnswerChoiceNum": "e",
+          "AnswerChoiceText": "Asian",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 28
+        },
+        {
+          "AnswerChoiceID": 27,
+          "AnswerChoiceNum": "f",
+          "AnswerChoiceText": "Other Specify:",
+          "AdditionalAnswerDataFormat": 1,
+          "NextQuestionID": 28
+        },
+        {
+          "AnswerChoiceID": 7,
+          "AnswerChoiceNum": "g",
+          "AnswerChoiceText": "Don't Know",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 28
+        },
+        {
+          "AnswerChoiceID": 8,
+          "AnswerChoiceNum": "h",
+          "AnswerChoiceText": "Refused",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 28
+        }
+      ]
+    },
+    {
+      "QuestionID": 28,
+      "QuestionNum": "18",
+      "QuestionText": "How would you describe your gender identity?",
+      "QuestionHelpText": "",
+      "AllowMultipleAnswers": false,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 65,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "Female",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 29
+        },
+        {
+          "AnswerChoiceID": 66,
+          "AnswerChoiceNum": "b",
+          "AnswerChoiceText": "Male",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 29
+        },
+        {
+          "AnswerChoiceID": 67,
+          "AnswerChoiceNum": "c",
+          "AnswerChoiceText": "Transgender - Identify as Female",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 29
+        },
+        {
+          "AnswerChoiceID": 68,
+          "AnswerChoiceNum": "d",
+          "AnswerChoiceText": "Transgender - Identify as Male",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 29
+        },
+        {
+          "AnswerChoiceID": 69,
+          "AnswerChoiceNum": "e",
+          "AnswerChoiceText": "Intersex",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 29
+        },
+        {
+          "AnswerChoiceID": 70,
+          "AnswerChoiceNum": "f",
+          "AnswerChoiceText": "Genderqueer/Gender-Nonconforming",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 29
+        },
+        {
+          "AnswerChoiceID": 27,
+          "AnswerChoiceNum": "g",
+          "AnswerChoiceText": "Other Specify:",
+          "AdditionalAnswerDataFormat": 1,
+          "NextQuestionID": 29
+        },
+        {
+          "AnswerChoiceID": 7,
+          "AnswerChoiceNum": "h",
+          "AnswerChoiceText": "Don't Know",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 29
+        },
+        {
+          "AnswerChoiceID": 8,
+          "AnswerChoiceNum": "i",
+          "AnswerChoiceText": "Refused",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 29
+        }
+      ]
+    },
+    {
+      "QuestionID": 29,
+      "QuestionNum": "19",
+      "QuestionText": "Which of the following best fits how you think about your sexual orientation?",
+      "QuestionHelpText": "",
+      "AllowMultipleAnswers": false,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 71,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "Heterosexual(Straight)",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 30
+        },
+        {
+          "AnswerChoiceID": 72,
+          "AnswerChoiceNum": "b",
+          "AnswerChoiceText": "Bisexual-that is,attracted to men and women",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 30
+        },
+        {
+          "AnswerChoiceID": 73,
+          "AnswerChoiceNum": "c",
+          "AnswerChoiceText": "Gay or Lesbian",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 30
+        },
+        {
+          "AnswerChoiceID": 74,
+          "AnswerChoiceNum": "d",
+          "AnswerChoiceText": "Not sexually attracted to males or females",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 30
+        },
+        {
+          "AnswerChoiceID": 75,
+          "AnswerChoiceNum": "e",
+          "AnswerChoiceText": "Pansexual",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 30
+        },
+        {
+          "AnswerChoiceID": 27,
+          "AnswerChoiceNum": "f",
+          "AnswerChoiceText": "Other Specify:",
+          "AdditionalAnswerDataFormat": 1,
+          "NextQuestionID": 30
+        },
+        {
+          "AnswerChoiceID": 7,
+          "AnswerChoiceNum": "g",
+          "AnswerChoiceText": "Don't Know",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 30
+        },
+        {
+          "AnswerChoiceID": 8,
+          "AnswerChoiceNum": "h",
+          "AnswerChoiceText": "Refused",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 30
+        }
+      ]
+    },
+    {
+      "QuestionID": 30,
+      "QuestionNum": "20",
+      "QuestionText": "Have you ever been told you have any of the following conditions? Chronic Health Condition, Physical Disability, Severe Mental Illness, Learning Disability, or Chronic Substance Abuse Issue?",
+      "QuestionHelpText": "",
+      "AllowMultipleAnswers": false,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 1,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "Yes",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 31
+        },
+        {
+          "AnswerChoiceID": 2,
+          "AnswerChoiceNum": "b",
+          "AnswerChoiceText": "No",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 31
+        },
+        {
+          "AnswerChoiceID": 7,
+          "AnswerChoiceNum": "c",
+          "AnswerChoiceText": "Don't Know",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 31
+        },
+        {
+          "AnswerChoiceID": 8,
+          "AnswerChoiceNum": "d",
+          "AnswerChoiceText": "Refused",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 31
+        }
+      ]
+    },
+    {
+      "QuestionID": 31,
+      "QuestionNum": "20a",
+      "QuestionText": "Have you ever been told you are HIV positive or have AIDS?",
+      "QuestionHelpText": "",
+      "AllowMultipleAnswers": false,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 1,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "Yes",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 32
+        },
+        {
+          "AnswerChoiceID": 2,
+          "AnswerChoiceNum": "b",
+          "AnswerChoiceText": "No",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 32
+        },
+        {
+          "AnswerChoiceID": 7,
+          "AnswerChoiceNum": "c",
+          "AnswerChoiceText": "Don't Know",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 32
+        },
+        {
+          "AnswerChoiceID": 8,
+          "AnswerChoiceNum": "d",
+          "AnswerChoiceText": "Refused",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 32
+        }
+      ]
+    },
+    {
+      "QuestionID": 32,
+      "QuestionNum": "21",
+      "QuestionText": "Has anyone ever encouraged/pressured/forced you to exchange sexual acts for money, drugs, food, place to stay, clothing or protection?",
+      "QuestionHelpText": "",
+      "AllowMultipleAnswers": false,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 1,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "Yes",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 33
+        },
+        {
+          "AnswerChoiceID": 2,
+          "AnswerChoiceNum": "b",
+          "AnswerChoiceText": "No",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 34
+        },
+        {
+          "AnswerChoiceID": 7,
+          "AnswerChoiceNum": "c",
+          "AnswerChoiceText": "Don't Know",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 34
+        },
+        {
+          "AnswerChoiceID": 8,
+          "AnswerChoiceNum": "d",
+          "AnswerChoiceText": "Refused",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 34
+        }
+      ]
+    },
+    {
+      "QuestionID": 33,
+      "QuestionNum": "21a",
+      "QuestionText": "Are you currently in a situation like that?",
+      "QuestionHelpText": "",
+      "AllowMultipleAnswers": false,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 1,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "Yes",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 34
+        },
+        {
+          "AnswerChoiceID": 2,
+          "AnswerChoiceNum": "b",
+          "AnswerChoiceText": "No",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 34
+        },
+        {
+          "AnswerChoiceID": 7,
+          "AnswerChoiceNum": "c",
+          "AnswerChoiceText": "Don't Know",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 34
+        },
+        {
+          "AnswerChoiceID": 8,
+          "AnswerChoiceNum": "d",
+          "AnswerChoiceText": "Refused",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 34
+        }
+      ]
+    },
+    {
+      "QuestionID": 34,
+      "QuestionNum": "22",
+      "QuestionText": "What do you feel led to you being homeless or unstably housed?",
+      "QuestionHelpText": "Check ALL that apply - See Form for Responses",
+      "AllowMultipleAnswers": true,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 76,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "Couldn't Find/Lost Job",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 35
+        },
+        {
+          "AnswerChoiceID": 77,
+          "AnswerChoiceNum": "b",
+          "AnswerChoiceText": "Conflict or problem with family/people you live with",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 35
+        },
+        {
+          "AnswerChoiceID": 78,
+          "AnswerChoiceNum": "c",
+          "AnswerChoiceText": "Being physically abused or beaten",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 35
+        },
+        {
+          "AnswerChoiceID": 79,
+          "AnswerChoiceNum": "d",
+          "AnswerChoiceText": "Couldn't pay rent",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 35
+        },
+        {
+          "AnswerChoiceID": 80,
+          "AnswerChoiceNum": "e",
+          "AnswerChoiceText": "Sex work, human trafficking or something like that",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 35
+        },
+        {
+          "AnswerChoiceID": 81,
+          "AnswerChoiceNum": "f",
+          "AnswerChoiceText": "Aged out of Foster Care/DCF",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 35
+        },
+        {
+          "AnswerChoiceID": 82,
+          "AnswerChoiceNum": "g",
+          "AnswerChoiceText": "Loss of reduction of benefits (food stamps, welfare, etc.)",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 35
+        },
+        {
+          "AnswerChoiceID": 83,
+          "AnswerChoiceNum": "h",
+          "AnswerChoiceText": "Eviction or risk of eviction",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 35
+        },
+        {
+          "AnswerChoiceID": 84,
+          "AnswerChoiceNum": "i",
+          "AnswerChoiceText": "Family violence",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 35
+        },
+        {
+          "AnswerChoiceID": 85,
+          "AnswerChoiceNum": "j",
+          "AnswerChoiceText": "Violence from a boyfriend, girlfriend, friend or someone like that",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 35
+        },
+        {
+          "AnswerChoiceID": 86,
+          "AnswerChoiceNum": "k",
+          "AnswerChoiceText": "Someone I lived with asked me to leave",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 35
+        },
+        {
+          "AnswerChoiceID": 87,
+          "AnswerChoiceNum": "l",
+          "AnswerChoiceText": "Because I'm pregnant or had a child",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 35
+        },
+        {
+          "AnswerChoiceID": 88,
+          "AnswerChoiceNum": "m",
+          "AnswerChoiceText": "Had to leave because of my gender identity or sexual orientation",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 35
+        },
+        {
+          "AnswerChoiceID": 89,
+          "AnswerChoiceNum": "n",
+          "AnswerChoiceText": "Release from prison/jail",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 35
+        },
+        {
+          "AnswerChoiceID": 90,
+          "AnswerChoiceNum": "o",
+          "AnswerChoiceText": "Release from hospital",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 35
+        },
+        {
+          "AnswerChoiceID": 91,
+          "AnswerChoiceNum": "p",
+          "AnswerChoiceText": "Household breakup/death in household",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 35
+        },
+        {
+          "AnswerChoiceID": 92,
+          "AnswerChoiceNum": "q",
+          "AnswerChoiceText": "Injury/Illness",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 35
+        },
+        {
+          "AnswerChoiceID": 93,
+          "AnswerChoiceNum": "r",
+          "AnswerChoiceText": "Release from mental health treatment facility",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 35
+        },
+        {
+          "AnswerChoiceID": 94,
+          "AnswerChoiceNum": "s",
+          "AnswerChoiceText": "Foreclosure or rented or owned property",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 35
+        },
+        {
+          "AnswerChoiceID": 95,
+          "AnswerChoiceNum": "t",
+          "AnswerChoiceText": "Drug/Alcohol abuse",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 35
+        },
+        {
+          "AnswerChoiceID": 27,
+          "AnswerChoiceNum": "u",
+          "AnswerChoiceText": "Other Specify:",
+          "AdditionalAnswerDataFormat": 1,
+          "NextQuestionID": 35
+        },
+        {
+          "AnswerChoiceID": 7,
+          "AnswerChoiceNum": "v",
+          "AnswerChoiceText": "Don't Know",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 35
+        },
+        {
+          "AnswerChoiceID": 8,
+          "AnswerChoiceNum": "w",
+          "AnswerChoiceText": "Refused",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": 35
+        }
+      ]
+    },
+    {
+      "QuestionID": 35,
+      "QuestionNum": "23",
+      "QuestionText": "Right now, what do you need to improve your well-being?",
+      "QuestionHelpText": "Check ALL that apply - See Form for Responses",
+      "AllowMultipleAnswers": true,
+      "AnswerChoices": [
+        {
+          "AnswerChoiceID": 96,
+          "AnswerChoiceNum": "a",
+          "AnswerChoiceText": "Birth Certificate",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": ""
+        },
+        {
+          "AnswerChoiceID": 97,
+          "AnswerChoiceNum": "b",
+          "AnswerChoiceText": "Birth Control/Condoms",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": ""
+        },
+        {
+          "AnswerChoiceID": 98,
+          "AnswerChoiceNum": "c",
+          "AnswerChoiceText": "Counseling/Mental Health Services",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": ""
+        },
+        {
+          "AnswerChoiceID": 99,
+          "AnswerChoiceNum": "d",
+          "AnswerChoiceText": "Drug/Alcohol Treatment",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": ""
+        },
+        {
+          "AnswerChoiceID": 100,
+          "AnswerChoiceNum": "e",
+          "AnswerChoiceText": "Education/help with school",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": ""
+        },
+        {
+          "AnswerChoiceID": 101,
+          "AnswerChoiceNum": "f",
+          "AnswerChoiceText": "Employment/career help",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": ""
+        },
+        {
+          "AnswerChoiceID": 102,
+          "AnswerChoiceNum": "g",
+          "AnswerChoiceText": "Financial Assistance",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": ""
+        },
+        {
+          "AnswerChoiceID": 103,
+          "AnswerChoiceNum": "h",
+          "AnswerChoiceText": "Food",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": ""
+        },
+        {
+          "AnswerChoiceID": 104,
+          "AnswerChoiceNum": "i",
+          "AnswerChoiceText": "Help with being able to go back home",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": ""
+        },
+        {
+          "AnswerChoiceID": 105,
+          "AnswerChoiceNum": "j",
+          "AnswerChoiceText": "Help with a physical or learning disability",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": ""
+        },
+        {
+          "AnswerChoiceID": 106,
+          "AnswerChoiceNum": "k",
+          "AnswerChoiceText": "Hygiene Products",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": ""
+        },
+        {
+          "AnswerChoiceID": 107,
+          "AnswerChoiceNum": "l",
+          "AnswerChoiceText": "I.D. Card",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": ""
+        },
+        {
+          "AnswerChoiceID": 108,
+          "AnswerChoiceNum": "m",
+          "AnswerChoiceText": "Immigration Assistance for myself",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": ""
+        },
+        {
+          "AnswerChoiceID": 109,
+          "AnswerChoiceNum": "n",
+          "AnswerChoiceText": "Immigration assitance for a parent",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": ""
+        },
+        {
+          "AnswerChoiceID": 110,
+          "AnswerChoiceNum": "o",
+          "AnswerChoiceText": "Language Classes",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": ""
+        },
+        {
+          "AnswerChoiceID": 111,
+          "AnswerChoiceNum": "p",
+          "AnswerChoiceText": "Legal Help",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": ""
+        },
+        {
+          "AnswerChoiceID": 112,
+          "AnswerChoiceNum": "q",
+          "AnswerChoiceText": "Medical services",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": ""
+        },
+        {
+          "AnswerChoiceID": 113,
+          "AnswerChoiceNum": "r",
+          "AnswerChoiceText": "Place to live short-term",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": ""
+        },
+        {
+          "AnswerChoiceID": 114,
+          "AnswerChoiceNum": "s",
+          "AnswerChoiceText": "Place to shower",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": ""
+        },
+        {
+          "AnswerChoiceID": 115,
+          "AnswerChoiceNum": "t",
+          "AnswerChoiceText": "Place to do laundry",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": ""
+        },
+        {
+          "AnswerChoiceID": 116,
+          "AnswerChoiceNum": "u",
+          "AnswerChoiceText": "Place to live long-term",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": ""
+        },
+        {
+          "AnswerChoiceID": 117,
+          "AnswerChoiceNum": "v",
+          "AnswerChoiceText": "Transportation",
+          "AdditionalAnswerDataFormat": 0,
+          "NextQuestionID": ""
+        },
+        {
+          "AnswerChoiceID": 27,
+          "AnswerChoiceNum": "w",
+          "AnswerChoiceText": "Other Specify:",
+          "AdditionalAnswerDataFormat": 1,
+          "NextQuestionID": ""
+        }
+      ]
+    }
+  ]
+}

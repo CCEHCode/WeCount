@@ -1,0 +1,406 @@
+﻿Test Name: TestBuildResponseJSON Test Outcome: Passed Result StandardOutput: Debug Trace: {
+  "SurveyID": 1,
+  "InterviewerID": null,
+  "StartTime": "/Date(1483662893463)/",
+  "EndTime": "/Date(1483663313463)/",
+  "ResponseIdentifier": "4748f5f0-8f57-4856-a7d0-c1332b01e6b7",
+  "GPSLocation": {
+    "Lat": 47.6419587,
+    "Lon": -122.1327818,
+    "Accuracy": 0
+  },
+  "LocationNotes": "",
+  "NearestAddress": {
+    "Street": "",
+    "City": "",
+    "State": "",
+    "ZipCode": ""
+  },
+  "QuestionResponses": [
+    {
+      "QuestionID": 72,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 72,
+          "AnswerChoiceID": 237,
+          "AdditionalAnswerData": null
+        }
+      ]
+    },
+    {
+      "QuestionID": 73,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 73,
+          "AnswerChoiceID": 239,
+          "AdditionalAnswerData": "1"
+        }
+      ]
+    },
+    {
+      "QuestionID": 74,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 74,
+          "AnswerChoiceID": 242,
+          "AdditionalAnswerData": "Random words here"
+        }
+      ]
+    },
+    {
+      "QuestionID": 75,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 75,
+          "AnswerChoiceID": 245,
+          "AdditionalAnswerData": "11/1/2016"
+        }
+      ]
+    },
+    {
+      "QuestionID": 76,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 76,
+          "AnswerChoiceID": 242,
+          "AdditionalAnswerData": "Random words here"
+        }
+      ]
+    },
+    {
+      "QuestionID": 77,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 77,
+          "AnswerChoiceID": 246,
+          "AdditionalAnswerData": "Random words here"
+        }
+      ]
+    },
+    {
+      "QuestionID": 78,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 78,
+          "AnswerChoiceID": 284,
+          "AdditionalAnswerData": "11"
+        }
+      ]
+    },
+    {
+      "QuestionID": 79,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 79,
+          "AnswerChoiceID": 237,
+          "AdditionalAnswerData": null
+        }
+      ]
+    },
+    {
+      "QuestionID": 80,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 80,
+          "AnswerChoiceID": 266,
+          "AdditionalAnswerData": "Random words here"
+        }
+      ]
+    },
+    {
+      "QuestionID": 81,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 81,
+          "AnswerChoiceID": 267,
+          "AdditionalAnswerData": null
+        },
+        {
+          "QuestionID": 81,
+          "AnswerChoiceID": 268,
+          "AdditionalAnswerData": null
+        },
+        {
+          "QuestionID": 81,
+          "AnswerChoiceID": 269,
+          "AdditionalAnswerData": null
+        }
+      ]
+    },
+    {
+      "QuestionID": 82,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 82,
+          "AnswerChoiceID": 237,
+          "AdditionalAnswerData": null
+        }
+      ]
+    },
+    {
+      "QuestionID": 83,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 83,
+          "AnswerChoiceID": 237,
+          "AdditionalAnswerData": null
+        }
+      ]
+    },
+    {
+      "QuestionID": 84,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 84,
+          "AnswerChoiceID": 288,
+          "AdditionalAnswerData": null
+        }
+      ]
+    },
+    {
+      "QuestionID": 85,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 85,
+          "AnswerChoiceID": 293,
+          "AdditionalAnswerData": null
+        }
+      ]
+    },
+    {
+      "QuestionID": 86,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 86,
+          "AnswerChoiceID": 237,
+          "AdditionalAnswerData": null
+        }
+      ]
+    },
+    {
+      "QuestionID": 87,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 87,
+          "AnswerChoiceID": 237,
+          "AdditionalAnswerData": null
+        }
+      ]
+    },
+    {
+      "QuestionID": 88,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 88,
+          "AnswerChoiceID": 295,
+          "AdditionalAnswerData": "10"
+        }
+      ]
+    },
+    {
+      "QuestionID": 89,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 89,
+          "AnswerChoiceID": 237,
+          "AdditionalAnswerData": null
+        }
+      ]
+    },
+    {
+      "QuestionID": 90,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 90,
+          "AnswerChoiceID": 237,
+          "AdditionalAnswerData": null
+        }
+      ]
+    },
+    {
+      "QuestionID": 91,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 91,
+          "AnswerChoiceID": 237,
+          "AdditionalAnswerData": null
+        }
+      ]
+    },
+    {
+      "QuestionID": 92,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 92,
+          "AnswerChoiceID": 237,
+          "AdditionalAnswerData": null
+        }
+      ]
+    },
+    {
+      "QuestionID": 93,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 93,
+          "AnswerChoiceID": 237,
+          "AdditionalAnswerData": null
+        }
+      ]
+    },
+    {
+      "QuestionID": 94,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 94,
+          "AnswerChoiceID": 237,
+          "AdditionalAnswerData": null
+        }
+      ]
+    },
+    {
+      "QuestionID": 95,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 95,
+          "AnswerChoiceID": 237,
+          "AdditionalAnswerData": null
+        }
+      ]
+    },
+    {
+      "QuestionID": 96,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 96,
+          "AnswerChoiceID": 237,
+          "AdditionalAnswerData": null
+        }
+      ]
+    },
+    {
+      "QuestionID": 97,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 97,
+          "AnswerChoiceID": 237,
+          "AdditionalAnswerData": null
+        }
+      ]
+    },
+    {
+      "QuestionID": 98,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 98,
+          "AnswerChoiceID": 297,
+          "AdditionalAnswerData": null
+        }
+      ]
+    },
+    {
+      "QuestionID": 99,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 99,
+          "AnswerChoiceID": 302,
+          "AdditionalAnswerData": null
+        }
+      ]
+    },
+    {
+      "QuestionID": 100,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 100,
+          "AnswerChoiceID": 308,
+          "AdditionalAnswerData": null
+        }
+      ]
+    },
+    {
+      "QuestionID": 101,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 101,
+          "AnswerChoiceID": 237,
+          "AdditionalAnswerData": null
+        }
+      ]
+    },
+    {
+      "QuestionID": 102,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 102,
+          "AnswerChoiceID": 237,
+          "AdditionalAnswerData": null
+        }
+      ]
+    },
+    {
+      "QuestionID": 103,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 103,
+          "AnswerChoiceID": 237,
+          "AdditionalAnswerData": null
+        }
+      ]
+    },
+    {
+      "QuestionID": 104,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 104,
+          "AnswerChoiceID": 237,
+          "AdditionalAnswerData": null
+        }
+      ]
+    },
+    {
+      "QuestionID": 105,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 105,
+          "AnswerChoiceID": 313,
+          "AdditionalAnswerData": null
+        },
+        {
+          "QuestionID": 105,
+          "AnswerChoiceID": 314,
+          "AdditionalAnswerData": null
+        },
+        {
+          "QuestionID": 105,
+          "AnswerChoiceID": 315,
+          "AdditionalAnswerData": null
+        },
+        {
+          "QuestionID": 105,
+          "AnswerChoiceID": 316,
+          "AdditionalAnswerData": null
+        }
+      ]
+    },
+    {
+      "QuestionID": 106,
+      "AnswerChoiceResponses": [
+        {
+          "QuestionID": 106,
+          "AnswerChoiceID": 333,
+          "AdditionalAnswerData": null
+        },
+        {
+          "QuestionID": 106,
+          "AnswerChoiceID": 334,
+          "AdditionalAnswerData": null
+        },
+        {
+          "QuestionID": 106,
+          "AnswerChoiceID": 335,
+          "AdditionalAnswerData": null
+        }
+      ]
+    }
+  ]
+}

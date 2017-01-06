@@ -125,12 +125,7 @@ namespace PITCSurveySvc.Models
 
 				if (q == null)
 				{
-					q = new Question
-					{
-						QuestionText = qm.QuestionText,
-						ClarificationText = qm.QuestionHelpText,            // Move to SurveyQuestion?
-						AllowMultipleAnswers = qm.AllowMultipleAnswers      // Move to SurveyQuestion?
-					};
+					q = new Question();
 
 					_db.Questions.Add(q);
 
@@ -141,21 +136,21 @@ namespace PITCSurveySvc.Models
 					Trace.WriteLine($"- Q {q.QuestionText}");
 				}
 
+				q.QuestionText = qm.QuestionText;
+				q.ClarificationText = qm.QuestionHelpText;            // Move to SurveyQuestion?
+				q.AllowMultipleAnswers = qm.AllowMultipleAnswers;      // Move to SurveyQuestion?
+				
 				QuestionsByModelID.Add(qm.QuestionID, q);
 
 				foreach (SurveyQuestionAnswerChoiceModel acm in qm.AnswerChoices)
 				{
 					// See if answer choice already exists. Remember, answer choices are reusable, and can be shared across questions and surveys.
 
-					AnswerChoice a = _db.AnswerChoices.WhereEx(ac => ac.AnswerText == acm.AnswerChoiceText).SingleOrDefault();
+					AnswerChoice a = _db.AnswerChoices.WhereEx(ac => ac.AnswerText == acm.AnswerChoiceText && ac.AdditionalAnswerDataFormat == acm.AdditionalAnswerDataFormat).SingleOrDefault();
 
 					if (a == null)
 					{
-						a = new AnswerChoice
-						{
-							AnswerText = acm.AnswerChoiceText,
-							AdditionalAnswerDataFormat = acm.AdditionalAnswerDataFormat,
-						};
+						a = new AnswerChoice();
 
 						_db.AnswerChoices.Add(a);
 
@@ -165,6 +160,9 @@ namespace PITCSurveySvc.Models
 					{
 						Trace.WriteLine($"    - AC {a.AnswerText}");
 					}
+
+					a.AnswerText = acm.AnswerChoiceText;
+					a.AdditionalAnswerDataFormat = acm.AdditionalAnswerDataFormat;
 
 					if (!AnswerChoicesByModelID.ContainsKey(acm.AnswerChoiceID))
 					{
@@ -243,9 +241,7 @@ namespace PITCSurveySvc.Models
 					{
 						sac.EndSurvey = true;
 					}
-
 				}
-
 			}
 
 			return Survey;
