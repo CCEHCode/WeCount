@@ -3,57 +3,94 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PITCSurveyApp.Views.SurveyPage"
              Title="Survey">
-<!-- This page uses a survey template where the question and multiple choice answers
+  <!-- This page uses a survey template where the question and multiple choice answers
        are loaded dynamically in code behind. -->
-  <ScrollView>
-    <Grid Padding="12">
+  <Grid Padding="12">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="64" />
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+
+    <!-- Question & Help text -->
+    <StackLayout Margin="12"
+                 Grid.Row="0"
+                 Grid.Column="0"
+                 Grid.ColumnSpan="2" >
+      <Label x:Name="LblQuestion"
+             Text="Loading question..."
+             Margin="12,12,12,0"/>
+      <Label x:Name="LblHelpText"
+             Text="Loading question..."
+             Margin="12,0,12,12"
+             FontAttributes="Italic"
+             TextColor="Gray"/>
+    </StackLayout>
+
+    <!-- The dynamic answers are loaded here in a ListView.
+         The ScrollView is used to contain the ListView within the page since
+         it normally is shown full screen. For now it adds a scrollbar even if
+         there is enough room to display all the available answers. Need to
+         investigate a better way of limiting the ListView height if possible. -->
+    <ScrollView Grid.Row="1"
+                 Grid.Column="0"
+                 Grid.ColumnSpan="2"
+                 Margin="12,0,12,0">
+      <StackLayout x:Name="StackAnswerOptions">
+        <ListView x:Name="AnswersList"
+                  VerticalOptions="FillAndExpand"
+                  HasUnevenRows="True">
+          <ListView.ItemTemplate>
+            <DataTemplate>
+              <!-- Using a Label in a ViewCell since the TextCell didn't wrap well
+                   on all platforms. This gives us more lattitude too. -->
+              <ViewCell>
+                <Label Text="{Binding AnswerChoiceText}"
+                       FontSize="16"
+                       Margin="12"/>
+              </ViewCell>
+            </DataTemplate>
+          </ListView.ItemTemplate>
+        </ListView>
+      </StackLayout>
+    </ScrollView>
+
+    <!-- A Textbox is added to capture clarifications for answers that call for it -->
+    <Grid Grid.Row="2"
+          Grid.Column="0"
+          Grid.ColumnSpan="2"
+          Margin="12">
       <Grid.RowDefinitions>
         <RowDefinition Height="Auto" />
-        <RowDefinition Height="Auto" />
-        <RowDefinition Height="*" />
-        <RowDefinition Height="64" />
       </Grid.RowDefinitions>
       <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="Auto" />
         <ColumnDefinition Width="*" />
       </Grid.ColumnDefinitions>
-      
-      <!-- Question & Help text -->
-      <StackLayout Margin="12"
-                   Grid.Row="0" 
-                   Grid.Column="0" 
-                   Grid.ColumnSpan="2" >
-        <Label x:Name="LblQuestion"
-               Text="Loading question..." 
-               Margin="0,0,0,12"/>
-        <Label x:Name="LblHelpText"
-               Text="Loading question..." 
-               Margin="0,0,0,12"/>
-      </StackLayout>
-      
-      <!-- The dynamic answers are loaded here -->
-      <StackLayout x:Name="StackAnswerOptions" 
-                   Grid.Row="1"
-                   Grid.Column="0"
-                   Grid.ColumnSpan="2"
-                   Margin="12">
-      </StackLayout>
-      
-      <!-- Buttons at the bottom of the screen to navigate the survey -->
-      <Button Grid.Row="3"
-              Grid.Column="0"
-              Text="Previous"
-              TextColor="Black"
-              BackgroundColor="Silver"
-              IsEnabled="False"
-              Clicked="PreviousButton_OnClicked" />
-              <!-- Command="{Binding PreviousQuestionCommand}"/> -->
-      <Button Grid.Row="3"
-              Grid.Column="1"
-              Text="Next"
-              TextColor="White"
-              BackgroundColor="Green"
-              Clicked="NextButton_OnClicked" />
-              <!-- Command="{Binding NextQuestionCommand}"/> -->
+      <Label Grid.Row="0" Grid.Column="0" x:Name="LblSpecify" Text="Specify: "/>
+      <Entry Grid.Row="0" Grid.Column="1" x:Name="TxtSpecify" Placeholder="Please clarify the answer here if applicable"/>
     </Grid>
-  </ScrollView></ContentPage>
+
+    <!-- Buttons at the bottom of the screen to navigate the survey -->
+    <Button Grid.Row="3"
+            Grid.Column="0"
+            Text="Previous"
+            TextColor="Black"
+            BackgroundColor="Silver"
+            IsEnabled="False"
+            Clicked="PreviousButton_OnClicked" />
+    <!-- Command="{Binding PreviousQuestionCommand}"/> -->
+    <Button Grid.Row="3"
+            Grid.Column="1"
+            Text="Next"
+            TextColor="White"
+            BackgroundColor="Green"
+            Clicked="NextButton_OnClicked" />
+    <!-- Command="{Binding NextQuestionCommand}"/> -->
+  </Grid>
+</ContentPage>

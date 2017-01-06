@@ -8,11 +8,9 @@ namespace PITCSurveyApp.Views
     public partial class SurveyPage : ContentPage
 	{
 	    private int _currentQuestionIndex;
-        private Button _currentAnswer;
 
         public ICommand PreviousQuestionCommand { get; set; }
         public ICommand NextQuestionCommand { get; set; }
-        public ICommand ButtonSelectedCommand { get; set; }
 
         public SurveyPage()
         {
@@ -20,7 +18,6 @@ namespace PITCSurveyApp.Views
 
             PreviousQuestionCommand = new Command(PreviousQuestion);
             NextQuestionCommand = new Command(NextQuestion);
-            ButtonSelectedCommand = new Command(ButtonSelected);
 
             _currentQuestionIndex = 0;
 
@@ -34,25 +31,14 @@ namespace PITCSurveyApp.Views
                 // Access the current question
                 SurveyQuestionModel cq = App.SurveyVM.Question(index);
 
+                // BUG: For some reason, the title is not updating after question 1 on UWP, not tested on other platforms yet
                 Title = $"Survey Question {cq.QuestionNum} of {App.SurveyVM.SurveyQuestionsCount.ToString()}";
                 LblQuestion.Text = cq.QuestionText;
                 LblHelpText.Text = cq.QuestionHelpText;
 
-                //Need to clear the list of buttons in the current StackLayout
-                StackAnswerOptions.Children.Clear();
-                _currentAnswer = null;
-
-                Button btn;
-                foreach (SurveyQuestionAnswerChoiceModel answerOption in cq.AnswerChoices)
-                {
-                    btn = new Button();
-                    //btn.Text = $"{answerOption.AnswerChoiceNum} - {answerOption.AnswerChoiceText}";
-                    btn.Text = answerOption.AnswerChoiceText;
-                    //btn.HorizontalOptions = LayoutOptions.StartAndExpand;
-                    btn.Command = ButtonSelectedCommand;
-                    btn.CommandParameter = btn;
-                    StackAnswerOptions.Children.Add(btn);
-                }
+                AnswersList.ItemsSource = cq.AnswerChoices;
+                // Trying to force layout on the page to update the title, but has no effect
+                //this.ForceLayout();  
             }
             catch
             {
@@ -73,18 +59,6 @@ namespace PITCSurveyApp.Views
             _currentQuestionIndex++;
 
             LoadQuestion(_currentQuestionIndex);
-        }
-
-        void ButtonSelected(object obj)
-        {
-            if (_currentAnswer != null)
-            {
-                _currentAnswer.BackgroundColor = Color.White;
-            }
-
-            Button btn = (Button)obj;
-            btn.BackgroundColor = Color.Lime;
-            _currentAnswer = btn;
         }
 
 	    private void PreviousButton_OnClicked(object sender, EventArgs e)
