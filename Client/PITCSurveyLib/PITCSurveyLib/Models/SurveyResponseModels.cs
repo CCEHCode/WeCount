@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace PITCSurveyLib.Models
@@ -19,6 +20,7 @@ namespace PITCSurveyLib.Models
 		/// Identifier of the Interviewer conducting this survey.
 		/// </summary>
 		[Obsolete("User's auth token handled by App Service Authentication, no need to pass.")]
+		[JsonIgnore()]
 		public String InterviewerID { get; set; }
 
 		public DateTimeOffset StartTime { get; set; }

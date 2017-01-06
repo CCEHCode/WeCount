@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace PITCSurveyLib.Models
@@ -46,7 +47,8 @@ namespace PITCSurveyLib.Models
 																		// If null, default to next question in sequence.
 		public bool EndSurvey { get; set; }                             // If selected, this answer choice ends the survey.
 
-		[Obsolete("Use EndSurvey bool property instead.")]				// Deprecating this, to avoid use of "magic numbers".
+		[Obsolete("Use EndSurvey bool property instead.")]              // Deprecating this, to avoid use of "magic numbers".
+		[JsonIgnore()]
 		public const int END_SURVEY = -1;								// If NextQuestionID is this value, then survey is complete.
 	}
 
