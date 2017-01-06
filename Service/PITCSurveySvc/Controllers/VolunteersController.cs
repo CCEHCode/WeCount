@@ -14,19 +14,19 @@ namespace PITCSurveySvc.Controllers
 		[ResponseType(typeof(VolunteerModel))]
         public IHttpActionResult GetVolunteer()
         {
-            Volunteer volunteer = GetAuthenticatedVolunteer();
+            Volunteer Volunteer = GetAuthenticatedVolunteer();
 
-            if (volunteer == null)
+            if (Volunteer == null)
             {
                 return NotFound();
             }
 
-            return Ok(ModelConverter.ConvertToModel(volunteer));
+            return Ok(ModelConverter.ConvertToModel(Volunteer));
         }
 
         // PUT: api/Volunteers
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutVolunteer(VolunteerModel Model)
+        public IHttpActionResult PutVolunteer(VolunteerModel Volunteer)
         {
 			Volunteer sv = GetAuthenticatedVolunteer();
 
@@ -40,16 +40,16 @@ namespace PITCSurveySvc.Controllers
 				return BadRequest("The specified InterviewerID is not recognized. User not logged in?");
 			}
 
-			sv.FirstName = Model.FirstName;
-			sv.LastName = Model.LastName;
-			sv.Email = Model.Email;
-			sv.HomePhone = Model.HomePhone;
-			sv.MobilePhone = Model.MobilePhone;
+			sv.FirstName = Volunteer.FirstName;
+			sv.LastName = Volunteer.LastName;
+			sv.Email = Volunteer.Email;
+			sv.HomePhone = Volunteer.HomePhone;
+			sv.MobilePhone = Volunteer.MobilePhone;
 
-			sv.Address.Street = Model.Address.Street;
-			sv.Address.City = Model.Address.City;
-			sv.Address.State = Model.Address.State;
-			sv.Address.ZipCode = Model.Address.ZipCode;
+			sv.Address.Street = Volunteer.Address.Street;
+			sv.Address.City = Volunteer.Address.City;
+			sv.Address.State = Volunteer.Address.State;
+			sv.Address.ZipCode = Volunteer.Address.ZipCode;
 
             db.SaveChanges();
 

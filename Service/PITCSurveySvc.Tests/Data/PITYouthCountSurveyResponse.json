@@ -1,4 +1,4 @@
-﻿Test Name: TestBuildResponseJSON Test Outcome: Passed Result StandardOutput: Debug Trace: {
+﻿{
   "SurveyID": 1,
   "InterviewerID": null,
   "StartTime": "/Date(1483662893463)/",

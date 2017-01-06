@@ -16,14 +16,14 @@ namespace PITCSurveyEntities.Entities
 
 		public Guid ResponseIdentifier { get; set; }
 
-		[Required]
 		[ForeignKey("Survey_ID")]
 		public virtual Survey Survey { get; set; }
+		[Required]
 		public int Survey_ID { get; set; }
 
-		[Required]
 		[ForeignKey("Volunteer_ID")]
 		public virtual Volunteer Volunteer { get; set; }
+		[Required]
 		public int Volunteer_ID { get; set; }
 
 		public DateTimeOffset InterviewStarted { get; set; }
@@ -35,7 +35,7 @@ namespace PITCSurveyEntities.Entities
 
 		public Address NearestAddress { get; set; }
 
-		public virtual IList<SurveyResponseAnswer> Answers { get; set; }
+		public virtual IList<SurveyResponseAnswer> Answers { get; set; } = new List<SurveyResponseAnswer>();
 
 	}
 }

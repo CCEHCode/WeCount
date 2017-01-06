@@ -13,14 +13,14 @@ namespace PITCSurveyEntities.Entities
 		[Key]
 		public int ID { get; set; }
 
-		[Required]
 		[ForeignKey("SurveyQuestion_ID")]
 		public virtual SurveyQuestion SurveyQuestion { get; set; }
+		[Required]
 		public int SurveyQuestion_ID { get; set; }
 
-		[Required]
 		[ForeignKey("AnswerChoice_ID")]
 		public virtual AnswerChoice AnswerChoice { get; set; }
+		[Required]
 		public int AnswerChoice_ID { get; set; }
 
 		public String AnswerChoiceNum { get; set; }

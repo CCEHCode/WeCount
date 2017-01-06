@@ -18,7 +18,7 @@ namespace PITCSurveySvc.Controllers
 	/// </summary>
 	public class SurveysController : BaseController
     {
-
+		
 		// GET: api/Surveys
 		/// <summary>
 		/// Get a list of available Surveys and metadata.
@@ -56,35 +56,31 @@ namespace PITCSurveySvc.Controllers
 		/// <summary>
 		/// Get the full body of the specified Survey.
 		/// </summary>
-		/// <param name="id"></param>
+		/// <param name="ID"></param>
 		/// <returns></returns>
 		[SwaggerOperation("GetByID")]
 		[ResponseType(typeof(SurveyModel))]
 		[SwaggerResponse(HttpStatusCode.NotFound, "A Survey with the specified ID was not found.")]
 		[SwaggerResponse(HttpStatusCode.OK, "U can haz Survey", typeof(SurveyModel))]
 		[AllowAnonymous]
-		public IHttpActionResult GetSurvey(int id)
+		public IHttpActionResult GetSurvey(int ID)
 		{
 			// We don't use this here, but it ensures the volunteer record is created if it doesn't exist yet.
 			Volunteer sv = GetAuthenticatedVolunteer();
-
-			Survey Survey = db.Surveys.Where(s => s.ID == id).SingleOrDefault();
+			
+			Survey Survey = db.Surveys.Where(s => s.ID == ID).SingleOrDefault();
 			if (Survey == null)
-			{
 				return NotFound();
-			}
-			else
-			{
-				try
-				{
-					SurveyModel Model = ModelConverter.ConvertToModel(Survey);
 
-					return Ok(Model);
-				}
-				catch (Exception ex)
-				{
-					return InternalServerError(ex);
-				}
+			try
+			{
+				SurveyModel Model = ModelConverter.ConvertToModel(Survey);
+
+				return Ok(Model);
+			}
+			catch (Exception ex)
+			{
+				return InternalServerError(ex);
 			}
         }
 
@@ -92,61 +88,57 @@ namespace PITCSurveySvc.Controllers
 		/// <summary>
 		/// Import a new / updated Survey.
 		/// </summary>
-		/// <param name="Model"></param>
+		/// <param name="Survey"></param>
 		/// <returns></returns>
 		[SwaggerOperation("Create")]
 		[SwaggerResponse(HttpStatusCode.BadRequest)]
 		[SwaggerResponse(HttpStatusCode.NoContent)]
-		public IHttpActionResult PostSurvey(SurveyModel Model)
+		public IHttpActionResult PostSurvey(SurveyModel Survey)
 		{
 			// We don't use this here, but it ensures the volunteer record is created if it doesn't exist yet.
 			Volunteer sv = GetAuthenticatedVolunteer();
 
 			if (!ModelState.IsValid)
-			{
 				return BadRequest(ModelState);
-			}
-			else
+
+			try
 			{
-				try
+
+				ModelConverter Converter = new ModelConverter(db);
+
+				Survey ImportSurvey = Converter.ConvertToEntity(Survey);
+
+				// Handle this like we do for child objects in converter, allows update not just insert.
+				//db.Surveys.Add(Survey);
+
+				db.SaveChanges();
+
+				return Ok();
+			}
+			catch (DbEntityValidationException eve)
+			{
+				List<String> Errors = new List<string>();
+
+				//StringBuilder sb = new StringBuilder();
+
+				foreach (DbEntityValidationResult vr in eve.EntityValidationErrors)
 				{
+					//sb.AppendLine(vr.Entry.Entity.GetType().Name);
 
-					ModelConverter Converter = new ModelConverter(db);
-
-					Survey Survey = Converter.ConvertToEntity(Model);
-
-					// Handle this like we do for child objects in converter, allows update not just insert.
-					//db.Surveys.Add(Survey);
-
-					db.SaveChanges();
-
-					return Ok();
-				}
-				catch (DbEntityValidationException eve)
-				{
-					List<String> Errors = new List<string>();
-
-					//StringBuilder sb = new StringBuilder();
-
-					foreach (DbEntityValidationResult vr in eve.EntityValidationErrors)
+					foreach (DbValidationError ve in vr.ValidationErrors)
 					{
-						//sb.AppendLine(vr.Entry.Entity.GetType().Name);
-
-						foreach (DbValidationError ve in vr.ValidationErrors)
-						{
-							string Error = $"{vr.Entry.Entity.GetType().Name}.{ve.PropertyName}: {ve.ErrorMessage}";
-							//sb.AppendLine($"    {ve.PropertyName}: {ve.ErrorMessage}");
-							if (!Errors.Contains(Error))
-								Errors.Add(Error);
-						}
+						string Error = $"{vr.Entry.Entity.GetType().Name}.{ve.PropertyName}: {ve.ErrorMessage}";
+						//sb.AppendLine($"    {ve.PropertyName}: {ve.ErrorMessage}");
+						if (!Errors.Contains(Error))
+							Errors.Add(Error);
 					}
+				}
 
-					return InternalServerError(new InvalidOperationException(eve.Message + "\r\n" + String.Join("\r\n", Errors.ToArray()), eve));
-				}
-				catch (Exception ex)
-				{
-					return InternalServerError(ex);
-				}
+				return InternalServerError(new InvalidOperationException(eve.Message + "\r\n" + String.Join("\r\n", Errors.ToArray()), eve));
+			}
+			catch (Exception ex)
+			{
+				return InternalServerError(ex);
 			}
 		}
     }

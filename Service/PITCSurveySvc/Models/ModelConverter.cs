@@ -122,7 +122,7 @@ namespace PITCSurveySvc.Models
 				// See if question already exists. Remember, questions are reusable, and can be shared across surveys.
 
 				Question q = _db.Questions.WhereEx(eq => eq.QuestionText == qm.QuestionText).SingleOrDefault();
-
+				
 				if (q == null)
 				{
 					q = new Question();
@@ -256,7 +256,7 @@ namespace PITCSurveySvc.Models
 			{
 				Survey_ID = Model.SurveyID,
 				//Volunteer_ID = _db.Volunteers.Where(v => v.AuthID == Model.InterviewerID).Single().ID,
-				GPSLocation = System.Data.Entity.Spatial.DbGeography.PointFromText($"POINT({Model.GPSLocation.Lon} {Model.GPSLocation.Lat}", CoordinateSystemID),
+				GPSLocation = System.Data.Entity.Spatial.DbGeography.PointFromText($"Point({Model.GPSLocation.Lon} {Model.GPSLocation.Lat})", CoordinateSystemID),
 				LocationNotes = Model.LocationNotes,
 				NearestAddress = Model.NearestAddress,
 				ResponseIdentifier = Model.ResponseIdentifier,

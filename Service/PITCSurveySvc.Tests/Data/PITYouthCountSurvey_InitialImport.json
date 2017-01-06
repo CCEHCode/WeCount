@@ -15,7 +15,7 @@
           "AnswerChoiceText": "Yes",
           "AdditionalAnswerDataFormat": 0,
           "NextQuestionID": "",
-          "EndSurvey":  true
+          "EndSurvey": true
         },
         {
           "AnswerChoiceID": 2,
