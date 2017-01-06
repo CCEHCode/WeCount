@@ -218,10 +218,6 @@
       <Project>{7af89069-6241-4905-81c8-0898d40d4a1d}</Project>
       <Name>PITCSurveyLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PITCSurveyApp.Lib\PITCSurveyApp.Lib.csproj">
-      <Project>{43fdf823-bc71-4452-ab29-a028e38b7fd1}</Project>
-      <Name>PITCSurveyApp.Lib</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\profile_generic.png" />

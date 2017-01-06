@@ -8,13 +8,13 @@ using Microsoft.WindowsAzure.MobileServices;
 
 using PITCSurveyLib.Models;
 
-namespace PITCSurveyApp.Lib.Services
+namespace PITCSurveyApp.Services
 {
     public static class SurveyCloudService
     {
         private const string AzureMobileAppUrl = "https://appname.azurewebsites.net";
 
-        private static MobileServiceClient ApiClient;
+        public static MobileServiceClient ApiClient;
 
         static SurveyCloudService()
         {
@@ -30,7 +30,7 @@ namespace PITCSurveyApp.Lib.Services
                 var result = await ApiClient.InvokeApiAsync<SurveyModel>("Surveys", System.Net.Http.HttpMethod.Get, parameters);
                 return result;
             }
-            catch (Exception ex)
+            catch
             {
                 return null;
             }

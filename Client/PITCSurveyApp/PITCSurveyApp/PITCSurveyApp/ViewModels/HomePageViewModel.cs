@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Xamarin.Forms;
-
-using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Helpers;
-using PITCSurveyApp.Lib.Services;
-using PITCSurveyApp.Lib.ViewModels;
 using PITCSurveyApp.Views;
-using PITCSurveyLib.Models;
 
 namespace PITCSurveyApp.ViewModels
 {

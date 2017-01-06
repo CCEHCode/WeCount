@@ -1,22 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Microsoft.WindowsAzure.MobileServices;
-
+﻿using System.Collections.Generic;
 using Xamarin.Forms;
-
 using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Helpers;
-using PITCSurveyApp.Lib.Services;
-using PITCSurveyApp.Lib.ViewModels;
+using PITCSurveyApp.ViewModels;
 using PITCSurveyApp.Views;
-using PITCSurveyLib.Models;
 
 namespace PITCSurveyApp
 {
-	public partial class App : Application
+    public partial class App : Application
 	{
         public static SurveyViewModel SurveyVM { get; set; }
 

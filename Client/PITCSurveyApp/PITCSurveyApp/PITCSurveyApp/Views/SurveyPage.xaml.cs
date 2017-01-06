@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using PITCSurveyLib.Models;
 using Xamarin.Forms;
 
 namespace PITCSurveyApp.Views
 {
-	public partial class SurveyPage : ContentPage
+    public partial class SurveyPage : ContentPage
 	{
 	    private int _currentQuestionIndex;
         private Button _currentAnswer;
@@ -58,7 +54,7 @@ namespace PITCSurveyApp.Views
                     StackAnswerOptions.Children.Add(btn);
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 // TO DO: provide better details, log in HockeyApp, etc.
                 DisplayAlert("Error", "Something went wrong when loading this question.", "OK");

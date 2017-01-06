@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Threading.Tasks;
 
-namespace PITCSurveyApp.Lib.Helpers
+namespace PITCSurveyApp.Helpers
 {
     /// <summary>
     /// Reference article: https://msdn.microsoft.com/en-us/magazine/dn605875.aspx

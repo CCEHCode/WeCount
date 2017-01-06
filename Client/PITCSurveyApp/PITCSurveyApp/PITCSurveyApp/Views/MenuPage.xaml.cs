@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Xamarin.Forms;
-
-using PITCSurveyApp.ViewModels;
+﻿using Xamarin.Forms;
 
 namespace PITCSurveyApp.Views
 {
@@ -14,7 +6,6 @@ namespace PITCSurveyApp.Views
 	{
 		public MenuPage ()
 		{
-            BindingContext = new MenuPageViewModel();
             InitializeComponent ();
 		}
 	}

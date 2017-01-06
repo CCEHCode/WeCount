@@ -1,20 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
-
-using Xamarin.Forms;
-
-using PITCSurveyApp.Lib.Helpers;
-using PITCSurveyApp.Lib.Services;
+using PITCSurveyApp.Services;
 using PITCSurveyLib.Models;
 
-namespace PITCSurveyApp.Lib.ViewModels
+namespace PITCSurveyApp.ViewModels
 {
     /// <summary>
     /// ViewModel class used to manage
@@ -23,14 +13,6 @@ namespace PITCSurveyApp.Lib.ViewModels
     {
         //public NotifyTaskCompletion<SurveyModel> Survey { get; private set; }
         private SurveyModel Survey { get; set;  }
-
-        /// <summary>
-        /// SurveyViewModel Constructor
-        /// </summary>
-        public SurveyViewModel()
-        {
-           
-        }
 
         /// <summary>
         /// Load the surveys from local storage or the cloud
