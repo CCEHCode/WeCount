@@ -26,7 +26,7 @@ namespace PITCSurveySvc.Controllers
 		/// <param name="SurveyResponse"></param>
 		/// <returns></returns>
         [ResponseType(typeof(void))]
-		[SwaggerOperation("Create")]
+		[SwaggerOperation("PostSurveyResponse")]
 		[SwaggerResponse(HttpStatusCode.BadRequest, "The survey data wasn't acceptable (improper formatting, etc.).")]
 		[SwaggerResponse(HttpStatusCode.Conflict, "A SurveyResponse with the same ResponseIdentifier is already uploaded.")]
 		[SwaggerResponse(HttpStatusCode.NoContent, "SurveyResponse uploaded successfully.")]

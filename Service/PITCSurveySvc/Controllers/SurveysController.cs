@@ -25,9 +25,9 @@ namespace PITCSurveySvc.Controllers
 		/// </summary>
 		/// <param name="ActiveOnly"></param>
 		/// <returns></returns>
-		[SwaggerOperation("GetAll")]
-		[ResponseType(typeof(IEnumerable<SurveyModel>))]
-		[SwaggerResponse(HttpStatusCode.OK, "All mai Survey are belong 2 u <3", typeof(IEnumerable<SurveyModel>))]
+		[SwaggerOperation("GetAllSurveys")]
+		[ResponseType(typeof(IEnumerable<SurveySummaryModel>))]
+		[SwaggerResponse(HttpStatusCode.OK, "All mai Survey are belong 2 u <3", typeof(IEnumerable<SurveySummaryModel>))]
 		[AllowAnonymous]
 		public IEnumerable<SurveySummaryModel> GetSurveys(bool ActiveOnly)
         {
@@ -58,7 +58,7 @@ namespace PITCSurveySvc.Controllers
 		/// </summary>
 		/// <param name="ID"></param>
 		/// <returns></returns>
-		[SwaggerOperation("GetByID")]
+		[SwaggerOperation("GetSurveyByID")]
 		[ResponseType(typeof(SurveyModel))]
 		[SwaggerResponse(HttpStatusCode.NotFound, "A Survey with the specified ID was not found.")]
 		[SwaggerResponse(HttpStatusCode.OK, "U can haz Survey", typeof(SurveyModel))]
@@ -90,7 +90,7 @@ namespace PITCSurveySvc.Controllers
 		/// </summary>
 		/// <param name="Survey"></param>
 		/// <returns></returns>
-		[SwaggerOperation("Create")]
+		[SwaggerOperation("PostSurvey")]
 		[SwaggerResponse(HttpStatusCode.BadRequest)]
 		[SwaggerResponse(HttpStatusCode.NoContent)]
 		public IHttpActionResult PostSurvey(SurveyModel Survey)

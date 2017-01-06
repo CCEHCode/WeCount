@@ -43,8 +43,12 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.4.1.0\lib\net462\System.Runtime.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -89,6 +93,10 @@
     <Compile Include="Migrations\201612271605457_EndSurveyProperty.cs" />
     <Compile Include="Migrations\201612271605457_EndSurveyProperty.Designer.cs">
       <DependentUpon>201612271605457_EndSurveyProperty.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201701061600338_AddResponseVersionAndWellKnownQuestion.cs" />
+    <Compile Include="Migrations\201701061600338_AddResponseVersionAndWellKnownQuestion.Designer.cs">
+      <DependentUpon>201701061600338_AddResponseVersionAndWellKnownQuestion.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -144,6 +152,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201612271605457_EndSurveyProperty.resx">
       <DependentUpon>201612271605457_EndSurveyProperty.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701061600338_AddResponseVersionAndWellKnownQuestion.resx">
+      <DependentUpon>201701061600338_AddResponseVersionAndWellKnownQuestion.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PITCSurveyLib;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -23,6 +24,8 @@ namespace PITCSurveyEntities.Entities
 		public int Question_ID { get; set; }
 
 		public String QuestionNum { get; set; }
+
+		public WellKnownQuestion WellKnownQuestion { get; set; }
 
 		public virtual IList<SurveyAnswerChoice> AnswerChoices { get; set; }
 

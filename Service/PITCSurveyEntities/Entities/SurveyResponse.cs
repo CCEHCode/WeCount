@@ -21,6 +21,8 @@ namespace PITCSurveyEntities.Entities
 		[Required]
 		public int Survey_ID { get; set; }
 
+		public int Survey_Version { get; set; }
+
 		[ForeignKey("Volunteer_ID")]
 		public virtual Volunteer Volunteer { get; set; }
 		[Required]

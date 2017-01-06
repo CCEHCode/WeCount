@@ -1,6 +1,8 @@
 ﻿using PITCSurveyEntities.Entities;
 using PITCSurveyLib.Models;
 using PITCSurveySvc.Models;
+using Swashbuckle.Swagger.Annotations;
+using System.Collections.Generic;
 using System.Net;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -11,6 +13,8 @@ namespace PITCSurveySvc.Controllers
     {
 
 		// GET: api/Volunteers
+		[SwaggerOperation("GetAuthenticatedVolunteer")]
+		[SwaggerResponse(HttpStatusCode.OK, "Volunteer found", typeof(VolunteerModel))]
 		[ResponseType(typeof(VolunteerModel))]
         public IHttpActionResult GetVolunteer()
         {
@@ -24,8 +28,10 @@ namespace PITCSurveySvc.Controllers
             return Ok(ModelConverter.ConvertToModel(Volunteer));
         }
 
-        // PUT: api/Volunteers
-        [ResponseType(typeof(void))]
+		// PUT: api/Volunteers
+		[SwaggerOperation("UpdateVolunteer")]
+		[SwaggerResponse(HttpStatusCode.NoContent, "Volunteer updated")]
+		[ResponseType(typeof(void))]
         public IHttpActionResult PutVolunteer(VolunteerModel Volunteer)
         {
 			Volunteer sv = GetAuthenticatedVolunteer();

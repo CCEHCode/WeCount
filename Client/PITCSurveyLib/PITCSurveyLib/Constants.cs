@@ -5,7 +5,7 @@ namespace PITCSurveyLib
 	/// <summary>
 	/// Specifies the expected format for AdditionalAnswerData on AnswerChoices with a free-form or additional data field.
 	/// </summary>
-	public enum AnswerFormat : int
+	public enum AnswerFormat: int
 	{
 		/// <summary>
 		/// This answer choice needs to additional answer data.
@@ -26,6 +26,14 @@ namespace PITCSurveyLib
 		/// This answer choice expects an additional date value.
 		/// </summary>
 		Date = 3
+	}
+
+	public enum WellKnownQuestion: int
+	{
+		None = 0,
+		NameOrInitials = 1,
+		Gender = 2,
+		DOB = 3
 	}
 
 	[Obsolete("This no longer needs to be passed, as the auth mechanism returns it.")]

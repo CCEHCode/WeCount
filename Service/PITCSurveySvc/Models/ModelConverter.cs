@@ -30,7 +30,9 @@ namespace PITCSurveySvc.Models
 				SurveyID = Survey.ID,
 				Name = Survey.Name,
 				Description = Survey.Description,
-				IntroText = Survey.IntroText
+				IntroText = Survey.IntroText,
+				Version = Survey.Version,
+				LastUpdated = Survey.LastUpdated
 			};
 
 			foreach (SurveyQuestion sq in Survey.SurveyQuestions)
@@ -255,6 +257,7 @@ namespace PITCSurveySvc.Models
 			SurveyResponse Response = new SurveyResponse()
 			{
 				Survey_ID = Model.SurveyID,
+				Survey_Version = Model.Survey_Version,
 				//Volunteer_ID = _db.Volunteers.Where(v => v.AuthID == Model.InterviewerID).Single().ID,
 				GPSLocation = System.Data.Entity.Spatial.DbGeography.PointFromText($"Point({Model.GPSLocation.Lon} {Model.GPSLocation.Lat})", CoordinateSystemID),
 				LocationNotes = Model.LocationNotes,

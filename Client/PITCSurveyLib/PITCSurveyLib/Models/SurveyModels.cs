@@ -17,6 +17,9 @@ namespace PITCSurveyLib.Models
 		public String Description { get; set; }
 		public String IntroText { get; set; }
 
+		public int Version { get; set; }
+		public DateTimeOffset LastUpdated { get; set; }
+
 		public IList<SurveyQuestionModel> Questions { get; set; } = new List<SurveyQuestionModel>();
 	}
 
@@ -30,6 +33,8 @@ namespace PITCSurveyLib.Models
 		public String QuestionText { get; set; }
 		public String QuestionHelpText { get; set; }
 		public bool AllowMultipleAnswers {get; set; }
+
+		public WellKnownQuestion WellKnownQuestion { get; set; }
 
 		public IList<SurveyQuestionAnswerChoiceModel> AnswerChoices { get; set; } = new List<SurveyQuestionAnswerChoiceModel>();
 	}

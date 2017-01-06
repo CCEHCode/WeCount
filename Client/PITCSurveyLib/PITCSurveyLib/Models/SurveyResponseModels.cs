@@ -17,6 +17,11 @@ namespace PITCSurveyLib.Models
 		public int SurveyID { get; set; }
 
 		/// <summary>
+		/// The version of the survey this response matches.
+		/// </summary>
+		public int Survey_Version { get; set; }
+
+		/// <summary>
 		/// Identifier of the Interviewer conducting this survey.
 		/// </summary>
 		[Obsolete("User's auth token handled by App Service Authentication, no need to pass.")]
