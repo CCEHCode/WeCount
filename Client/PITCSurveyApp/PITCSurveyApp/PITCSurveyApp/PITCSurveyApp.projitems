@@ -14,14 +14,19 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\IMetricsManagerService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\CrossHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\FileHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\IFileHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\NotifyTaskCompletion.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ObservableObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Settings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\SurveyResponseModelWrapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\SurveyCloudService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\BaseViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\HomePageViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\LoginViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MenuPageViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MySurveysViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SurveyResponseViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SurveyViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
@@ -33,6 +38,10 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\MenuPage.xaml.cs">
       <DependentUpon>MenuPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\MySurveysPage.xaml.cs">
+      <DependentUpon>MySurveysPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\RootPage.xaml.cs">
@@ -91,6 +100,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Models\" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\MySurveysPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

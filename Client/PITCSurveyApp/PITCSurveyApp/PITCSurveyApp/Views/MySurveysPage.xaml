@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PITCSurveyApp.Views.MySurveysPage"
+             Title="My Surveys">
+  <ContentPage.Padding>
+    <OnPlatform x:TypeArguments="Thickness"
+                iOS="10, 20, 10, 0"
+                Android="10, 0"
+                WinPhone="10, 0" />
+  </ContentPage.Padding>
+  <StackLayout>
+    <ListView x:Name="SurveyListView"
+              ItemsSource="{Binding Surveys}">
+      <ListView.ItemTemplate>
+        <DataTemplate>
+          <TextCell Text="{Binding Text}" 
+                    TextColor="{Binding TextColor}"
+                    Detail="{Binding Details}">
+            <TextCell.ContextActions>
+              <MenuItem Text="Delete" 
+                        Command="{Binding DeleteCommand}"/>
+              <MenuItem Text="Upload" 
+                        Command="{Binding UploadCommand}"/>
+            </TextCell.ContextActions>
+          </TextCell>
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
+    <!--<StackLayout Orientation="Horizontal">
+      <Button Text="Upload Selected"
+              HorizontalOptions="FillAndExpand"
+              IsEnabled="{Binding IsNotBusy}"
+              TextColor="White"
+              BackgroundColor="{StaticResource Primary}"/>
+      <Button Text="Upload All"
+              HorizontalOptions="FillAndExpand"
+              IsEnabled="{Binding IsNotBusy}"
+              TextColor="White"
+              BackgroundColor="{StaticResource Primary}"/>
+    </StackLayout>-->
+  </StackLayout>
+</ContentPage>

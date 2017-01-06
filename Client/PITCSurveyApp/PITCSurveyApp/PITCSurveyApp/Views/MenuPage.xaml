@@ -13,6 +13,7 @@
   <ContentPage.Content>
     <StackLayout BackgroundColor="#F2F2F2" Padding="12">
       <Button Text="Home" TextColor="White" BackgroundColor="Gray" Command="{Binding GoHomeCommand}" />
+      <Button Text="My Surveys" TextColor="White" BackgroundColor="Gray" Command="{Binding GoMySurveysCommand}" />
       <Button Text="Settings" TextColor="White" BackgroundColor="Gray" Command="{Binding GoSettingsCommand}" />
     </StackLayout>
   </ContentPage.Content>
