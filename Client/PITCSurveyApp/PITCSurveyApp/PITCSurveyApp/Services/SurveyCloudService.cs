@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.WindowsAzure.MobileServices;
 
 using PITCSurveyLib.Models;
+using PITCSurveyLib;
 
 namespace PITCSurveyApp.Services
 {
@@ -36,5 +37,22 @@ namespace PITCSurveyApp.Services
             }
 
         }
+
+		public static async Task<bool> SubmitSurveyResponse(SurveyResponseModel SurveyResponse)
+		{
+			try
+			{
+				var API = new PITCSurveyAPI(new Uri(AzureMobileAppUrl), null);
+
+				await API.PostSurveyResponseAsync(SurveyResponse);
+
+				return true;
+			}
+			catch (Exception)
+			{
+				//throw;
+				return false;
+			}
+		}
     }
 }
