@@ -45,9 +45,6 @@
     <Compile Include="Models\SurveyResponseModels.cs" />
     <Compile Include="Models\SurveySummaryModels.cs" />
     <Compile Include="Models\VolunteerModel.cs" />
-    <Compile Include="PITCSurveyAPI\IPITCSurveyAPI.cs" />
-    <Compile Include="PITCSurveyAPI\PITCSurveyAPI.cs" />
-    <Compile Include="PITCSurveyAPI\PITCSurveyAPIExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
