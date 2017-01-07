@@ -29,7 +29,7 @@ namespace PITCSurveyApp.ViewModels
         {
             _response = response;
             NextQuestionCommand = new Command(NextQuestion, () => CanGoForward);
-            PreviousQuestionCommand = new Command(PreviousQuestion, () => false);
+            PreviousQuestionCommand = new Command(PreviousQuestion, () => CanGoBack);
         }
 
         public event EventHandler QuestionChanged;
@@ -51,7 +51,9 @@ namespace PITCSurveyApp.ViewModels
             }
         }
 
-        private bool CanGoForward => CurrentAnswers.Count > 0;
+        private bool CanGoForward => !_endSurvey && CurrentAnswers.Count > 0;
+
+        private bool CanGoBack => _index > 0;
 
         public int SurveyQuestionsCount => App.LatestSurvey?.Questions?.Count ?? 0;
 
@@ -80,6 +82,7 @@ namespace PITCSurveyApp.ViewModels
         public void UpdateCommands()
         {
             NextQuestionCommand.ChangeCanExecute();
+            PreviousQuestionCommand.ChangeCanExecute();
         }
 
         private async void NextQuestion()
@@ -97,8 +100,31 @@ namespace PITCSurveyApp.ViewModels
 
         private void PreviousQuestion()
         {
-            // TODO: use last answered question?
-            throw new NotImplementedException();
+            var previousId = int.MinValue;
+            if (_endSurvey)
+            {
+                _endSurvey = false;
+                previousId = _response.Item.QuestionResponses.Max(q => q.QuestionID);
+            }
+            else
+            {
+                var currentQuestion = CurrentQuestion;
+                foreach (var response in _response.Item.QuestionResponses)
+                {
+                    if (response.QuestionID < currentQuestion.QuestionID && response.QuestionID > previousId)
+                    {
+                        previousId = response.QuestionID;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+
+            _index = QuestionIndex(previousId);
+            UpdateCommands();
+            QuestionChanged?.Invoke(this, new EventArgs());
         }
 
         private SurveyQuestionModel Question(int index)

@@ -46,7 +46,6 @@
             Text="Previous"
             TextColor="Black"
             BackgroundColor="Silver"
-            IsEnabled="False"
             Command="{Binding PreviousQuestionCommand}"/>
     <Button Grid.Row="3"
             Grid.Column="1"
