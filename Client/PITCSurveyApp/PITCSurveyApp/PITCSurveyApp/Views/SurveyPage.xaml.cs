@@ -1,74 +1,233 @@
 ﻿using System;
-using System.Windows.Input;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using PITCSurveyApp.ViewModels;
+using PITCSurveyLib;
 using PITCSurveyLib.Models;
 using Xamarin.Forms;
 
 namespace PITCSurveyApp.Views
 {
     public partial class SurveyPage : ContentPage
-	{
-	    private int _currentQuestionIndex;
-
-        public ICommand PreviousQuestionCommand { get; set; }
-        public ICommand NextQuestionCommand { get; set; }
+    {
+        private readonly SurveyViewModel _viewModel;
 
         public SurveyPage()
         {
             InitializeComponent();
 
-            PreviousQuestionCommand = new Command(PreviousQuestion);
-            NextQuestionCommand = new Command(NextQuestion);
-
-            _currentQuestionIndex = 0;
-
-            LoadQuestion(_currentQuestionIndex);
+            _viewModel = new SurveyViewModel();
+            _viewModel.QuestionChanged += (sender, e) => UpdateQuestion();
+            BindingContext = _viewModel;
+            UpdateQuestion();
         }
 
-	    void LoadQuestion(int index)
+	    private void UpdateQuestion()
 	    {
+            AnswerOptionsStackLayout.Children.Clear();
+            var q = _viewModel.CurrentQuestion;
             try
             {
-                // Access the current question
-                SurveyQuestionModel cq = App.SurveyVM.Question(index);
+                Title = $"Survey Question {q.QuestionNum} of {_viewModel.SurveyQuestionsCount}";
+                QuestionLabel.Text = q.QuestionText;
+                HelpTextLabel.Text = q.QuestionHelpText;
 
-                // BUG: For some reason, the title is not updating after question 1 on UWP, not tested on other platforms yet
-                Title = $"Survey Question {cq.QuestionNum} of {App.SurveyVM.SurveyQuestionsCount.ToString()}";
-                LblQuestion.Text = cq.QuestionText;
-                LblHelpText.Text = cq.QuestionHelpText;
+                var listView = new ListView();
+                listView.HasUnevenRows = true;
+                listView.ItemTemplate = new DataTemplate(typeof(WrappedItemSelectionTemplate));
+                listView.ItemsSource = CreateChoices(q, _viewModel.CurrentAnswers);
+                listView.ItemSelected += (sender, e) =>
+                {
+                    var answer = (WrappedAnswerChoice)e.SelectedItem;
+                    answer.IsSelected = !answer.IsSelected;
+                };
 
-                AnswersList.ItemsSource = cq.AnswerChoices;
-                // Trying to force layout on the page to update the title, but has no effect
-                //this.ForceLayout();  
+                AnswerOptionsStackLayout.Children.Add(listView);
             }
-            catch
+            catch (Exception e)
             {
-                // TO DO: provide better details, log in HockeyApp, etc.
+                // TODO: provide better details, log in HockeyApp, etc.
                 DisplayAlert("Error", "Something went wrong when loading this question.", "OK");
             }
         }
 
-	    void PreviousQuestion(object obj)
-	    {
-            // Not implemented yet
-            throw new NotImplementedException();
+        private IList<WrappedAnswerChoice> CreateChoices(
+            SurveyQuestionModel q, 
+            IList<SurveyQuestionAnswerChoiceResponseModel> previousAnswers)
+        {
+            var choices = new List<WrappedAnswerChoice>(q.AnswerChoices.Count);
+            foreach (var choice in q.AnswerChoices)
+            {
+                var previousAnswer = previousAnswers.FirstOrDefault(a => a.AnswerChoiceID == choice.AnswerChoiceID);
+                choices.Add(previousAnswer != null
+                    ? new WrappedAnswerChoice(choice, previousAnswer, true)
+                    : new WrappedAnswerChoice(
+                        choice,
+                        new SurveyQuestionAnswerChoiceResponseModel
+                        {
+                            QuestionID = q.QuestionID,
+                            AnswerChoiceID = choice.AnswerChoiceID,
+                        }));
+            }
+
+            foreach (var choice in choices)
+            {
+                choice.PropertyChanged += (sender, e) =>
+                {
+                    if (!q.AllowMultipleAnswers && e.PropertyName == nameof(WrappedAnswerChoice.IsSelected) && choice.IsSelected)
+                    {
+                        foreach (var otherChoice in choices)
+                        {
+                            if (otherChoice != choice)
+                            {
+                                otherChoice.IsSelected = false;
+                            }
+                        }
+                    }
+
+                    if (choice.IsSelected)
+                    {
+                        _viewModel.AddAnswer(choice.Answer);
+                    }
+                    else
+                    {
+                        _viewModel.RemoveAnswer(choice.Answer);
+                    }
+
+                    _viewModel.UpdateCommands();
+                };
+            }
+
+            return choices;
         }
 
-	    void NextQuestion(object obj)
-	    {
-            // This is temporary, each question/answer will actually specify which question comes next
-            _currentQuestionIndex++;
+        class WrappedAnswerChoice : INotifyPropertyChanged
+        {
+            private readonly SurveyQuestionAnswerChoiceModel _item;
+            private readonly SurveyQuestionAnswerChoiceResponseModel _answer;
 
-            LoadQuestion(_currentQuestionIndex);
+            private bool _isSelected = false;
+            private bool _isSpecifiable = false;
+            private Keyboard _keyboard = Keyboard.Default;
+
+            public WrappedAnswerChoice(
+                SurveyQuestionAnswerChoiceModel item,
+                SurveyQuestionAnswerChoiceResponseModel answer)
+                : this(item, answer, false)
+            {
+            }
+
+            public WrappedAnswerChoice(
+                SurveyQuestionAnswerChoiceModel item, 
+                SurveyQuestionAnswerChoiceResponseModel answer, 
+                bool isSelected)
+            {
+                _item = item;
+                _answer = answer;
+                _isSelected = isSelected;
+            }
+
+            public event PropertyChangedEventHandler PropertyChanged;
+
+            public SurveyQuestionAnswerChoiceModel Item => _item;
+
+            public SurveyQuestionAnswerChoiceResponseModel Answer => _answer;
+
+            public string Name => _item.AnswerChoiceText;
+
+            public Keyboard Keyboard =>
+                Item.AdditionalAnswerDataFormat == AnswerFormat.Int
+                    ? Keyboard.Numeric
+                    : Keyboard.Default;
+
+            public string Placeholder =>
+                Item.AdditionalAnswerDataFormat == AnswerFormat.Date
+                    ? "MM/DD/YYYY"
+                    : string.Empty;
+
+
+            public bool IsSelected
+            {
+                get { return _isSelected; }
+                set
+                {
+                    if (_isSelected != value)
+                    {
+                        _isSelected = value;
+                        PropertyChanged (this, new PropertyChangedEventArgs(nameof(IsSelected))); // C# 6
+                        UpdateSpecifiable();
+                    }
+                }
+            }
+
+            public bool IsSpecifiable
+            {
+                get { return _isSpecifiable; }
+                set
+                {
+                    if (_isSpecifiable != value)
+                    {
+                        _isSpecifiable = value;
+                        PropertyChanged(this, new PropertyChangedEventArgs(nameof(IsSpecifiable)));
+                    }
+                }
+            }
+
+            public string Text
+            {
+                get { return _answer.AdditionalAnswerData; }
+                set { _answer.AdditionalAnswerData = value; }
+            }
+
+            private void UpdateSpecifiable()
+            {
+                IsSpecifiable = _isSelected && Item.AdditionalAnswerDataFormat != AnswerFormat.None;
+            }
         }
 
-	    private void PreviousButton_OnClicked(object sender, EventArgs e)
-	    {
-	        PreviousQuestion(null);
-	    }
+        class WrappedItemSelectionTemplate : ViewCell
+        {
+            public WrappedItemSelectionTemplate()
+            {
+                var name = new Label
+                {
+                    HorizontalOptions = LayoutOptions.StartAndExpand,
+                    VerticalOptions = LayoutOptions.FillAndExpand,
+                };
 
-	    private void NextButton_OnClicked(object sender, EventArgs e)
-	    {
-	        NextQuestion(null);
-	    }
-	}
+                name.SetBinding(Label.TextProperty, new Binding(nameof(WrappedAnswerChoice.Name)));
+
+                var mainSwitch = new Switch
+                {
+                    HorizontalOptions = LayoutOptions.EndAndExpand,
+                    VerticalOptions = LayoutOptions.FillAndExpand,
+                };
+
+                mainSwitch.SetBinding(Switch.IsToggledProperty, new Binding(nameof(WrappedAnswerChoice.IsSelected)));
+
+                var answerLayout = new StackLayout
+                {
+                    Orientation = StackOrientation.Horizontal,
+                };
+
+                answerLayout.Children.Add(name);
+                answerLayout.Children.Add(mainSwitch);
+                var entry = new Entry
+                {
+                    HorizontalOptions = LayoutOptions.Fill,
+                };
+
+                entry.SetBinding(Entry.PlaceholderProperty, new Binding(nameof(WrappedAnswerChoice.Placeholder)));
+                entry.SetBinding(InputView.KeyboardProperty, new Binding(nameof(WrappedAnswerChoice.Keyboard)));
+                entry.SetBinding(IsVisibleProperty, new Binding(nameof(WrappedAnswerChoice.IsSpecifiable)));
+                entry.SetBinding(Entry.TextProperty, new Binding(nameof(WrappedAnswerChoice.Text), BindingMode.TwoWay));
+
+                var stackLayout = new StackLayout();
+                stackLayout.Children.Add(answerLayout);
+                stackLayout.Children.Add(entry);
+                View = stackLayout;
+            }
+        }
+    }
 }

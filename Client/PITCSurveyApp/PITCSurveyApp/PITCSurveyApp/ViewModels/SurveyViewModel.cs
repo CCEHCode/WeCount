@@ -1,74 +1,100 @@
 ﻿using System;
-using System.Threading.Tasks;
-using System.Diagnostics;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using PITCSurveyApp.Helpers;
-using PITCSurveyApp.Models;
-using PITCSurveyApp.Services;
+using System.Collections.Generic;
+using System.Linq;
 using PITCSurveyLib.Models;
+using Xamarin.Forms;
 
 namespace PITCSurveyApp.ViewModels
 {
     /// <summary>
     /// ViewModel class used to manage
     /// </summary>
-    public class SurveyViewModel
+    public class SurveyViewModel : BaseViewModel
     {
         private const string SurveyFileName = "questions.json";
 
-        //public NotifyTaskCompletion<SurveyModel> Survey { get; private set; }
-        private SurveyModel Survey { get; set;  }
+        private readonly SurveyResponseModel _responses = new SurveyResponseModel();
 
-        /// <summary>
-        /// Load the surveys from local storage or the cloud
-        /// </summary>
-        /// <returns></returns>
-        public async Task GetSurvey()
+        private int _index;
+
+        public SurveyViewModel()
         {
-            var fileHelper = new FileHelper();
-            if (await fileHelper.ExistsAsync(SurveyFileName))
-            {
-                var surveyText = await fileHelper.ReadTextAsync(SurveyFileName);
-                var surveyJson = JObject.Parse(surveyText);
-                Survey = surveyJson.ToObject<SurveyModel>();
-            }
+            NextQuestionCommand = new Command(NextQuestion, () => CanGoForward);
+            PreviousQuestionCommand = new Command(PreviousQuestion, () => false);
+        }
 
-            try
+        public event EventHandler QuestionChanged;
+
+        public Command NextQuestionCommand { get; }
+
+        public Command PreviousQuestionCommand { get; }
+
+        public SurveyQuestionModel CurrentQuestion => Question(_index);
+
+        public IList<SurveyQuestionAnswerChoiceResponseModel> CurrentAnswers
+        {
+            get
             {
-                // TODO: add logic to only periodically check for survey updates
-                var azureSurvey = await SurveyCloudService.GetLatestSurvey();
-                if (Survey == null || Survey.Version < azureSurvey.Version)
+                var questionResponse = _responses.QuestionResponses.FirstOrDefault(r => r.QuestionID == CurrentQuestion.QuestionID);
+                return questionResponse?.AnswerChoiceResponses ?? Array.Empty<SurveyQuestionAnswerChoiceResponseModel>();
+            }
+        }
+
+        private bool CanGoForward => CurrentAnswers.Count > 0;
+
+        public int SurveyQuestionsCount => App.LatestSurvey?.Questions?.Count ?? 0;
+
+        public void AddAnswer(SurveyQuestionAnswerChoiceResponseModel answer)
+        {
+            var existingQuestion = _responses.QuestionResponses.FirstOrDefault(r => r.QuestionID == answer.QuestionID);
+            if (existingQuestion == null)
+            {
+                existingQuestion = new SurveyQuestionResponseModel
                 {
-                    Survey = azureSurvey;
-                    var surveyJson = JObject.FromObject(Survey);
-                    var surveyText = surveyJson.ToString(Formatting.None);
-                    await fileHelper.WriteTextAsync(SurveyFileName, surveyText);
-                }
+                    QuestionID = answer.QuestionID,
+                };
+
+                _responses.QuestionResponses.Add(existingQuestion);
             }
-            catch (Exception ex)
+
+            existingQuestion.AnswerChoiceResponses.Add(answer);
+        }
+        
+        public void RemoveAnswer(SurveyQuestionAnswerChoiceResponseModel answer)
+        {
+            var existingQuestion = _responses.QuestionResponses.FirstOrDefault(r => r.QuestionID == answer.QuestionID);
+            if (existingQuestion != null)
             {
-                // TODO: capture exception in HockeyApp
+                existingQuestion.AnswerChoiceResponses.Remove(answer);
             }
         }
 
-        public string SurveyVersion => Survey?.Version.ToString();
-
-        public int SurveyQuestionsCount
+        public void UpdateCommands()
         {
-            get { return ((Survey != null) ? Survey.Questions.Count : 0); }
+            NextQuestionCommand.ChangeCanExecute();
         }
 
-        public SurveyQuestionModel Question(int index)
+        private void NextQuestion()
         {
-            if (index >= 0)
+            _index++;
+            QuestionChanged?.Invoke(this, new EventArgs());
+        }
+
+        private void PreviousQuestion()
+        {
+            // TODO: use last answered question?
+            throw new NotImplementedException();
+        }
+
+        private SurveyQuestionModel Question(int index)
+        {
+            var questions = App.LatestSurvey?.Questions;
+            if (questions != null && index >= 0 && index < questions.Count)
             {
-                return Survey.Questions[index];
+                return questions[index];
             }
-            else
-            {
-                return null;
-            }
+
+            return null;
         }
     }
 }

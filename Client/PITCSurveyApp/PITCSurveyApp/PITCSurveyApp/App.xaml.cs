@@ -4,12 +4,13 @@ using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Helpers;
 using PITCSurveyApp.ViewModels;
 using PITCSurveyApp.Views;
+using PITCSurveyLib.Models;
 
 namespace PITCSurveyApp
 {
     public partial class App : Application
 	{
-        public static SurveyViewModel SurveyVM { get; set; }
+        public static SurveyModel LatestSurvey { get; set; }
 
         public static IDictionary<string, string> LoginParameters => null;
 

@@ -1,31 +1,47 @@
-﻿using System.Windows.Input;
-using Xamarin.Forms;
+﻿using System;
+using System.Windows.Input;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PITCSurveyApp.Helpers;
+using PITCSurveyApp.Services;
 using PITCSurveyApp.Views;
+using PITCSurveyLib.Models;
+using Xamarin.Forms;
 
 namespace PITCSurveyApp.ViewModels
 {
-    class HomePageViewModel
+    class HomePageViewModel : BaseViewModel
     {
-        private SurveyViewModel vm { get; set; }
+        private const string SurveyFileName = "questions.json";
 
-        public ICommand NewSurveyCommand { get; set; }
+        private string _surveyVersion = "Loading...";
+        private string _surveyQuestionCount = "Loading...";
 
         public HomePageViewModel()
         {
             NewSurveyCommand = new Command(NewSurvey);
-
-            App.SurveyVM = new SurveyViewModel();      
+            LoadSurveyCommand = new Command(LoadSurvey);
+            IsBusy = true;
+            Init();
 
             // TO DO: Need to populate this from the authentication service
             UserFullname = "Volunteer";
         }
 
-        // Commands
-        void NewSurvey(object obj)
+        public ICommand NewSurveyCommand { get; }
+
+        public ICommand LoadSurveyCommand { get; }
+
+        public string SurveyVersion
         {
-            App.NavigationPage.Navigation.PushAsync(new SurveyPage());
-            App.MenuIsPresented = false;
+            get { return _surveyVersion; }
+            set { SetProperty(ref _surveyVersion, value); }
+        }
+
+        public string SurveyQuestionCount
+        {
+            get { return _surveyQuestionCount; }
+            set { SetProperty(ref _surveyQuestionCount, value); }
         }
 
         public string UserFullname { get; set; }
@@ -38,6 +54,62 @@ namespace PITCSurveyApp.ViewModels
         public ImageSource BannerImage
         {
             get { return ImageSource.FromFile(CrossHelper.GetOSFullImagePath("ccehlogo.jpg")); }
+        }
+
+        private void NewSurvey(object obj)
+        {
+            App.NavigationPage.Navigation.PushAsync(new SurveyPage());
+        }
+
+        private void LoadSurvey(object obj)
+        {
+            App.NavigationPage.Navigation.PushAsync(new MySurveysPage());
+        }
+
+        private async void Init()
+        {
+            var fileHelper = new FileHelper();
+            if (await fileHelper.ExistsAsync(SurveyFileName))
+            {
+                var surveyText = await fileHelper.ReadTextAsync(SurveyFileName);
+                var surveyJson = JObject.Parse(surveyText);
+                App.LatestSurvey = surveyJson.ToObject<SurveyModel>();
+            }
+
+            try
+            {
+                // TODO: add logic to only periodically check for survey updates
+                var azureSurvey = await SurveyCloudService.GetLatestSurvey();
+                if (App.LatestSurvey == null || App.LatestSurvey.Version < azureSurvey.Version)
+                {
+                    App.LatestSurvey = azureSurvey;
+                    var surveyJson = JObject.FromObject(azureSurvey);
+                    var surveyText = surveyJson.ToString(Formatting.None);
+                    await fileHelper.WriteTextAsync(SurveyFileName, surveyText);
+                }
+            }
+            catch (Exception ex)
+            {
+                // TODO: capture exception in HockeyApp
+            }
+
+            IsBusy = false;
+            UpdateSurveyInfo();
+        }
+
+        private void UpdateSurveyInfo()
+        {
+            var survey = App.LatestSurvey;
+            if (survey == null)
+            {
+                SurveyVersion = "Failed to load survey.";
+                SurveyQuestionCount = "Failed to load survey.";
+            }
+            else
+            {
+                SurveyVersion = survey.Version.ToString();
+                SurveyQuestionCount = survey.Questions?.Count.ToString() ?? "Invalid survey.";
+            }
         }
     }
 }

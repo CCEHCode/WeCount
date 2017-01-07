@@ -1,8 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:PITCSurveyApp.ViewModels"
              x:Class="PITCSurveyApp.Views.HomePage"
              Title="{Binding UserGreeting}">
+  <ContentPage.BindingContext>
+    <vm:HomePageViewModel />
+  </ContentPage.BindingContext>
   <Grid Padding="20,40,20,20" ColumnSpacing="10" RowSpacing="20">
     <Grid.RowDefinitions>
       <RowDefinition Height="*"/>
@@ -17,11 +21,11 @@
       <Label Text="We Count Survey App" Margin="0,12,0,0" HorizontalOptions="Center" />
       <StackLayout Orientation="Horizontal" Margin="0,24,0,0" >
         <Label Text="Survey Version: "/>
-        <Label x:Name="LblSurveyVersionCloud" Text="Loading..."/>
+        <Label Text="{Binding SurveyVersion}"/>
       </StackLayout>
       <StackLayout Orientation="Horizontal">
         <Label Text="No of Questions: "/>
-        <Label x:Name="LblSurveyQuestionsCount" Text="Loading..."/>
+        <Label Text="{Binding SurveyQuestionCount}"/>
       </StackLayout>
     </StackLayout>
     <Button x:Name="BtnNewSurvey"
@@ -29,6 +33,7 @@
             Text="New Survey"
             BackgroundColor="{StaticResource DarkBackgroundColor}"
             HorizontalOptions="FillAndExpand"
+            IsEnabled="{Binding IsNotBusy}"
             Command="{Binding NewSurveyCommand}"/>
     <!-- This button is temporarily disabled until the feature is added to the app -->
     <Button x:Name="BtnLoadSurvey"
