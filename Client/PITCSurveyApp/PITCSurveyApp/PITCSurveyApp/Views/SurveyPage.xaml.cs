@@ -38,7 +38,7 @@ namespace PITCSurveyApp.Views
 	    {
 	        AnswerOptionsStackLayout.Children.Clear();
 
-	        if (_viewModel.EndSurvey)
+	        if (_viewModel.IsSurveyEnded)
 	        {
 	            Title = "Survey Complete";
 	            QuestionLabel.Text = "Thank you for participating.";
@@ -95,27 +95,30 @@ namespace PITCSurveyApp.Views
             {
                 choice.PropertyChanged += (sender, e) =>
                 {
-                    if (!q.AllowMultipleAnswers && e.PropertyName == nameof(WrappedAnswerChoice.IsSelected) && choice.IsSelected)
+                    if (e.PropertyName == nameof(WrappedAnswerChoice.IsSelected))
                     {
-                        foreach (var otherChoice in choices)
+                        if (!q.AllowMultipleAnswers && choice.IsSelected)
                         {
-                            if (otherChoice != choice)
+                            foreach (var otherChoice in choices)
                             {
-                                otherChoice.IsSelected = false;
+                                if (otherChoice != choice)
+                                {
+                                    otherChoice.IsSelected = false;
+                                }
                             }
                         }
-                    }
 
-                    if (choice.IsSelected)
-                    {
-                        _viewModel.AddAnswer(choice.Answer);
-                    }
-                    else
-                    {
-                        _viewModel.RemoveAnswer(choice.Answer);
-                    }
+                        if (choice.IsSelected)
+                        {
+                            _viewModel.AddAnswer(choice.Answer);
+                        }
+                        else
+                        {
+                            _viewModel.RemoveAnswer(choice.Answer);
+                        }
 
-                    _viewModel.UpdateCommands();
+                        _viewModel.UpdateCommands();
+                    }
                 };
             }
 

@@ -18,7 +18,7 @@ namespace PITCSurveyApp.ViewModels
         private readonly UploadedItem<SurveyResponseModel> _response;
 
         private int _index;
-        private bool _endSurvey;
+        private bool _isSurveyEnded;
 
         public SurveyViewModel()
             : this(CreateNewSurveyResponse())
@@ -30,6 +30,7 @@ namespace PITCSurveyApp.ViewModels
             _response = response;
             NextQuestionCommand = new Command(NextQuestion, () => CanGoForward);
             PreviousQuestionCommand = new Command(PreviousQuestion, () => CanGoBack);
+            Init();
         }
 
         public event EventHandler QuestionChanged;
@@ -40,7 +41,7 @@ namespace PITCSurveyApp.ViewModels
 
         public SurveyQuestionModel CurrentQuestion => Question(_index);
 
-        public bool EndSurvey => _endSurvey;
+        public bool IsSurveyEnded => _isSurveyEnded;
 
         public IList<SurveyQuestionAnswerChoiceResponseModel> CurrentAnswers
         {
@@ -51,7 +52,7 @@ namespace PITCSurveyApp.ViewModels
             }
         }
 
-        private bool CanGoForward => !_endSurvey && CurrentAnswers.Count > 0;
+        private bool CanGoForward => !_isSurveyEnded && CurrentAnswers.Count > 0;
 
         private bool CanGoBack => _index > 0;
 
@@ -91,9 +92,14 @@ namespace PITCSurveyApp.ViewModels
             var currentAnswerIds = new HashSet<int>(CurrentAnswers.Select(a => a.AnswerChoiceID));
             var matchingAnswer = CurrentQuestion.AnswerChoices.FirstOrDefault(a => currentAnswerIds.Contains(a.AnswerChoiceID));
             var nextQuestionIndex = QuestionIndex(matchingAnswer?.NextQuestionID);
-            // TODO: this is a hack because of a bug in the survey where the NextQuestionID produces a cycle
+            // TODO: This is a hack because of a bug in the survey where the NextQuestionID produces a cycle. 
+            // Confirm that question IDs are always increasing.
             _index = nextQuestionIndex > _index ? nextQuestionIndex : _index + 1;
-            _endSurvey = (matchingAnswer?.EndSurvey ?? false) || nextQuestionIndex < 0;
+            if ((matchingAnswer?.EndSurvey ?? false) || nextQuestionIndex < 0)
+            {
+                EndSurvey();
+            }
+
             UpdateCommands();
             QuestionChanged?.Invoke(this, new EventArgs());
         }
@@ -101,9 +107,9 @@ namespace PITCSurveyApp.ViewModels
         private void PreviousQuestion()
         {
             var previousId = int.MinValue;
-            if (_endSurvey)
+            if (_isSurveyEnded)
             {
-                _endSurvey = false;
+                _isSurveyEnded = false;
                 previousId = _response.Item.QuestionResponses.Max(q => q.QuestionID);
             }
             else
@@ -138,6 +144,12 @@ namespace PITCSurveyApp.ViewModels
             return null;
         }
 
+        private void EndSurvey()
+        {
+            _isSurveyEnded = true;
+            _response.Item.EndTime = DateTimeOffset.Now;
+        }
+
         private int QuestionIndex(int? questionID)
         {
             var questions = App.LatestSurvey?.Questions;
@@ -153,6 +165,36 @@ namespace PITCSurveyApp.ViewModels
             }
 
             return -1;
+        }
+
+        private void Init()
+        {
+            var lastAnswer = _response.Item.QuestionResponses
+                .Where(q => q.AnswerChoiceResponses.Count > 0)
+                .MaxByOrDefault(a => a.QuestionID);
+
+            if (lastAnswer == null)
+            {
+                _index = 0;
+                return;
+            }
+
+            var lastQuestion = App.LatestSurvey?.Questions.FirstOrDefault(q => q.QuestionID == lastAnswer.QuestionID);
+            if (lastQuestion == null)
+            {
+                _index = 0;
+                return;
+            }
+
+            var lastAnswerIds = new HashSet<int>(lastAnswer.AnswerChoiceResponses.Select(a => a.AnswerChoiceID));
+            var matchingAnswer = lastQuestion.AnswerChoices.FirstOrDefault(a => lastAnswerIds.Contains(a.AnswerChoiceID));
+            var nextQuestionIndex = QuestionIndex(matchingAnswer?.NextQuestionID);
+            var lastIndex = QuestionIndex(lastAnswer.QuestionID);
+            _index = nextQuestionIndex > lastIndex ? nextQuestionIndex : lastIndex + 1;
+            if ((matchingAnswer?.EndSurvey ?? false) || nextQuestionIndex < 0)
+            {
+                _isSurveyEnded = true;
+            }
         }
 
         private static UploadedItem<SurveyResponseModel> CreateNewSurveyResponse()

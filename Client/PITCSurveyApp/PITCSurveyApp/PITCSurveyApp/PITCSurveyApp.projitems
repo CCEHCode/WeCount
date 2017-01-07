@@ -12,6 +12,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\EnumerableExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\FileHelperExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\IMetricsManagerService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\SurveyResponseModelExtensions.cs" />
