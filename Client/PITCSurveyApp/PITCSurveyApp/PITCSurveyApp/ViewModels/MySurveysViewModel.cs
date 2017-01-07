@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
 using PITCSurveyApp.Helpers;
 using PITCSurveyApp.Models;
 using Xamarin.Forms;

@@ -18,6 +18,8 @@
                     TextColor="{Binding TextColor}"
                     Detail="{Binding Details}">
             <TextCell.ContextActions>
+              <MenuItem Text="Edit" 
+                        Command="{Binding EditCommand}"/>
               <MenuItem Text="Delete" 
                         Command="{Binding DeleteCommand}"/>
               <MenuItem Text="Upload" 

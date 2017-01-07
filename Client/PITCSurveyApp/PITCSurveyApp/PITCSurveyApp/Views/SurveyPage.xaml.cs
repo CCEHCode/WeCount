@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using PITCSurveyApp.Models;
 using PITCSurveyApp.ViewModels;
 using PITCSurveyLib;
 using PITCSurveyLib.Models;
@@ -14,10 +15,20 @@ namespace PITCSurveyApp.Views
         private readonly SurveyViewModel _viewModel;
 
         public SurveyPage()
+            : this(new SurveyViewModel())
+        {
+        }
+
+        public SurveyPage(UploadedItem<SurveyResponseModel> response)
+            : this(new SurveyViewModel(response))
+        {
+        }
+
+        private SurveyPage(SurveyViewModel viewModel)
         {
             InitializeComponent();
 
-            _viewModel = new SurveyViewModel();
+            _viewModel = viewModel;
             _viewModel.QuestionChanged += (sender, e) => UpdateQuestion();
             BindingContext = _viewModel;
             UpdateQuestion();
@@ -126,6 +137,7 @@ namespace PITCSurveyApp.Views
                 _item = item;
                 _answer = answer;
                 _isSelected = isSelected;
+                UpdateSpecifiable();
             }
 
             public event PropertyChangedEventHandler PropertyChanged;
@@ -146,7 +158,6 @@ namespace PITCSurveyApp.Views
                     ? "MM/DD/YYYY"
                     : string.Empty;
 
-
             public bool IsSelected
             {
                 get { return _isSelected; }
@@ -155,7 +166,7 @@ namespace PITCSurveyApp.Views
                     if (_isSelected != value)
                     {
                         _isSelected = value;
-                        PropertyChanged (this, new PropertyChangedEventArgs(nameof(IsSelected))); // C# 6
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSelected))); // C# 6
                         UpdateSpecifiable();
                     }
                 }
@@ -169,7 +180,7 @@ namespace PITCSurveyApp.Views
                     if (_isSpecifiable != value)
                     {
                         _isSpecifiable = value;
-                        PropertyChanged(this, new PropertyChangedEventArgs(nameof(IsSpecifiable)));
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSpecifiable)));
                     }
                 }
             }

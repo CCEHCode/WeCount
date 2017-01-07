@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Helpers;
 using PITCSurveyApp.ViewModels;
+using PITCSurveyApp.Views;
 using PITCSurveyLib;
 using PITCSurveyLib.Models;
 using Xamarin.Forms;
@@ -26,6 +27,7 @@ namespace PITCSurveyApp.Models
             _filename = filename;
             DeleteCommand = new Command(Delete);
             UploadCommand = new Command(async () => await UploadAsync());
+            EditCommand = new Command(Edit);
         }
 
         public EventHandler Deleted;
@@ -33,6 +35,8 @@ namespace PITCSurveyApp.Models
         public Command DeleteCommand { get; }
 
         public Command UploadCommand { get; }
+
+        public Command EditCommand { get; }
 
         public SurveyResponseModel Response => _response.Item;
 
@@ -86,6 +90,11 @@ namespace PITCSurveyApp.Models
         {
             await _fileHelper.DeleteAsync(_filename);
             Deleted?.Invoke(this, new EventArgs());
+        }
+
+        public async void Edit()
+        {
+            await App.NavigationPage.PushAsync(new SurveyPage(_response));
         }
 
         private void Update()
