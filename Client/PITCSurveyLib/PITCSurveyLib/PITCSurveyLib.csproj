@@ -39,6 +39,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Address.cs" />
+    <Compile Include="APIException.cs" />
+    <Compile Include="APIHelper.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="GPSLocation.cs" />
     <Compile Include="Models\SurveyModels.cs" />
