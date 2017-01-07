@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using PITCSurveyApp.Extensions;
+using PITCSurveyApp.Helpers;
+using PITCSurveyApp.Models;
 using PITCSurveyLib.Models;
 using Xamarin.Forms;
 
@@ -11,14 +14,19 @@ namespace PITCSurveyApp.ViewModels
     /// </summary>
     public class SurveyViewModel : BaseViewModel
     {
-        private const string SurveyFileName = "questions.json";
-
-        private readonly SurveyResponseModel _responses = new SurveyResponseModel();
+        private readonly IFileHelper _fileHelper = new FileHelper();
+        private readonly UploadedItem<SurveyResponseModel> _response;
 
         private int _index;
 
         public SurveyViewModel()
+            : this(CreateNewSurveyResponse())
         {
+        }
+
+        public SurveyViewModel(UploadedItem<SurveyResponseModel> response)
+        {
+            _response = response;
             NextQuestionCommand = new Command(NextQuestion, () => CanGoForward);
             PreviousQuestionCommand = new Command(PreviousQuestion, () => false);
         }
@@ -35,7 +43,7 @@ namespace PITCSurveyApp.ViewModels
         {
             get
             {
-                var questionResponse = _responses.QuestionResponses.FirstOrDefault(r => r.QuestionID == CurrentQuestion.QuestionID);
+                var questionResponse = _response.Item.QuestionResponses.FirstOrDefault(r => r.QuestionID == CurrentQuestion.QuestionID);
                 return questionResponse?.AnswerChoiceResponses ?? Array.Empty<SurveyQuestionAnswerChoiceResponseModel>();
             }
         }
@@ -46,7 +54,7 @@ namespace PITCSurveyApp.ViewModels
 
         public void AddAnswer(SurveyQuestionAnswerChoiceResponseModel answer)
         {
-            var existingQuestion = _responses.QuestionResponses.FirstOrDefault(r => r.QuestionID == answer.QuestionID);
+            var existingQuestion = _response.Item.QuestionResponses.FirstOrDefault(r => r.QuestionID == answer.QuestionID);
             if (existingQuestion == null)
             {
                 existingQuestion = new SurveyQuestionResponseModel
@@ -54,7 +62,7 @@ namespace PITCSurveyApp.ViewModels
                     QuestionID = answer.QuestionID,
                 };
 
-                _responses.QuestionResponses.Add(existingQuestion);
+                _response.Item.QuestionResponses.Add(existingQuestion);
             }
 
             existingQuestion.AnswerChoiceResponses.Add(answer);
@@ -62,7 +70,7 @@ namespace PITCSurveyApp.ViewModels
         
         public void RemoveAnswer(SurveyQuestionAnswerChoiceResponseModel answer)
         {
-            var existingQuestion = _responses.QuestionResponses.FirstOrDefault(r => r.QuestionID == answer.QuestionID);
+            var existingQuestion = _response.Item.QuestionResponses.FirstOrDefault(r => r.QuestionID == answer.QuestionID);
             if (existingQuestion != null)
             {
                 existingQuestion.AnswerChoiceResponses.Remove(answer);
@@ -74,9 +82,11 @@ namespace PITCSurveyApp.ViewModels
             NextQuestionCommand.ChangeCanExecute();
         }
 
-        private void NextQuestion()
+        private async void NextQuestion()
         {
+            await _fileHelper.SaveAsync(GetFilename(_response), _response);
             _index++;
+            UpdateCommands();
             QuestionChanged?.Invoke(this, new EventArgs());
         }
 
@@ -95,6 +105,25 @@ namespace PITCSurveyApp.ViewModels
             }
 
             return null;
+        }
+
+        private static UploadedItem<SurveyResponseModel> CreateNewSurveyResponse()
+        {
+            return new UploadedItem<SurveyResponseModel>
+            {
+                Item = new SurveyResponseModel
+                {
+                    ResponseIdentifier = Guid.NewGuid(),
+                    SurveyID = App.LatestSurvey.SurveyID,
+                    Survey_Version = App.LatestSurvey.Version,
+                    StartTime = DateTimeOffset.Now,
+                },
+            };
+        }
+
+        private static string GetFilename(UploadedItem<SurveyResponseModel> response)
+        {
+            return $"{response.Item.ResponseIdentifier}.survey.json";
         }
     }
 }

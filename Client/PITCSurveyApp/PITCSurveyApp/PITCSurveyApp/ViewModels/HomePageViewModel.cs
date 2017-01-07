@@ -88,7 +88,7 @@ namespace PITCSurveyApp.ViewModels
                     await fileHelper.WriteTextAsync(SurveyFileName, surveyText);
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 // TODO: capture exception in HockeyApp
             }

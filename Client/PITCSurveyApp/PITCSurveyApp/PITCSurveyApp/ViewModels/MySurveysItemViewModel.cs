@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Globalization;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Helpers;
 using PITCSurveyApp.ViewModels;
+using PITCSurveyLib;
+using PITCSurveyLib.Models;
 using Xamarin.Forms;
 
 namespace PITCSurveyApp.Models
@@ -14,18 +15,11 @@ namespace PITCSurveyApp.Models
         private readonly IFileHelper _fileHelper = new FileHelper();
         private readonly string _filename;
 
-        private SurveyResponseModelWrapper _response;
+        private UploadedItem<SurveyResponseModel> _response;
         private DateTime? _lastModified;
 
         private Color _textColor;
         private string _details;
-
-        public MySurveysItemViewModel(string filename, SurveyResponseModelWrapper response)
-            : this(filename)
-        {
-            _response = response;
-            Update();
-        }
 
         public MySurveysItemViewModel(string filename)
         {
@@ -40,9 +34,9 @@ namespace PITCSurveyApp.Models
 
         public Command UploadCommand { get; }
 
-        public SurveyResponseModelWrapper Response => _response;
+        public SurveyResponseModel Response => _response.Item;
 
-        public string Text => $"{_response.Name}, {_response.DateOfBirth}";
+        public string Text => $"{Name}, {DateOfBirth}";
 
         public string Details
         {
@@ -58,26 +52,26 @@ namespace PITCSurveyApp.Models
 
         public DateTime? LastModified => _lastModified;
 
+        private string Name => 
+            _response.Item.GetWellKnownAnswer(App.LatestSurvey, WellKnownQuestion.NameOrInitials) ?? "Unknown";
+
+        private string DateOfBirth =>
+            _response.Item.GetWellKnownAnswer(App.LatestSurvey, WellKnownQuestion.DOB) ?? "Unknown";
+
         public async Task LoadAsync()
         {
             if (_filename != null)
             {
                 _lastModified = await _fileHelper.LastModifiedAsync(_filename);
-
-                var responseText = await _fileHelper.ReadTextAsync(_filename);
-                var json = JObject.Parse(responseText);
-                _response = json.ToObject<SurveyResponseModelWrapper>();
+                _response = await _fileHelper.LoadAsync<UploadedItem<SurveyResponseModel>>(_filename);
                 Update();
             }
         }
 
-        public async Task SaveAsync()
+        public Task SaveAsync()
         {
             _lastModified = DateTime.Now;
-
-            var json = JObject.FromObject(_response);
-            var responseText = json.ToString(Formatting.None);
-            await _fileHelper.WriteTextAsync(_filename, responseText);
+            return _fileHelper.SaveAsync(_filename, _response);
         }
 
         public async Task UploadAsync()

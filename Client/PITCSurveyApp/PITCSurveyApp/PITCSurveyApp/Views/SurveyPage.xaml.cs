@@ -45,7 +45,7 @@ namespace PITCSurveyApp.Views
 
                 AnswerOptionsStackLayout.Children.Add(listView);
             }
-            catch (Exception e)
+            catch
             {
                 // TODO: provide better details, log in HockeyApp, etc.
                 DisplayAlert("Error", "Something went wrong when loading this question.", "OK");
