@@ -74,11 +74,11 @@ namespace PITCSurveySvc.Controllers
 						sb.AppendLine($"{ve.PropertyName}: {ve.ErrorMessage}");
 					}
 				}
-				return InternalServerError(new ApplicationException(sb.ToString(), evex));
+				return Content(HttpStatusCode.InternalServerError, sb.ToString()); // InternalServerError(new ApplicationException(sb.ToString(), evex));
 			}
 			catch (Exception ex)
 			{
-				return InternalServerError(ex);
+				return Content(HttpStatusCode.InternalServerError, ex.ToString()); // InternalServerError(ex);
 			}
 		}
 	}

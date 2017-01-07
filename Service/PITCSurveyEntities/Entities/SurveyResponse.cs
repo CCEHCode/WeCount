@@ -35,7 +35,7 @@ namespace PITCSurveyEntities.Entities
 
 		public String LocationNotes { get; set; }
 
-		public Address NearestAddress { get; set; }
+		public Address NearestAddress { get; set; } = new Address();
 
 		public virtual IList<SurveyResponseAnswer> Answers { get; set; } = new List<SurveyResponseAnswer>();
 

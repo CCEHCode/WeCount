@@ -259,9 +259,9 @@ namespace PITCSurveySvc.Models
 				Survey_ID = Model.SurveyID,
 				Survey_Version = Model.Survey_Version,
 				//Volunteer_ID = _db.Volunteers.Where(v => v.AuthID == Model.InterviewerID).Single().ID,
-				GPSLocation = System.Data.Entity.Spatial.DbGeography.PointFromText($"Point({Model.GPSLocation.Lon} {Model.GPSLocation.Lat})", CoordinateSystemID),
+				GPSLocation = (Model.GPSLocation != null) ? System.Data.Entity.Spatial.DbGeography.PointFromText($"Point({Model.GPSLocation.Lon} {Model.GPSLocation.Lat})", CoordinateSystemID) : null,
 				LocationNotes = Model.LocationNotes,
-				NearestAddress = Model.NearestAddress,
+				NearestAddress = Model.NearestAddress ?? new PITCSurveyLib.Address(),
 				ResponseIdentifier = Model.ResponseIdentifier,
 				InterviewStarted = Model.StartTime,
 				InterviewCompleted = Model.EndTime
