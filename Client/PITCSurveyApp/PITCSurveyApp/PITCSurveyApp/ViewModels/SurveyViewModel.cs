@@ -18,6 +18,7 @@ namespace PITCSurveyApp.ViewModels
         private readonly UploadedItem<SurveyResponseModel> _response;
 
         private int _index;
+        private bool _endSurvey;
 
         public SurveyViewModel()
             : this(CreateNewSurveyResponse())
@@ -39,11 +40,13 @@ namespace PITCSurveyApp.ViewModels
 
         public SurveyQuestionModel CurrentQuestion => Question(_index);
 
+        public bool EndSurvey => _endSurvey;
+
         public IList<SurveyQuestionAnswerChoiceResponseModel> CurrentAnswers
         {
             get
             {
-                var questionResponse = _response.Item.QuestionResponses.FirstOrDefault(r => r.QuestionID == CurrentQuestion.QuestionID);
+                var questionResponse = _response.Item.QuestionResponses.FirstOrDefault(r => r.QuestionID == CurrentQuestion?.QuestionID);
                 return questionResponse?.AnswerChoiceResponses ?? Array.Empty<SurveyQuestionAnswerChoiceResponseModel>();
             }
         }
@@ -71,10 +74,7 @@ namespace PITCSurveyApp.ViewModels
         public void RemoveAnswer(SurveyQuestionAnswerChoiceResponseModel answer)
         {
             var existingQuestion = _response.Item.QuestionResponses.FirstOrDefault(r => r.QuestionID == answer.QuestionID);
-            if (existingQuestion != null)
-            {
-                existingQuestion.AnswerChoiceResponses.Remove(answer);
-            }
+            existingQuestion?.AnswerChoiceResponses.Remove(answer);
         }
 
         public void UpdateCommands()
@@ -85,7 +85,12 @@ namespace PITCSurveyApp.ViewModels
         private async void NextQuestion()
         {
             await _fileHelper.SaveAsync(GetFilename(_response), _response);
-            _index++;
+            var currentAnswerIds = new HashSet<int>(CurrentAnswers.Select(a => a.AnswerChoiceID));
+            var matchingAnswer = CurrentQuestion.AnswerChoices.FirstOrDefault(a => currentAnswerIds.Contains(a.AnswerChoiceID));
+            var nextQuestionIndex = QuestionIndex(matchingAnswer?.NextQuestionID);
+            // TODO: this is a hack because of a bug in the survey where the NextQuestionID produces a cycle
+            _index = nextQuestionIndex > _index ? nextQuestionIndex : _index + 1;
+            _endSurvey = (matchingAnswer?.EndSurvey ?? false) || nextQuestionIndex < 0;
             UpdateCommands();
             QuestionChanged?.Invoke(this, new EventArgs());
         }
@@ -105,6 +110,23 @@ namespace PITCSurveyApp.ViewModels
             }
 
             return null;
+        }
+
+        private int QuestionIndex(int? questionID)
+        {
+            var questions = App.LatestSurvey?.Questions;
+            if (questions != null)
+            {
+                for (var i = 0; i < questions.Count; ++i)
+                {
+                    if (questions[i].QuestionID == questionID)
+                    {
+                        return i;
+                    }
+                }
+            }
+
+            return -1;
         }
 
         private static UploadedItem<SurveyResponseModel> CreateNewSurveyResponse()

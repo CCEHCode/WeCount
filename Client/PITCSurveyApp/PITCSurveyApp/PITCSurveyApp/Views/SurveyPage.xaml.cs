@@ -36,32 +36,41 @@ namespace PITCSurveyApp.Views
 
 	    private void UpdateQuestion()
 	    {
-            AnswerOptionsStackLayout.Children.Clear();
-            var q = _viewModel.CurrentQuestion;
-            try
-            {
-                Title = $"Survey Question {q.QuestionNum} of {_viewModel.SurveyQuestionsCount}";
-                QuestionLabel.Text = q.QuestionText;
-                HelpTextLabel.Text = q.QuestionHelpText;
+	        AnswerOptionsStackLayout.Children.Clear();
 
-                var listView = new ListView();
-                listView.HasUnevenRows = true;
-                listView.ItemTemplate = new DataTemplate(typeof(WrappedItemSelectionTemplate));
-                listView.ItemsSource = CreateChoices(q, _viewModel.CurrentAnswers);
-                listView.ItemSelected += (sender, e) =>
-                {
-                    var answer = (WrappedAnswerChoice)e.SelectedItem;
-                    answer.IsSelected = !answer.IsSelected;
-                };
+	        if (_viewModel.EndSurvey)
+	        {
+	            Title = "Survey Complete";
+	            QuestionLabel.Text = "Thank you for participating.";
+                HelpTextLabel.Text = null;
+                return;
+	        }
 
-                AnswerOptionsStackLayout.Children.Add(listView);
-            }
-            catch
-            {
-                // TODO: provide better details, log in HockeyApp, etc.
-                DisplayAlert("Error", "Something went wrong when loading this question.", "OK");
-            }
-        }
+	        var q = _viewModel.CurrentQuestion;
+	        try
+	        {
+	            Title = $"Survey Question {q.QuestionNum} of {_viewModel.SurveyQuestionsCount}";
+	            QuestionLabel.Text = q.QuestionText;
+	            HelpTextLabel.Text = q.QuestionHelpText;
+
+	            var listView = new ListView();
+	            listView.HasUnevenRows = true;
+	            listView.ItemTemplate = new DataTemplate(typeof(WrappedItemSelectionTemplate));
+	            listView.ItemsSource = CreateChoices(q, _viewModel.CurrentAnswers);
+	            listView.ItemSelected += (sender, e) =>
+	            {
+	                var answer = (WrappedAnswerChoice) e.SelectedItem;
+	                answer.IsSelected = !answer.IsSelected;
+	            };
+
+	            AnswerOptionsStackLayout.Children.Add(listView);
+	        }
+	        catch
+	        {
+	            // TODO: provide better details, log in HockeyApp, etc.
+	            DisplayAlert("Error", "Something went wrong when loading this question.", "OK");
+	        }
+	    }
 
         private IList<WrappedAnswerChoice> CreateChoices(
             SurveyQuestionModel q, 
