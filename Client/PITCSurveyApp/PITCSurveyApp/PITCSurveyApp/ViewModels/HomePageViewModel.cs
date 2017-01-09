@@ -58,7 +58,7 @@ namespace PITCSurveyApp.ViewModels
 
         private void NewSurvey(object obj)
         {
-            App.NavigationPage.Navigation.PushAsync(new SurveyPage());
+            App.NavigationPage.Navigation.PushAsync(new SurveyLocationPage());
         }
 
         private void LoadSurvey(object obj)

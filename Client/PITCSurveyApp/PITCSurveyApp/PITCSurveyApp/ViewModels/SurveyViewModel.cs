@@ -21,7 +21,7 @@ namespace PITCSurveyApp.ViewModels
         private bool _isSurveyEnded;
 
         public SurveyViewModel()
-            : this(CreateNewSurveyResponse())
+            : this(new UploadedItem<SurveyResponseModel>(SurveyResponseModelExtensions.CreateNew()))
         {
         }
 
@@ -195,20 +195,6 @@ namespace PITCSurveyApp.ViewModels
             {
                 _isSurveyEnded = true;
             }
-        }
-
-        private static UploadedItem<SurveyResponseModel> CreateNewSurveyResponse()
-        {
-            return new UploadedItem<SurveyResponseModel>
-            {
-                Item = new SurveyResponseModel
-                {
-                    ResponseIdentifier = Guid.NewGuid(),
-                    SurveyID = App.LatestSurvey.SurveyID,
-                    Survey_Version = App.LatestSurvey.Version,
-                    StartTime = DateTimeOffset.Now,
-                },
-            };
         }
 
         private static string GetFilename(UploadedItem<SurveyResponseModel> response)

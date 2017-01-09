@@ -1,32 +1,23 @@
-﻿
-using PITCSurveyApp.Helpers;
+﻿using PITCSurveyApp.Helpers;
 
 namespace PITCSurveyApp.ViewModels
 {
     public class BaseViewModel : ObservableObject
     {
-        /// <summary>
-        /// Get the azure service instance
-        /// </summary>
-        //public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>();
+        private bool _isBusy = false;
 
-        bool isBusy = false;
         public bool IsBusy
         {
-            get { return isBusy; }
-            set { SetProperty(ref isBusy, value); }
+            get { return _isBusy; }
+            set
+            {
+                if (SetProperty(ref _isBusy, value))
+                {
+                    OnPropertyChanged(nameof(IsNotBusy));
+                }
+            }
         }
-        /// <summary>
-        /// Private backing field to hold the title
-        /// </summary>
-        string title = string.Empty;
-        /// <summary>
-        /// Public property to set and get the title of the item
-        /// </summary>
-        public string Title
-        {
-            get { return title; }
-            set { SetProperty(ref title, value); }
-        }
+
+        public bool IsNotBusy => !_isBusy;
     }
 }

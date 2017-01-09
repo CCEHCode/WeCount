@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:PITCSurveyApp.ViewModels"
+             x:Class="PITCSurveyApp.Views.SurveyLocationPage"
+             Title="Survey Location">
+  <ContentPage.BindingContext>
+    <vm:SurveyLocationViewModel />
+  </ContentPage.BindingContext>
+  <Grid Padding="20,20,20,20" ColumnSpacing="10" RowSpacing="20">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="100"/>
+      <RowDefinition Height="100"/>
+    </Grid.RowDefinitions>
+    <StackLayout VerticalOptions="StartAndExpand" Padding="30">
+      <Label Text="GPS Location"/>
+      <Label Text="{Binding Position}"/>
+      <Label Text="Street" />
+      <Entry HorizontalOptions="FillAndExpand"
+             IsEnabled="{Binding IsNotBusy}"
+             Text="{Binding Street, Mode=TwoWay}"/>
+      <Label Text="City" />
+      <Entry HorizontalOptions="FillAndExpand"
+             IsEnabled="{Binding IsNotBusy}"
+             Text="{Binding City, Mode=TwoWay}"/>
+      <Label Text="State" />
+      <Entry HorizontalOptions="FillAndExpand"
+             IsEnabled="{Binding IsNotBusy}"
+             Text="{Binding State, Mode=TwoWay}"/>
+      <Label Text="Zip Code" />
+      <Entry HorizontalOptions="FillAndExpand"
+             IsEnabled="{Binding IsNotBusy}"
+             Text="{Binding ZipCode, Mode=TwoWay}"/>
+      <Label Text="Location Notes" />
+      <Entry HorizontalOptions="FillAndExpand"
+             Text="{Binding LocationNotes, Mode=TwoWay}"/>
+    </StackLayout>
+    <Button Text="Use Last Location"
+            Grid.Row="1"
+            BackgroundColor="{StaticResource DarkBackgroundColor}"
+            HorizontalOptions="FillAndExpand"
+            Command="{Binding UseLastLocationCommand}"/>
+    <Button Text="Start Survey"
+            Grid.Row="2"
+            BackgroundColor="{StaticResource DarkBackgroundColor}"
+            HorizontalOptions="FillAndExpand"
+            Command="{Binding StartSurveyCommand}" />
+  </Grid>
+</ContentPage>

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using PITCSurveyLib;
 using PITCSurveyLib.Models;
 
@@ -20,6 +21,17 @@ namespace PITCSurveyApp.Extensions
                 .FirstOrDefault(r => r.QuestionID == nameQuestion.QuestionID)?
                 .AnswerChoiceResponses?.FirstOrDefault()?
                 .AdditionalAnswerData;
+        }
+
+        public static SurveyResponseModel CreateNew()
+        {
+            return new SurveyResponseModel
+            {
+                ResponseIdentifier = Guid.NewGuid(),
+                SurveyID = App.LatestSurvey.SurveyID,
+                Survey_Version = App.LatestSurvey.Version,
+                StartTime = DateTimeOffset.Now,
+            };
         }
     }
 }

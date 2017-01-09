@@ -28,12 +28,10 @@
         <Label Text="{Binding SurveyQuestionCount}"/>
       </StackLayout>
     </StackLayout>
-    <Button x:Name="BtnNewSurvey"
-            Grid.Row="1"
+    <Button Grid.Row="1"
             Text="New Survey"
             BackgroundColor="{StaticResource DarkBackgroundColor}"
             HorizontalOptions="FillAndExpand"
-            IsEnabled="{Binding IsNotBusy}"
             Command="{Binding NewSurveyCommand}"/>
     <!-- This button is temporarily disabled until the feature is added to the app -->
     <Button x:Name="BtnLoadSurvey"
