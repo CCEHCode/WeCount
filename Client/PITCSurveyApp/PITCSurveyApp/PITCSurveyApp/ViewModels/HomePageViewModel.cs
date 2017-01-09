@@ -7,6 +7,7 @@ using PITCSurveyApp.Services;
 using PITCSurveyApp.Views;
 using PITCSurveyLib.Models;
 using Xamarin.Forms;
+using PITCSurveyLib;
 
 namespace PITCSurveyApp.ViewModels
 {
@@ -79,7 +80,7 @@ namespace PITCSurveyApp.ViewModels
             try
             {
                 // TODO: add logic to only periodically check for survey updates
-                var azureSurvey = await SurveyCloudService.GetLatestSurvey();
+                var azureSurvey = await APIHelper.GetSurveyByIDAsync(1);	// TODO: Replace with actual SurveyID, from GetAvailableSurveysAsync()
                 if (App.LatestSurvey == null || App.LatestSurvey.Version < azureSurvey.Version)
                 {
                     App.LatestSurvey = azureSurvey;

@@ -12,6 +12,7 @@ namespace PITCSurveyApp.Services
     {
         private const string AzureMobileAppUrl = "https://appname.azurewebsites.net";
 
+		// TODO: Move this into APIHelper for consistency?
         public static MobileServiceClient ApiClient;
 
         static SurveyCloudService()
@@ -19,7 +20,8 @@ namespace PITCSurveyApp.Services
             ApiClient = new MobileServiceClient(AzureMobileAppUrl);
         }
 
-        public static async Task<SurveyModel> GetLatestSurvey(int id = 1)
+		/*
+		public static async Task<SurveyModel> GetLatestSurvey(int id = 1)
         {
 			try
 			{
@@ -31,6 +33,7 @@ namespace PITCSurveyApp.Services
 				return null;
 			}
         }
+		*/
 
     }
 }
