@@ -15,9 +15,15 @@ namespace PITCSurveyLib
 
 		private PITCSurveyAPI API;
 
+		public static string AuthToken { get; set; }
+
 		public APIHelper()
 		{
-			var Creds = new Microsoft.Rest.BasicAuthenticationCredentials() { UserName = "", Password = "" };
+			//var Creds = new Microsoft.Rest.BasicAuthenticationCredentials() { UserName = "", Password = "" };
+
+			// TODO: Swapping the above line for the below one should, in theory, allow seamless passing of the user's auth to the service. I think.
+
+			var Creds = new Microsoft.Rest.TokenCredentials(AuthToken);
 
 			API = new PITCSurveyAPI(new Uri(AzureMobileAppUrl), Creds);
 		}

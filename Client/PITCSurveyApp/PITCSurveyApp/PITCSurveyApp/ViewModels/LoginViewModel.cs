@@ -4,6 +4,7 @@ using Microsoft.WindowsAzure.MobileServices;
 using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Helpers;
 using Xamarin.Forms;
+using PITCSurveyLib;
 
 namespace PITCSurveyApp.ViewModels
 {
@@ -34,6 +35,7 @@ namespace PITCSurveyApp.ViewModels
             {
                 if (Settings.IsLoggedIn)
                 {
+					APIHelper.AuthToken = Settings.AuthToken;
                     App.GoToMainPage();
                 }
             }

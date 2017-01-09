@@ -22,9 +22,10 @@ namespace PITCSurveyApp.Services
             ApiClient = new MobileServiceClient(AzureMobileAppUrl);
         }
 
-        public static async Task<SurveyModel> GetLatestSurvey()
+        public static async Task<SurveyModel> GetLatestSurvey(int ID = 1)
         {
-            var parameters = new Dictionary<string, string>{{"id", "1"}};
+			/*
+			var parameters = new Dictionary<string, string>{{"id", "1"}};
 
             try
             {
@@ -35,7 +36,21 @@ namespace PITCSurveyApp.Services
             {
                 return null;
             }
+			*/
 
+			// NOTE: ATY - Replaced original code above with call to new helper below.
+
+			try
+			{
+				var API = new APIHelper();
+
+				return await API.GetSurveyByIDAsync(ID);
+			}
+			catch (Exception)
+			{
+				// TODO: Return error to show to user?
+				return null;
+			}
         }
 
     }
