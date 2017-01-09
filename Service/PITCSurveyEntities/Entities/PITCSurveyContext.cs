@@ -39,6 +39,8 @@ namespace PITCSurveyEntities.Entities
 		
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
+			Database.SetInitializer(new MigrateDatabaseToLatestVersion<PITCSurveyContext, Migrations.Configuration>());
+
 			//modelBuilder.Entity<Question>().HasMany(q => q.AnswerChoices).WithMany().Map(m => m.ToTable("QuestionAnswerChoices"));
 			modelBuilder.Entity<SurveyQuestion>().HasMany(q => q.AnswerChoices).WithRequired(a => a.SurveyQuestion).Map(m => m.ToTable("SurveyAnswerChoices"));
 

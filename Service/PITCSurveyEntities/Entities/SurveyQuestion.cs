@@ -25,8 +25,6 @@ namespace PITCSurveyEntities.Entities
 
 		public String QuestionNum { get; set; }
 
-		public WellKnownQuestion WellKnownQuestion { get; set; }
-
 		public virtual IList<SurveyAnswerChoice> AnswerChoices { get; set; }
 
 		[ForeignKey("DependentQuestion_ID")]

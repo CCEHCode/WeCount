@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PITCSurveyLib;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -15,6 +16,8 @@ namespace PITCSurveyEntities.Entities
 
 		public String QuestionText { get; set; }
 		public String ClarificationText { get; set; }
+
+		public WellKnownQuestion WellKnownQuestion { get; set; }
 
 		public bool AllowMultipleAnswers { get; set; }
 

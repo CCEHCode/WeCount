@@ -98,6 +98,10 @@
     <Compile Include="Migrations\201701061600338_AddResponseVersionAndWellKnownQuestion.Designer.cs">
       <DependentUpon>201701061600338_AddResponseVersionAndWellKnownQuestion.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201701091513547_MoveWellKnownQuestionToQuestion.cs" />
+    <Compile Include="Migrations\201701091513547_MoveWellKnownQuestionToQuestion.Designer.cs">
+      <DependentUpon>201701091513547_MoveWellKnownQuestionToQuestion.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
@@ -155,6 +159,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201701061600338_AddResponseVersionAndWellKnownQuestion.resx">
       <DependentUpon>201701061600338_AddResponseVersionAndWellKnownQuestion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701091513547_MoveWellKnownQuestionToQuestion.resx">
+      <DependentUpon>201701091513547_MoveWellKnownQuestionToQuestion.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
