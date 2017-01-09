@@ -7,32 +7,38 @@
   <ContentPage.BindingContext>
     <vm:SurveyLocationViewModel />
   </ContentPage.BindingContext>
-  <Grid Padding="20,20,20,20" ColumnSpacing="10" RowSpacing="20">
+  <Grid Padding="10,10,10,10" ColumnSpacing="10" RowSpacing="10">
     <Grid.RowDefinitions>
       <RowDefinition Height="*"/>
-      <RowDefinition Height="100"/>
-      <RowDefinition Height="100"/>
+      <RowDefinition Height="75"/>
+      <RowDefinition Height="75"/>
     </Grid.RowDefinitions>
-    <StackLayout VerticalOptions="StartAndExpand" Padding="30">
-      <Label Text="GPS Location"/>
-      <Label Text="{Binding Position}"/>
-      <Label Text="Street" />
+    <StackLayout VerticalOptions="StartAndExpand" Padding="10">
+      <Label Text="GPS Location"
+             FontAttributes="Bold"/>
+      <Label Text="{Binding Position}" Margin="5"/>
+      <Label Text="Street"
+             FontAttributes="Bold"/>
       <Entry HorizontalOptions="FillAndExpand"
              IsEnabled="{Binding IsNotBusy}"
              Text="{Binding Street, Mode=TwoWay}"/>
-      <Label Text="City" />
+      <Label Text="City"
+             FontAttributes="Bold"/>
       <Entry HorizontalOptions="FillAndExpand"
              IsEnabled="{Binding IsNotBusy}"
              Text="{Binding City, Mode=TwoWay}"/>
-      <Label Text="State" />
+      <Label Text="State"
+             FontAttributes="Bold"/>
       <Entry HorizontalOptions="FillAndExpand"
              IsEnabled="{Binding IsNotBusy}"
              Text="{Binding State, Mode=TwoWay}"/>
-      <Label Text="Zip Code" />
+      <Label Text="Zip Code"
+             FontAttributes="Bold"/>
       <Entry HorizontalOptions="FillAndExpand"
              IsEnabled="{Binding IsNotBusy}"
              Text="{Binding ZipCode, Mode=TwoWay}"/>
-      <Label Text="Location Notes" />
+      <Label Text="Location Notes"
+             FontAttributes="Bold"/>
       <Entry HorizontalOptions="FillAndExpand"
              Text="{Binding LocationNotes, Mode=TwoWay}"/>
     </StackLayout>
