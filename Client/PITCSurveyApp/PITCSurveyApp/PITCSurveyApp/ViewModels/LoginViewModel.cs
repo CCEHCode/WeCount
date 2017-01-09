@@ -29,13 +29,18 @@ namespace PITCSurveyApp.ViewModels
             try
             {
                 DependencyService.Get<IMetricsManagerService>().TrackEvent("UserLogin");
-                await App.Authenticator.AuthenticateAsync(MobileServiceAuthenticationProvider.Google);
+                var user = await App.Authenticator.AuthenticateAsync(MobileServiceAuthenticationProvider.Google);
+                Settings.AuthToken = user.MobileServiceAuthenticationToken;
+                APIHelper.AuthToken = Settings.AuthToken;
+            }
+            catch
+            {
+                // TODO: sign in failed
             }
             finally
             {
                 if (Settings.IsLoggedIn)
                 {
-					APIHelper.AuthToken = Settings.AuthToken;
                     App.GoToMainPage();
                 }
             }

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 using Microsoft.WindowsAzure.MobileServices;
@@ -22,29 +19,12 @@ namespace PITCSurveyApp.Services
             ApiClient = new MobileServiceClient(AzureMobileAppUrl);
         }
 
-        public static async Task<SurveyModel> GetLatestSurvey(int ID = 1)
+        public static async Task<SurveyModel> GetLatestSurvey(int id = 1)
         {
-			/*
-			var parameters = new Dictionary<string, string>{{"id", "1"}};
-
-            try
-            {
-                var result = await ApiClient.InvokeApiAsync<SurveyModel>("Surveys", System.Net.Http.HttpMethod.Get, parameters);
-                return result;
-            }
-            catch
-            {
-                return null;
-            }
-			*/
-
-			// NOTE: ATY - Replaced original code above with call to new helper below.
-
 			try
 			{
-				var API = new APIHelper();
-
-				return await API.GetSurveyByIDAsync(ID);
+				var api = new APIHelper();
+				return await api.GetSurveyByIDAsync(id);
 			}
 			catch (Exception)
 			{
