@@ -1,27 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
+﻿using System.Threading.Tasks;
+using Microsoft.WindowsAzure.MobileServices;
+using PITCSurveyApp.Services;
 
 namespace PITCSurveyApp.UWP
 {
-    public sealed partial class MainPage
+    public sealed partial class MainPage : IAuthenticate
     {
         public MainPage()
         {
             this.InitializeComponent();
-
+            PITCSurveyApp.App.Init(this);
             LoadApplication(new PITCSurveyApp.App());
+        }
+
+        public async Task<MobileServiceUser> AuthenticateAsync(MobileServiceAuthenticationProvider provider)
+        {
+            try
+            {
+                return await SurveyCloudService.ApiClient.LoginAsync(provider);
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

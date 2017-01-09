@@ -2,6 +2,7 @@
 using Xamarin.Forms;
 using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Helpers;
+using PITCSurveyApp.Services;
 using PITCSurveyApp.ViewModels;
 using PITCSurveyApp.Views;
 using PITCSurveyLib.Models;
@@ -11,6 +12,13 @@ namespace PITCSurveyApp
     public partial class App : Application
 	{
         public static SurveyModel LatestSurvey { get; set; }
+
+        public static IAuthenticate Authenticator { get; private set; }
+
+        public static void Init(IAuthenticate authenticator)
+        {
+            Authenticator = authenticator;
+        }
 
         public static IDictionary<string, string> LoginParameters => null;
 
