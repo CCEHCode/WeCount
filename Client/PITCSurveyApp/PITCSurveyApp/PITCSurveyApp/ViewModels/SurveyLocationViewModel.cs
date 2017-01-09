@@ -165,8 +165,8 @@ namespace PITCSurveyApp.ViewModels
                     _response.Item.GPSLocation.Accuracy = (float) position.Accuracy;
                     var address = await Geocoder.ReverseGeocode(position.Latitude, position.Longitude);
                     Street = address.AddressLine;
-                    City = address.AdminDistrict;
-                    State = address.Locality;
+                    City = address.Locality;
+                    State = address.AdminDistrict;
                     ZipCode = address.PostalCode;
                 }
             }
