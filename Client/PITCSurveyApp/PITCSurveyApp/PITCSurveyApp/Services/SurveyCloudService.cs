@@ -23,8 +23,7 @@ namespace PITCSurveyApp.Services
         {
 			try
 			{
-				var api = new APIHelper();
-				return await api.GetSurveyByIDAsync(id);
+				return await APIHelper.GetSurveyByIDAsync(id);
 			}
 			catch (Exception)
 			{

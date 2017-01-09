@@ -8,36 +8,59 @@ using System.Threading.Tasks;
 
 namespace PITCSurveyLib
 {
-	public class APIHelper
+	public static class APIHelper
 	{
 
 		private const string AzureMobileAppUrl = "https://pitcsurveyapi.azurewebsites.net";
 
-		private PITCSurveyAPI API;
+		private static readonly ServiceClientCredentials _AnonCreds = new Microsoft.Rest.BasicAuthenticationCredentials() { UserName = "", Password = "" };
+		
+		private static PITCSurveyAPI _API;
 
-		public static string AuthToken { get; set; }
-
-		public APIHelper()
+		// TODO: Could expose an actual ServiceClientCredentials property here, but I don't think it'll be that useful for us.
+		private static string _AuthToken;
+		public static string AuthToken
 		{
-			//var Creds = new Microsoft.Rest.BasicAuthenticationCredentials() { UserName = "", Password = "" };
+			get
+			{
+				return _AuthToken;
+			}
 
-			// TODO: Swapping the above line for the below one should, in theory, allow seamless passing of the user's auth to the service. I think.
+			set
+			{
+				_AuthToken = value;
 
-			var Creds = new Microsoft.Rest.TokenCredentials(AuthToken);
-
-			API = new PITCSurveyAPI(new Uri(AzureMobileAppUrl), Creds);
+				InitAPI();
+			}
 		}
 
-		public IEnumerable<SurveySummaryModel> GetAvailableSurveys()
+		static APIHelper()
+		{
+			InitAPI();
+		}
+
+		private static void InitAPI()
+		{
+			_API?.Dispose();
+
+			_API = new PITCSurveyAPI(new Uri(AzureMobileAppUrl), string.IsNullOrEmpty(AuthToken) ? _AnonCreds : new Microsoft.Rest.TokenCredentials(AuthToken));
+		}
+
+		public static void SignOut()
+		{
+			AuthToken = null;
+		}
+
+		public static IEnumerable<SurveySummaryModel> GetAvailableSurveys()
 		{
 			return GetAvailableSurveysAsync().Result;
 		}
 
-		public async Task<IEnumerable<SurveySummaryModel>> GetAvailableSurveysAsync()
+		public static async Task<IEnumerable<SurveySummaryModel>> GetAvailableSurveysAsync()
 		{
 			try
 			{
-				var result = await API.GetAllSurveysAsync(true);
+				var result = await _API.GetAllSurveysAsync(true);
 
 				return result;
 			}
@@ -51,16 +74,16 @@ namespace PITCSurveyLib
 			}
 		}
 
-		public SurveyModel GetSurveyByID(int ID)
+		public static SurveyModel GetSurveyByID(int ID)
 		{
 			return GetSurveyByIDAsync(ID).Result;
 		}
 
-		public async Task<SurveyModel> GetSurveyByIDAsync(int ID)
+		public static async Task<SurveyModel> GetSurveyByIDAsync(int ID)
 		{
 			try
 			{
-				var result = await API.GetSurveyByIDAsync(ID);
+				var result = await _API.GetSurveyByIDAsync(ID);
 
 				return result;
 			}
@@ -74,16 +97,16 @@ namespace PITCSurveyLib
 			}
 		}
 
-		public bool SubmitSurveyResponse(SurveyResponseModel SurveyResponse)
+		public static bool SubmitSurveyResponse(SurveyResponseModel SurveyResponse)
 		{
 			return SubmitSurveyResponseAsync(SurveyResponse).Result;
 		}
 
-		public async Task<bool> SubmitSurveyResponseAsync(SurveyResponseModel SurveyResponse)
+		public static async Task<bool> SubmitSurveyResponseAsync(SurveyResponseModel SurveyResponse)
 		{
 			try
 			{
-				await API.PostSurveyResponseAsync(SurveyResponse);
+				await _API.PostSurveyResponseAsync(SurveyResponse);
 
 				return true;
 			}
