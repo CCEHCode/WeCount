@@ -43,7 +43,8 @@ namespace PITCSurveySvc.Models
 					QuestionNum = sq.QuestionNum,
 					QuestionText = sq.Question.QuestionText,
 					QuestionHelpText = sq.Question.ClarificationText,
-					AllowMultipleAnswers = sq.Question.AllowMultipleAnswers
+					AllowMultipleAnswers = sq.Question.AllowMultipleAnswers,
+					WellKnownQuestion = sq.Question.WellKnownQuestion
 				};
 
 				foreach (SurveyAnswerChoice ac in sq.AnswerChoices)
@@ -141,7 +142,8 @@ namespace PITCSurveySvc.Models
 				q.QuestionText = qm.QuestionText;
 				q.ClarificationText = qm.QuestionHelpText;            // Move to SurveyQuestion?
 				q.AllowMultipleAnswers = qm.AllowMultipleAnswers;      // Move to SurveyQuestion?
-				
+				q.WellKnownQuestion = qm.WellKnownQuestion;
+
 				QuestionsByModelID.Add(qm.QuestionID, q);
 
 				foreach (SurveyQuestionAnswerChoiceModel acm in qm.AnswerChoices)
