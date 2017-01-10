@@ -1,10 +1,7 @@
-﻿using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Microsoft.WindowsAzure.MobileServices;
-using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Helpers;
 using Xamarin.Forms;
-using PITCSurveyLib;
 
 namespace PITCSurveyApp.ViewModels
 {
@@ -12,7 +9,8 @@ namespace PITCSurveyApp.ViewModels
     {
         public LoginViewModel()
         {
-            SignInCommand = new Command(async () => await SignIn());
+            MicrosoftLoginCommand = new Command(() => SignIn(MobileServiceAuthenticationProvider.MicrosoftAccount));
+            GoogleLoginCommand = new Command(() => SignIn(MobileServiceAuthenticationProvider.Google));
             NotNowCommand = new Command(App.GoToMainPage);
         }
 
@@ -22,27 +20,27 @@ namespace PITCSurveyApp.ViewModels
 
         public ICommand NotNowCommand { get; }
 
-        public ICommand SignInCommand { get; }
+        public ICommand GoogleLoginCommand { get; }
 
-        private async Task SignIn()
+        public ICommand MicrosoftLoginCommand { get; }
+
+        private async void SignIn(MobileServiceAuthenticationProvider provider)
         {
             try
             {
-                DependencyService.Get<IMetricsManagerService>().TrackEvent("UserLogin");
-                var user = await App.Authenticator.AuthenticateAsync(MobileServiceAuthenticationProvider.Google);
-                Settings.AuthToken = user.MobileServiceAuthenticationToken;
-                APIHelper.AuthToken = Settings.AuthToken;
-            }
-            catch
-            {
-                // TODO: sign in failed
+                await App.LoginAsync(provider);
             }
             finally
             {
+#if WINDOWS_UWP
+                // Updating the main page here will cause an exception for Android
+                // Instead, for Android and iOS, we wait for the view to send the
+                // `OnAppearing` event and update the main page then.
                 if (Settings.IsLoggedIn)
                 {
                     App.GoToMainPage();
                 }
+#endif
             }
         }
     }

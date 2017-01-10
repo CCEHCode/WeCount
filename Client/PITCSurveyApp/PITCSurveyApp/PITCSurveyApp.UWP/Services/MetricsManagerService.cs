@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using Microsoft.HockeyApp;
-
 using PITCSurveyApp.Extensions;
 
 [assembly: Xamarin.Forms.Dependency(typeof(PITCSurveyApp.UWP.MetricsManagerService))]
+
 namespace PITCSurveyApp.UWP
 {
     class MetricsManagerService : IMetricsManagerService
@@ -16,6 +12,26 @@ namespace PITCSurveyApp.UWP
         public void TrackEvent(string eventName)
         {
             HockeyClient.Current.TrackEvent(eventName);
+        }
+
+        public void TrackException(string eventName, Exception ex)
+        {
+            HockeyClient.Current.TrackException(ex);
+        }
+
+        public void TrackLatency(string eventName, TimeSpan latency)
+        {
+            var measurements = new Dictionary<string, double>
+            {
+                { "latency", latency.TotalMilliseconds },
+            };
+
+            TrackEvent(eventName, null, measurements);
+        }
+
+        public void TrackEvent(string eventName, Dictionary<string, string> properties, Dictionary<string, double> measurements)
+        {
+            HockeyClient.Current.TrackEvent(eventName, properties, measurements);
         }
     }
 }

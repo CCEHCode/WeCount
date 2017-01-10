@@ -50,5 +50,15 @@ namespace PITCSurveyApp.iOS
                 return null;
             }
         }
+
+        public Task LogoutAsync()
+        {
+            foreach (var cookie in NSHttpCookieStorage.SharedStorage.Cookies)
+            {
+                NSHttpCookieStorage.SharedStorage.DeleteCookie(cookie);
+            }
+
+            return SurveyCloudService.ApiClient.LogoutAsync();
+        }
     }
 }

@@ -1,7 +1,34 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:PITCSurveyApp.ViewModels"
              x:Class="PITCSurveyApp.Views.SettingsPage"
              Title="Settings">
-	<Label Text="Settings Page" VerticalOptions="Center" HorizontalOptions="Center" />
+  <ContentPage.BindingContext>
+    <vm:SettingsViewModel/>
+  </ContentPage.BindingContext>
+  <Grid Padding="20,40,20,20" ColumnSpacing="10" RowSpacing="20">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="64" />
+      <RowDefinition Height="64" />
+    </Grid.RowDefinitions>
+    <Button Text="Sign in with Microsoft Account"
+            Grid.Row="0"
+            IsVisible="{Binding IsAnonymous}"
+            TextColor="White"
+            BackgroundColor="{StaticResource Primary}"
+            Command="{Binding MicrosoftLoginCommand}" />
+    <Button Text="Sign in with Google Account"
+            Grid.Row="1"
+            IsVisible="{Binding IsAnonymous}"
+            TextColor="White"
+            BackgroundColor="{StaticResource Primary}"
+            Command="{Binding GoogleLoginCommand}" />
+    <Button Text="Log out"
+            Grid.Row="0"
+            IsVisible="{Binding IsLoggedIn}"  
+            TextColor="White"
+            BackgroundColor="{StaticResource Primary}"
+            Command="{Binding LogoutCommand}" />
+  </Grid>
 </ContentPage>

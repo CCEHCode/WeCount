@@ -2,7 +2,7 @@
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
-
+using Android.Webkit;
 using HockeyApp.Android;
 using HockeyApp.Android.Metrics;
 using Microsoft.WindowsAzure.MobileServices;
@@ -42,6 +42,12 @@ namespace PITCSurveyApp.Droid
                 return null;
             }
 	    }
-	}
+
+        public Task LogoutAsync()
+        {
+            CookieManager.Instance.RemoveAllCookie();
+            return SurveyCloudService.ApiClient.LogoutAsync();
+        }
+    }
 }
 

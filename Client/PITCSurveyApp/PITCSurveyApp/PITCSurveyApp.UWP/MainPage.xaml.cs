@@ -24,5 +24,10 @@ namespace PITCSurveyApp.UWP
                 return null;
             }
         }
+
+        public Task LogoutAsync()
+        {
+            return SurveyCloudService.ApiClient.LogoutAsync();
+        }
     }
 }

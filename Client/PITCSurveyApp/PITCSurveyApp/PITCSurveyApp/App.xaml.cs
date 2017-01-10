@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.WindowsAzure.MobileServices;
 using Xamarin.Forms;
 using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Helpers;
 using PITCSurveyApp.Services;
-using PITCSurveyApp.ViewModels;
 using PITCSurveyApp.Views;
+using PITCSurveyLib;
 using PITCSurveyLib.Models;
 
 namespace PITCSurveyApp
@@ -13,11 +16,11 @@ namespace PITCSurveyApp
 	{
         public static SurveyModel LatestSurvey { get; set; }
 
-        public static IAuthenticate Authenticator { get; private set; }
+	    private static IAuthenticate s_authenticator;
 
         public static void Init(IAuthenticate authenticator)
         {
-            Authenticator = authenticator;
+            s_authenticator = authenticator;
         }
 
         public static IDictionary<string, string> LoginParameters => null;
@@ -62,7 +65,7 @@ namespace PITCSurveyApp
             }
         }
 
-        public static void GoToMainPage()
+        public static async void GoToMainPage()
         {
             var menuPage = new MenuPage();
             NavigationPage = new NavigationPage(new HomePage());
@@ -70,6 +73,36 @@ namespace PITCSurveyApp
             RootPage.Master = menuPage;
             RootPage.Detail = NavigationPage;
             Current.MainPage = RootPage;
+        }
+
+	    public static async Task LoginAsync(MobileServiceAuthenticationProvider provider)
+	    {
+	        try
+	        {
+	            DependencyService.Get<IMetricsManagerService>().TrackEvent("UserLogin");
+	            var user = await s_authenticator.AuthenticateAsync(provider);
+	            Settings.AuthToken = user?.MobileServiceAuthenticationToken;
+	            APIHelper.AuthToken = user?.MobileServiceAuthenticationToken;
+	        }
+	        catch (Exception ex)
+	        {
+                DependencyService.Get<IMetricsManagerService>().TrackException("UserLoginFailed", ex);
+            }
+        }
+
+	    public static async Task LogoutAsync()
+	    {
+	        try
+	        {
+	            DependencyService.Get<IMetricsManagerService>().TrackEvent("UserLogout");
+	            await s_authenticator.LogoutAsync();
+	            Settings.AuthToken = null;
+	            APIHelper.AuthToken = null;
+	        }
+	        catch (Exception ex)
+	        {
+                DependencyService.Get<IMetricsManagerService>().TrackException("UserLogoutFailed", ex);
+            }
         }
 
 	    public static void DisplayAlert(string title, string message, string cancel)
