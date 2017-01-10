@@ -53,10 +53,13 @@ namespace PITCSurveyApp.Views
 	            QuestionLabel.Text = q.QuestionText;
 	            HelpTextLabel.Text = q.QuestionHelpText;
 
-	            var listView = new ListView();
-	            listView.HasUnevenRows = true;
-	            listView.ItemTemplate = new DataTemplate(typeof(WrappedItemSelectionTemplate));
-	            listView.ItemsSource = CreateChoices(q, _viewModel.CurrentAnswers);
+	            var listView = new ListView
+	            {
+	                HasUnevenRows = true,
+	                ItemTemplate = new DataTemplate(typeof(WrappedItemSelectionTemplate)),
+	                ItemsSource = CreateChoices(q, _viewModel.CurrentAnswers),
+	            };
+
 	            listView.ItemSelected += (sender, e) =>
 	            {
 	                var answer = (WrappedAnswerChoice) e.SelectedItem;
