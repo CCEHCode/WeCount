@@ -115,6 +115,7 @@ namespace PITCSurveyLib
 				switch (hex.Response.StatusCode)
 				{
 					case System.Net.HttpStatusCode.NoContent:
+						// NOTE: This does *not* throw error, but returns true above.
 						return true;
 					case System.Net.HttpStatusCode.Conflict:
 						return false;
