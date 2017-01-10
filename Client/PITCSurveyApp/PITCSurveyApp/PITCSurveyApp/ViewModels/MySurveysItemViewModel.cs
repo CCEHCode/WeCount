@@ -97,18 +97,9 @@ namespace PITCSurveyApp.Models
             }
         }
 
-        public Task SaveAsync()
-        {
-            _lastModified = DateTime.Now;
-            return _fileHelper.SaveAsync(_filename, _response);
-        }
-
         public async Task UploadAsync()
         {
-            // TODO: log upload metrics
-            await APIHelper.SubmitSurveyResponseAsync(_response.Item);
-            _response.Uploaded = DateTime.Now;
-            await SaveAsync();
+            await _response.UploadAsync();
             Update();
         }
 

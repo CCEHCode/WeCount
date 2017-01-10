@@ -132,9 +132,8 @@ namespace PITCSurveyApp.ViewModels
 
         public Task SaveAsync()
         {
-            var fileHelper = new FileHelper();
             UpdateLastLocation();
-            return fileHelper.SaveAsync(_response.Item.GetFilename(), _response);
+            return _response.SaveAsync();
         }
 
         private bool CanGoForward =>

@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
+using PITCSurveyApp.Helpers;
+using PITCSurveyApp.Models;
 using PITCSurveyLib;
 using PITCSurveyLib.Models;
 
@@ -26,6 +29,20 @@ namespace PITCSurveyApp.Extensions
         public static string GetFilename(this SurveyResponseModel response)
         {
             return $"{response.ResponseIdentifier}.survey.json";
+        }
+
+        public static async Task UploadAsync(this UploadedItem<SurveyResponseModel> response)
+        {
+            // TODO: log upload
+            await APIHelper.SubmitSurveyResponseAsync(response.Item);
+            response.Uploaded = DateTime.Now;
+            await response.SaveAsync();
+        }
+
+        public static Task SaveAsync(this UploadedItem<SurveyResponseModel> response)
+        {
+            var fileHelper = new FileHelper();
+            return fileHelper.SaveAsync(response.Item.GetFilename(), response);
         }
 
         public static SurveyResponseModel CreateNew()

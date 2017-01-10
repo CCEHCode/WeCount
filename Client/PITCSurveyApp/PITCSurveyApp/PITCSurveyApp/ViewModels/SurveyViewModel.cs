@@ -64,12 +64,9 @@ namespace PITCSurveyApp.ViewModels
 
         public int SurveyQuestionsCount => App.LatestSurvey?.Questions?.Count ?? 0;
 
-        public async Task UploadAsync()
+        public Task UploadAsync()
         {
-            // TODO: log upload
-            await APIHelper.SubmitSurveyResponseAsync(_response.Item);
-            _response.Uploaded = DateTime.Now;
-            await SaveAsync();
+            return _response.UploadAsync();
         }
 
         public void AddAnswer(SurveyQuestionAnswerChoiceResponseModel answer)
@@ -102,7 +99,7 @@ namespace PITCSurveyApp.ViewModels
 
         private async void NextQuestion()
         {
-            await SaveAsync();
+            await _response.SaveAsync();
             var currentAnswerIds = new HashSet<int>(CurrentAnswers.Select(a => a.AnswerChoiceID));
             var matchingAnswer = CurrentQuestion.AnswerChoices.FirstOrDefault(a => currentAnswerIds.Contains(a.AnswerChoiceID));
             var nextQuestionIndex = QuestionIndex(matchingAnswer?.NextQuestionID);
@@ -118,8 +115,9 @@ namespace PITCSurveyApp.ViewModels
             QuestionChanged?.Invoke(this, new EventArgs());
         }
 
-        private void PreviousQuestion()
+        private async void PreviousQuestion()
         {
+            await _response.SaveAsync();
             var previousId = int.MinValue;
             if (_isSurveyEnded)
             {
@@ -145,11 +143,6 @@ namespace PITCSurveyApp.ViewModels
             _index = QuestionIndex(previousId);
             UpdateCommands();
             QuestionChanged?.Invoke(this, new EventArgs());
-        }
-
-        private async Task SaveAsync()
-        {
-            await _fileHelper.SaveAsync(_response.Item.GetFilename(), _response);
         }
 
         private async void EditLocation()
