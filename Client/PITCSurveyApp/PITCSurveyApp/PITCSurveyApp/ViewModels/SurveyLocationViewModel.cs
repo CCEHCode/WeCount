@@ -162,8 +162,9 @@ namespace PITCSurveyApp.ViewModels
         private async void StartSurvey()
         {
             UpdateLastLocation();
-            await App.NavigationPage.PopAsync();
+            var currentPage = App.NavigationPage.CurrentPage;
             await App.NavigationPage.PushAsync(new SurveyPage(_response));
+            App.NavigationPage.Navigation.RemovePage(currentPage);
         }
 
         private void UseCurrentLocation()
