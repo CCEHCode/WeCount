@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using PITCSurveyApp.Models;
 using PITCSurveyApp.ViewModels;
@@ -40,9 +41,7 @@ namespace PITCSurveyApp.Views
 
 	        if (_viewModel.IsSurveyEnded)
 	        {
-	            Title = "Survey Complete";
-	            QuestionLabel.Text = "Thank you for participating.";
-                HelpTextLabel.Text = null;
+	            EndSurvey();
                 return;
 	        }
 
@@ -74,6 +73,23 @@ namespace PITCSurveyApp.Views
 	            DisplayAlert("Error", "Something went wrong when loading this question.", "OK");
 	        }
 	    }
+
+        private async void EndSurvey()
+        {
+            Title = "Survey Complete";
+            QuestionLabel.Text = "Thank you for participating.";
+            HelpTextLabel.Text = "Uploading survey, please wait...";
+
+            try
+            {
+                await _viewModel.UploadAsync();
+                HelpTextLabel.Text = $"Survey uploaded at {DateTime.Now.ToString("t", CultureInfo.CurrentCulture)}.";
+            }
+            catch
+            {
+                HelpTextLabel.Text = "Failed to upload survey, please try again from My Surveys menu page.";
+            }
+        }
 
         private IList<WrappedAnswerChoice> CreateChoices(
             SurveyQuestionModel q, 

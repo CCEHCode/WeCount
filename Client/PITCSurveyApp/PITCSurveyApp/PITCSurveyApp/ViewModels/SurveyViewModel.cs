@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Helpers;
 using PITCSurveyApp.Models;
 using PITCSurveyApp.Views;
+using PITCSurveyLib;
 using PITCSurveyLib.Models;
 using Xamarin.Forms;
 
@@ -62,6 +64,14 @@ namespace PITCSurveyApp.ViewModels
 
         public int SurveyQuestionsCount => App.LatestSurvey?.Questions?.Count ?? 0;
 
+        public async Task UploadAsync()
+        {
+            // TODO: log upload
+            await APIHelper.SubmitSurveyResponseAsync(_response.Item);
+            _response.Uploaded = DateTime.Now;
+            await SaveAsync();
+        }
+
         public void AddAnswer(SurveyQuestionAnswerChoiceResponseModel answer)
         {
             var existingQuestion = _response.Item.QuestionResponses.FirstOrDefault(r => r.QuestionID == answer.QuestionID);
@@ -92,7 +102,7 @@ namespace PITCSurveyApp.ViewModels
 
         private async void NextQuestion()
         {
-            await _fileHelper.SaveAsync(_response.Item.GetFilename(), _response);
+            await SaveAsync();
             var currentAnswerIds = new HashSet<int>(CurrentAnswers.Select(a => a.AnswerChoiceID));
             var matchingAnswer = CurrentQuestion.AnswerChoices.FirstOrDefault(a => currentAnswerIds.Contains(a.AnswerChoiceID));
             var nextQuestionIndex = QuestionIndex(matchingAnswer?.NextQuestionID);
@@ -135,6 +145,11 @@ namespace PITCSurveyApp.ViewModels
             _index = QuestionIndex(previousId);
             UpdateCommands();
             QuestionChanged?.Invoke(this, new EventArgs());
+        }
+
+        private async Task SaveAsync()
+        {
+            await _fileHelper.SaveAsync(_response.Item.GetFilename(), _response);
         }
 
         private async void EditLocation()
