@@ -54,4 +54,16 @@
             BackgroundColor="Green"
             Command="{Binding NextQuestionCommand}"/>
   </Grid>
+  <ContentPage.ToolbarItems>
+    <ToolbarItem Text="Location"
+                 Command="{Binding EditLocationCommand}"
+                 Order="Primary">
+      <ToolbarItem.Icon>
+        <OnPlatform x:TypeArguments="FileImageSource"
+                    iOS="ic_room_white_36pt.png"
+                    Android="ic_room_white_36dp.png"
+                    WinPhone="Assets/LocationIcon.png" />
+      </ToolbarItem.Icon>
+    </ToolbarItem>
+  </ContentPage.ToolbarItems>
 </ContentPage>

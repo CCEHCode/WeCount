@@ -18,8 +18,6 @@ namespace PITCSurveyApp.ViewModels
         {
             UploadSelectedCommand = new Command(UploadSelected, () => SelectedItem != null);
             UploadAllCommand = new Command(UploadAll, () => Surveys?.Count > 0);
-
-            Init();
         }
 
         public Command UploadSelectedCommand { get; }
@@ -55,6 +53,26 @@ namespace PITCSurveyApp.ViewModels
                 UploadSelectedCommand.ChangeCanExecute();
             }
         }
+
+        public async Task RefreshAsync()
+        {
+            Surveys?.Clear();
+            var fileHelper = new FileHelper();
+            var files = await fileHelper.GetFilesAsync();
+            var surveyFiles = files.Where(f => f.EndsWith(".survey.json"));
+            var managers = new List<MySurveysItemViewModel>();
+            foreach (var surveyFile in surveyFiles)
+            {
+                var manager = new MySurveysItemViewModel(surveyFile);
+                manager.Deleted += ResponseDeleted;
+                await manager.LoadAsync();
+                managers.Add(manager);
+            }
+
+            managers.Sort((x, y) => -CompareDateTime(x.LastModified, y.LastModified));
+            Surveys = new ObservableCollection<MySurveysItemViewModel>(managers);
+        }
+
 
         private async void UploadSelected()
         {
@@ -105,24 +123,6 @@ namespace PITCSurveyApp.ViewModels
                     "At least one survey upload failed. Please try again.",
                     "OK");
             }
-        }
-
-        private async void Init()
-        {
-            var fileHelper = new FileHelper();
-            var files = await fileHelper.GetFilesAsync();
-            var surveyFiles = files.Where(f => f.EndsWith(".survey.json"));
-            var managers = new List<MySurveysItemViewModel>();
-            foreach (var surveyFile in surveyFiles)
-            {
-                var manager = new MySurveysItemViewModel(surveyFile);
-                manager.Deleted += ResponseDeleted;
-                await manager.LoadAsync();
-                managers.Add(manager);
-            }
-
-            managers.Sort((x, y) => -CompareDateTime(x.LastModified, y.LastModified));
-            Surveys = new ObservableCollection<MySurveysItemViewModel>(managers);
         }
 
         private int CompareDateTime(DateTime? x, DateTime? y)

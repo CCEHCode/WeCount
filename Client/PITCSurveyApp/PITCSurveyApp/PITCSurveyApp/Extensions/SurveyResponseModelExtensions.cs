@@ -23,6 +23,11 @@ namespace PITCSurveyApp.Extensions
                 .AdditionalAnswerData;
         }
 
+        public static string GetFilename(this SurveyResponseModel response)
+        {
+            return $"{response.ResponseIdentifier}.survey.json";
+        }
+
         public static SurveyResponseModel CreateNew()
         {
             return new SurveyResponseModel

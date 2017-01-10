@@ -260,6 +260,21 @@
     <AndroidResource Include="Resources\Drawable\ccehlogo.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <AndroidResource Include="Resources\drawable-hdpi\ic_room_white_36dp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-mdpi\ic_room_white_36dp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_room_white_36dp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_room_white_36dp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_room_white_36dp.png" />
+  </ItemGroup>
+  <ItemGroup>
     <AndroidResource Include="Resources\values\styles.xml" />
   </ItemGroup>
   <Import Project="..\PITCSurveyApp\PITCSurveyApp.projitems" Label="Shared" Condition="Exists('..\PITCSurveyApp\PITCSurveyApp.projitems')" />

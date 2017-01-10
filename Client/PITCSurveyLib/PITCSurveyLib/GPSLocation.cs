@@ -8,8 +8,8 @@ namespace PITCSurveyLib
 {
 	public class GPSLocation
 	{
-		public double Lat { get; set; }
-		public double Lon { get; set; }
+		public double? Lat { get; set; }
+		public double? Lon { get; set; }
 
 		/// <summary>
 		/// Identifies the estimated accuracy of the GPS location info. Represented as a "circle of confidence".

@@ -1,4 +1,5 @@
-﻿using PITCSurveyApp.Extensions;
+﻿using System.Threading.Tasks;
+using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Helpers;
 using PITCSurveyApp.Models;
 using PITCSurveyApp.Views;
@@ -21,22 +22,38 @@ namespace PITCSurveyApp.ViewModels
         private string _position = "Loading...";
 
         public SurveyLocationViewModel()
-            : this(new UploadedItem<SurveyResponseModel>(SurveyResponseModelExtensions.CreateNew()))
+            : this(new UploadedItem<SurveyResponseModel>(SurveyResponseModelExtensions.CreateNew()), false)
         {
         }
 
-        public SurveyLocationViewModel(UploadedItem<SurveyResponseModel> response)
+        public SurveyLocationViewModel(UploadedItem<SurveyResponseModel> response, bool updateLocation)
         {
             _response = response;
             UseLastLocationCommand = new Command(UseLastLocation, () => CanUseLastLocation);
             StartSurveyCommand = new Command(StartSurvey, () => CanGoForward);
-            IsBusy = true;
-            Init();
+            UpdateLocationCommand = new Command(UseCurrentLocation);
+            IsUpdateLocation = updateLocation;
+
+            if (!updateLocation)
+            {
+                IsBusy = true;
+                InitializeLocation();
+            }
+            else
+            {
+                Position = PrettyPrintPosition();
+            }
         }
 
         public Command UseLastLocationCommand { get; }
         
         public Command StartSurveyCommand { get; }
+
+        public Command UpdateLocationCommand { get; }
+
+        public bool IsUpdateLocation { get; }
+
+        public bool IsInitialLocation => !IsUpdateLocation;
 
         public string Position
         {
@@ -113,6 +130,13 @@ namespace PITCSurveyApp.ViewModels
             }
         }
 
+        public Task SaveAsync()
+        {
+            var fileHelper = new FileHelper();
+            UpdateLastLocation();
+            return fileHelper.SaveAsync(_response.Item.GetFilename(), _response);
+        }
+
         private bool CanGoForward =>
             !string.IsNullOrEmpty(Street) &&
             !string.IsNullOrEmpty(City) &&
@@ -138,7 +162,14 @@ namespace PITCSurveyApp.ViewModels
         private async void StartSurvey()
         {
             UpdateLastLocation();
+            await App.NavigationPage.PopAsync();
             await App.NavigationPage.PushAsync(new SurveyPage(_response));
+        }
+
+        private void UseCurrentLocation()
+        {
+            IsBusy = true;
+            InitializeLocation();
         }
 
         private void UpdateLastLocation()
@@ -151,17 +182,14 @@ namespace PITCSurveyApp.ViewModels
             UseLastLocationCommand.ChangeCanExecute();
         }
 
-        private async void Init()
+        private async void InitializeLocation()
         {
-            var positionAvailable = false;
             try
             {
                 var geolocator = CrossGeolocator.Current;
                 if (geolocator != null && geolocator.IsGeolocationEnabled && geolocator.IsGeolocationAvailable)
                 {
                     var position = await geolocator.GetPositionAsync();
-                    positionAvailable = true;
-                    Position = $"{position.Latitude:N4}, {position.Longitude:N4}";
                     _response.Item.GPSLocation.Lat = position.Latitude;
                     _response.Item.GPSLocation.Lon = position.Longitude;
                     _response.Item.GPSLocation.Accuracy = (float) position.Accuracy;
@@ -181,13 +209,17 @@ namespace PITCSurveyApp.ViewModels
             }
             finally
             {
-                if (!positionAvailable)
-                {
-                    Position = "Position not available";
-                }
-
+                Position = PrettyPrintPosition();
                 IsBusy = false;
             }
+        }
+
+        private string PrettyPrintPosition()
+        {
+            var gpsLocation = _response.Item.GPSLocation;
+            return gpsLocation.Lat.HasValue
+                ? $"{gpsLocation.Lat:N4}, {gpsLocation.Lon:N4}"
+                : "Position not available";
         }
     }
 }

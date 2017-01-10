@@ -235,6 +235,15 @@
   <ItemGroup>
     <BundleResource Include="Resources\ccehlogo.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\ic_room_white_36pt.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\ic_room_white_36pt%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\ic_room_white_36pt%403x.png" />
+  </ItemGroup>
   <Import Project="..\PITCSurveyApp\PITCSurveyApp.projitems" Label="Shared" Condition="Exists('..\PITCSurveyApp\PITCSurveyApp.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -73,7 +73,7 @@ namespace PITCSurveyApp.Models
 
                 var matchingQuestion = App.LatestSurvey?.Questions.FirstOrDefault(q => q.QuestionID == lastResponse.QuestionID);
                 var lastResponseAnswerIds = new HashSet<int>(lastResponse.AnswerChoiceResponses.Select(r => r.AnswerChoiceID));
-                var endSurveyAnswer = matchingQuestion.AnswerChoices.FirstOrDefault(
+                var endSurveyAnswer = matchingQuestion?.AnswerChoices.FirstOrDefault(
                     a => lastResponseAnswerIds.Contains(a.AnswerChoiceID) && a.EndSurvey);
                 return endSurveyAnswer != null;
             }

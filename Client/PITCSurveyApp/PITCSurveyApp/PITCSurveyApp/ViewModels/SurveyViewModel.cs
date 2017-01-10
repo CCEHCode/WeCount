@@ -4,6 +4,7 @@ using System.Linq;
 using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Helpers;
 using PITCSurveyApp.Models;
+using PITCSurveyApp.Views;
 using PITCSurveyLib.Models;
 using Xamarin.Forms;
 
@@ -30,6 +31,7 @@ namespace PITCSurveyApp.ViewModels
             _response = response;
             NextQuestionCommand = new Command(NextQuestion, () => CanGoForward);
             PreviousQuestionCommand = new Command(PreviousQuestion, () => CanGoBack);
+            EditLocationCommand = new Command(EditLocation);
             Init();
         }
 
@@ -38,6 +40,8 @@ namespace PITCSurveyApp.ViewModels
         public Command NextQuestionCommand { get; }
 
         public Command PreviousQuestionCommand { get; }
+
+        public Command EditLocationCommand { get; }
 
         public SurveyQuestionModel CurrentQuestion => Question(_index);
 
@@ -88,7 +92,7 @@ namespace PITCSurveyApp.ViewModels
 
         private async void NextQuestion()
         {
-            await _fileHelper.SaveAsync(GetFilename(_response), _response);
+            await _fileHelper.SaveAsync(_response.Item.GetFilename(), _response);
             var currentAnswerIds = new HashSet<int>(CurrentAnswers.Select(a => a.AnswerChoiceID));
             var matchingAnswer = CurrentQuestion.AnswerChoices.FirstOrDefault(a => currentAnswerIds.Contains(a.AnswerChoiceID));
             var nextQuestionIndex = QuestionIndex(matchingAnswer?.NextQuestionID);
@@ -131,6 +135,11 @@ namespace PITCSurveyApp.ViewModels
             _index = QuestionIndex(previousId);
             UpdateCommands();
             QuestionChanged?.Invoke(this, new EventArgs());
+        }
+
+        private async void EditLocation()
+        {
+            await App.NavigationPage.Navigation.PushAsync(new SurveyLocationPage(_response, true));
         }
 
         private SurveyQuestionModel Question(int index)
@@ -195,11 +204,6 @@ namespace PITCSurveyApp.ViewModels
             {
                 _isSurveyEnded = true;
             }
-        }
-
-        private static string GetFilename(UploadedItem<SurveyResponseModel> response)
-        {
-            return $"{response.Item.ResponseIdentifier}.survey.json";
         }
     }
 }

@@ -1,12 +1,37 @@
-﻿using Xamarin.Forms;
+﻿using PITCSurveyApp.Models;
+using PITCSurveyApp.ViewModels;
+using PITCSurveyLib.Models;
+using Xamarin.Forms;
 
 namespace PITCSurveyApp.Views
 {
 	public partial class SurveyLocationPage : ContentPage
 	{
+	    private readonly SurveyLocationViewModel _viewModel;
+
 		public SurveyLocationPage ()
+            : this(new SurveyLocationViewModel())
 		{
-            InitializeComponent();
 		}
-	}
+
+        public SurveyLocationPage(UploadedItem<SurveyResponseModel> response, bool updateLocation)
+            : this(new SurveyLocationViewModel(response, updateLocation))
+        {
+        }
+
+	    private SurveyLocationPage(SurveyLocationViewModel viewModel)
+	    {
+            InitializeComponent();
+
+	        _viewModel = viewModel;
+	        BindingContext = _viewModel;
+	    }
+
+        protected override async void OnDisappearing()
+        {
+            base.OnDisappearing();
+
+            await _viewModel.SaveAsync();
+        }
+    }
 }

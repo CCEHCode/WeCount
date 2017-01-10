@@ -4,9 +4,6 @@
              xmlns:vm="clr-namespace:PITCSurveyApp.ViewModels"
              x:Class="PITCSurveyApp.Views.SurveyLocationPage"
              Title="Survey Location">
-  <ContentPage.BindingContext>
-    <vm:SurveyLocationViewModel />
-  </ContentPage.BindingContext>
   <Grid Padding="10,10,10,10" ColumnSpacing="10" RowSpacing="10">
     <Grid.RowDefinitions>
       <RowDefinition Height="*"/>
@@ -50,7 +47,14 @@
     <Button Text="Start Survey"
             Grid.Row="2"
             BackgroundColor="{StaticResource DarkBackgroundColor}"
+            IsVisible="{Binding IsInitialLocation}"
             HorizontalOptions="FillAndExpand"
             Command="{Binding StartSurveyCommand}" />
+    <Button Text="Use Current Location"
+            Grid.Row="2"
+            BackgroundColor="{StaticResource DarkBackgroundColor}"
+            IsVisible="{Binding IsUpdateLocation}"
+            HorizontalOptions="FillAndExpand"
+            Command="{Binding UpdateLocationCommand}" />
   </Grid>
 </ContentPage>

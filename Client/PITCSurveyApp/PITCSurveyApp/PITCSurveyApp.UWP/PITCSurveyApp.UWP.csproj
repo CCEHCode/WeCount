@@ -111,6 +111,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\ccehlogo.jpg" />
+    <Content Include="Assets\LocationIcon.png" />
     <Content Include="Assets\profile_generic.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
