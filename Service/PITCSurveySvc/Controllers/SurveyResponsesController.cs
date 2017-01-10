@@ -7,6 +7,7 @@ using System.Data;
 using System.Data.Entity.Validation;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -74,11 +75,11 @@ namespace PITCSurveySvc.Controllers
 						sb.AppendLine($"{ve.PropertyName}: {ve.ErrorMessage}");
 					}
 				}
-				return Content(HttpStatusCode.InternalServerError, sb.ToString()); // InternalServerError(new ApplicationException(sb.ToString(), evex));
+				throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, sb.ToString())); // InternalServerError(new ApplicationException(sb.ToString(), evex));
 			}
 			catch (Exception ex)
 			{
-				return Content(HttpStatusCode.InternalServerError, ex.ToString()); // InternalServerError(ex);
+				throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.ToString()));	// return Content(HttpStatusCode.InternalServerError, ex.ToString()); // InternalServerError(ex);
 			}
 		}
 	}
