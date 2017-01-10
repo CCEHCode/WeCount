@@ -153,25 +153,39 @@ namespace PITCSurveyApp.ViewModels
 
         private async void Init()
         {
+            var positionAvailable = false;
             try
             {
                 var geolocator = CrossGeolocator.Current;
                 if (geolocator != null && geolocator.IsGeolocationEnabled && geolocator.IsGeolocationAvailable)
                 {
                     var position = await geolocator.GetPositionAsync();
+                    positionAvailable = true;
                     Position = $"{position.Latitude:N4}, {position.Longitude:N4}";
                     _response.Item.GPSLocation.Lat = position.Latitude;
                     _response.Item.GPSLocation.Lon = position.Longitude;
                     _response.Item.GPSLocation.Accuracy = (float) position.Accuracy;
                     var address = await Geocoder.ReverseGeocode(position.Latitude, position.Longitude);
-                    Street = address.AddressLine;
-                    City = address.Locality;
-                    State = address.AdminDistrict;
-                    ZipCode = address.PostalCode;
+                    if (address != null)
+                    {
+                        Street = address.AddressLine;
+                        City = address.Locality;
+                        State = address.AdminDistrict;
+                        ZipCode = address.PostalCode;
+                    }
                 }
+            }
+            catch
+            {
+                // TODO: log exception
             }
             finally
             {
+                if (!positionAvailable)
+                {
+                    Position = "Position not available";
+                }
+
                 IsBusy = false;
             }
         }

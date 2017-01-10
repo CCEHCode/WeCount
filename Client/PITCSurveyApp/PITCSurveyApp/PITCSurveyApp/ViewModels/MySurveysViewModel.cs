@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using PITCSurveyApp.Helpers;
 using PITCSurveyApp.Models;
 using Xamarin.Forms;
@@ -10,20 +11,100 @@ namespace PITCSurveyApp.ViewModels
 {
     class MySurveysViewModel : BaseViewModel
     {
-        private readonly INavigation _navigation;
         private ObservableCollection<MySurveysItemViewModel> _surveys;
+        private MySurveysItemViewModel _selectedItem;
 
-        public MySurveysViewModel(INavigation navigation)
+        public MySurveysViewModel()
         {
-            _navigation = navigation;
-            IsBusy = true;
+            UploadSelectedCommand = new Command(UploadSelected, () => SelectedItem != null);
+            UploadAllCommand = new Command(UploadAll, () => Surveys?.Count > 0);
+
             Init();
         }
+
+        public Command UploadSelectedCommand { get; }
+
+        public Command UploadAllCommand { get; }
 
         public ObservableCollection<MySurveysItemViewModel> Surveys
         {
             get { return _surveys; }
-            private set { SetProperty(ref _surveys, value); }
+            private set
+            {
+                if (_surveys != null)
+                {
+                    _surveys.CollectionChanged -= OnCollectionChanged;
+                }
+
+                SetProperty(ref _surveys, value);
+                UploadAllCommand.ChangeCanExecute();
+
+                if (_surveys != null)
+                {
+                    _surveys.CollectionChanged += OnCollectionChanged;
+                }
+            }
+        }
+
+        public MySurveysItemViewModel SelectedItem
+        {
+            get { return _selectedItem; }
+            set
+            {
+                SetProperty(ref _selectedItem, value);
+                UploadSelectedCommand.ChangeCanExecute();
+            }
+        }
+
+        private async void UploadSelected()
+        {
+            var selectedItem = SelectedItem;
+            if (selectedItem == null)
+            {
+                return;
+            }
+
+            try
+            {
+                await selectedItem.UploadAsync();
+            }
+            catch
+            {
+                App.DisplayAlert(
+                    "Upload Failed",
+                    "Failed to upload survey. Please try again.",
+                    "OK");
+            }
+        }
+
+        private async void UploadAll()
+        {
+            var uploadFailed = false;
+            var tasks = new List<Task>();
+            foreach (var item in Surveys)
+            {
+                tasks.Add(Task.Run(async () =>
+                {
+                    try
+                    {
+                        await item.UploadAsync();
+                    }
+                    catch
+                    {
+                        // TODO: log failure
+                        uploadFailed = true;
+                    }
+                }));
+            }
+
+            await Task.WhenAll(tasks);
+            if (uploadFailed)
+            {
+                App.DisplayAlert(
+                    "Upload Failed",
+                    "At least one survey upload failed. Please try again.",
+                    "OK");
+            }
         }
 
         private async void Init()
@@ -41,8 +122,6 @@ namespace PITCSurveyApp.ViewModels
             }
 
             managers.Sort((x, y) => -CompareDateTime(x.LastModified, y.LastModified));
-
-            IsBusy = false;
             Surveys = new ObservableCollection<MySurveysItemViewModel>(managers);
         }
 
@@ -68,7 +147,18 @@ namespace PITCSurveyApp.ViewModels
 
         private void ResponseDeleted(object sender, EventArgs args)
         {
-            Surveys.Remove((MySurveysItemViewModel) sender);
+            var item = (MySurveysItemViewModel)sender;
+            if (item == SelectedItem)
+            {
+                SelectedItem = null;    
+            }
+
+            Surveys.Remove(item);
+        }
+
+        private void OnCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            UploadAllCommand.ChangeCanExecute();
         }
     }
 }

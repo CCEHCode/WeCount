@@ -72,6 +72,11 @@ namespace PITCSurveyApp
             Current.MainPage = RootPage;
         }
 
+	    public static void DisplayAlert(string title, string message, string cancel)
+	    {
+	        RootPage.DisplayAlert(title, message, cancel);
+	    }
+
         protected override void OnStart ()
 		{
 			// Handle when your app starts

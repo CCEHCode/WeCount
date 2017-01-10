@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Threading.Tasks;
 using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Helpers;
+using PITCSurveyApp.Services;
 using PITCSurveyApp.ViewModels;
 using PITCSurveyApp.Views;
 using PITCSurveyLib;
@@ -26,7 +27,7 @@ namespace PITCSurveyApp.Models
         {
             _filename = filename;
             DeleteCommand = new Command(Delete);
-            UploadCommand = new Command(async () => await UploadAsync());
+            UploadCommand = new Command(Upload);
             EditCommand = new Command(Edit);
         }
 
@@ -37,6 +38,8 @@ namespace PITCSurveyApp.Models
         public Command UploadCommand { get; }
 
         public Command EditCommand { get; }
+
+        public bool NeedsUpload => !_response.Uploaded.HasValue && _lastModified > _response.Uploaded; 
 
         public SurveyResponseModel Response => _response.Item;
 
@@ -80,7 +83,8 @@ namespace PITCSurveyApp.Models
 
         public async Task UploadAsync()
         {
-            // TODO: perform upload and capture metrics
+            // TODO: log upload metrics
+            await APIHelper.SubmitSurveyResponseAsync(_response.Item);
             _response.Uploaded = DateTime.Now;
             await SaveAsync();
             Update();
@@ -92,6 +96,22 @@ namespace PITCSurveyApp.Models
             Deleted?.Invoke(this, new EventArgs());
         }
 
+        private async void Upload()
+        {
+            try
+            {
+                await UploadAsync();
+            }
+            catch (Exception ex)
+            {
+                // TODO: log upload failure
+                App.DisplayAlert(
+                    "Upload Failure",
+                    "Failed to upload survey, please try again.",
+                    "OK");
+            }
+        }
+
         public async void Edit()
         {
             await App.NavigationPage.PushAsync(new SurveyPage(_response));
@@ -100,7 +120,7 @@ namespace PITCSurveyApp.Models
         private void Update()
         {
             TextColor = _response.Uploaded.HasValue ? Color.Default : Color.Red;
-            Details = $"{PrettyPrintLastModified(LastModified)}, {PrettyPrintUploaded(_response.Uploaded)}";
+            Details = $"{PrettyPrintLastModified(_lastModified)}, {PrettyPrintUploaded(_response.Uploaded)}";
         }
 
         private static string PrettyPrintLastModified(DateTime? lastModified)

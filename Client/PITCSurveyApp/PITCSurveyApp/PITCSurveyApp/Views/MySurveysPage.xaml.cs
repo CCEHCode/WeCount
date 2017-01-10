@@ -8,8 +8,6 @@ namespace PITCSurveyApp.Views
 		public MySurveysPage ()
 		{
 			InitializeComponent ();
-
-		    BindingContext = new MySurveysViewModel(Navigation);
 		}
-	}
+    }
 }
