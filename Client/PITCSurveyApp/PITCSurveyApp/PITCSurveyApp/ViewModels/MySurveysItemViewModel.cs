@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Helpers;
-using PITCSurveyApp.Services;
 using PITCSurveyApp.ViewModels;
 using PITCSurveyApp.Views;
 using PITCSurveyLib;
@@ -21,6 +22,7 @@ namespace PITCSurveyApp.Models
         private DateTime? _lastModified;
 
         private Color _textColor;
+        private string _text;
         private string _details;
 
         public MySurveysItemViewModel(string filename)
@@ -39,11 +41,13 @@ namespace PITCSurveyApp.Models
 
         public Command EditCommand { get; }
 
-        public bool NeedsUpload => !_response.Uploaded.HasValue && _lastModified > _response.Uploaded; 
-
         public SurveyResponseModel Response => _response.Item;
 
-        public string Text => $"{Name}, {DateOfBirth}";
+        public string Text
+        {
+            get { return _text; }
+            set { SetProperty(ref _text, value); }   
+        }
 
         public string Details
         {
@@ -55,6 +59,24 @@ namespace PITCSurveyApp.Models
         {
             get { return _textColor; }
             set { SetProperty(ref _textColor, value); }
+        }
+
+        public bool IsIneligible
+        {
+            get
+            {
+                var lastResponse = _response.Item.QuestionResponses.MaxByOrDefault(r => r.QuestionID);
+                if (lastResponse == null)
+                {
+                    return false;
+                }
+
+                var matchingQuestion = App.LatestSurvey?.Questions.FirstOrDefault(q => q.QuestionID == lastResponse.QuestionID);
+                var lastResponseAnswerIds = new HashSet<int>(lastResponse.AnswerChoiceResponses.Select(r => r.AnswerChoiceID));
+                var endSurveyAnswer = matchingQuestion.AnswerChoices.FirstOrDefault(
+                    a => lastResponseAnswerIds.Contains(a.AnswerChoiceID) && a.EndSurvey);
+                return endSurveyAnswer != null;
+            }
         }
 
         public DateTime? LastModified => _lastModified;
@@ -120,6 +142,7 @@ namespace PITCSurveyApp.Models
         private void Update()
         {
             TextColor = _response.Uploaded.HasValue ? Color.Default : Color.Red;
+            Text = IsIneligible ? "Ineligible Survey" : $"{Name}, {DateOfBirth}";
             Details = $"{PrettyPrintLastModified(_lastModified)}, {PrettyPrintUploaded(_response.Uploaded)}";
         }
 
