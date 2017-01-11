@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using PITCSurveyApp.Helpers;
 using PITCSurveyApp.Models;
+using PITCSurveyApp.Services;
 using PITCSurveyLib;
 using PITCSurveyLib.Models;
 
@@ -34,7 +35,8 @@ namespace PITCSurveyApp.Extensions
         public static async Task UploadAsync(this UploadedItem<SurveyResponseModel> response)
         {
             // TODO: log upload
-            await APIHelper.SubmitSurveyResponseAsync(response.Item);
+            //await APIHelper.SubmitSurveyResponseAsync(response.Item);
+            await SurveyCloudService.SubmitSurveyResponseAsync(response.Item);
             response.Uploaded = DateTime.Now;
             await response.SaveAsync();
         }
