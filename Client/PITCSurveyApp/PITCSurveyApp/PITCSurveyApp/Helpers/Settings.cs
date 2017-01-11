@@ -10,6 +10,9 @@ namespace PITCSurveyApp.Helpers
     /// </summary>
     public static class Settings
     {
+        private const string AuthTokenKey = "authtoken";
+        private const string UserIdKey = "userid";
+
         // HockeyApp App IDs, we have one for each supported platform
 #if WINDOWS_UWP
         public static string HockeyAppId = "hockeyAppId";
@@ -19,16 +22,34 @@ namespace PITCSurveyApp.Helpers
         public static string HockeyAppId = "hockeyAppId";
 #endif
 
-        private static ISettings AppSettings
+        private static ISettings AppSettings => CrossSettings.Current;
+
+        public static string UserId
         {
             get
             {
-                return CrossSettings.Current;
+                return AppSettings.GetValueOrDefault(UserIdKey, default(string));
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue(UserIdKey, value);
             }
         }
 
-        public static string AuthToken { get; set; }
+        public static string AuthToken
+        {
+            get
+            {
+                return AppSettings.GetValueOrDefault(AuthTokenKey, default(string));
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue(AuthTokenKey, value);
+            }
+        }
 
-        public static bool IsLoggedIn => !string.IsNullOrWhiteSpace(AuthToken);
+        public static bool Initializing { get; set; }
+
+        public static bool IsLoggedIn => !Initializing && !string.IsNullOrWhiteSpace(AuthToken);
     }
 }

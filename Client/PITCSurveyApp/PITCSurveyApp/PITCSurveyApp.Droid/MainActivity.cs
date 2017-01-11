@@ -31,17 +31,21 @@ namespace PITCSurveyApp.Droid
             LoadApplication (new PITCSurveyApp.App ());
 		}
 
-	    public async Task<MobileServiceUser> AuthenticateAsync(MobileServiceAuthenticationProvider provider)
+        public MobileServiceUser User
+        {
+            get { return SurveyCloudService.ApiClient.CurrentUser; }
+            set { SurveyCloudService.ApiClient.CurrentUser = value; }
+        }
+
+        public Task<MobileServiceUser> LoginAsync(MobileServiceAuthenticationProvider provider)
 	    {
-	        try
-	        {
-	            return await SurveyCloudService.ApiClient.LoginAsync(this, provider);
-	        }
-            catch
-            {
-                return null;
-            }
+	        return SurveyCloudService.ApiClient.LoginAsync(this, provider);
 	    }
+
+	    public Task RefreshLoginAsync()
+	    {
+	        return SurveyCloudService.ApiClient.RefreshUserAsync();
+        }
 
         public Task LogoutAsync()
         {

@@ -49,17 +49,21 @@ namespace PITCSurveyApp
             SetMainPage();
         }
 
-        public static void SetMainPage()
+        public static async void SetMainPage()
         {
-            if (!Settings.IsLoggedIn)
+            Settings.Initializing = true;
+
+            Current.MainPage = new NavigationPage(new LoginPage())
             {
-                Current.MainPage = new NavigationPage(new LoginPage())
-                {
-                    BarBackgroundColor = (Color)Current.Resources["Primary"],
-                    BarTextColor = Color.White
-                };
-            }
-            else
+                BarBackgroundColor = (Color)Current.Resources["Primary"],
+                BarTextColor = Color.White
+            };
+
+            await RefreshLoginAsync();
+
+            Settings.Initializing = false;
+
+            if (Settings.IsLoggedIn)
             {
                 GoToMainPage();
             }
@@ -80,8 +84,9 @@ namespace PITCSurveyApp
 	        try
 	        {
 	            DependencyService.Get<IMetricsManagerService>().TrackEvent("UserLogin");
-	            var user = await s_authenticator.AuthenticateAsync(provider);
+	            var user = await s_authenticator.LoginAsync(provider);
 	            Settings.AuthToken = user?.MobileServiceAuthenticationToken;
+	            Settings.UserId = user?.UserId;
 	            APIHelper.AuthToken = user?.MobileServiceAuthenticationToken;
 	        }
 	        catch (Exception ex)
@@ -89,6 +94,30 @@ namespace PITCSurveyApp
                 DependencyService.Get<IMetricsManagerService>().TrackException("UserLoginFailed", ex);
             }
         }
+
+	    public static async Task RefreshLoginAsync()
+	    {
+	        if (!string.IsNullOrEmpty(Settings.AuthToken))
+	        {
+	            try
+	            {
+                    DependencyService.Get<IMetricsManagerService>().TrackEvent("UserRefresh");
+                    s_authenticator.User = new MobileServiceUser(Settings.UserId)
+	                {
+	                    MobileServiceAuthenticationToken = Settings.AuthToken,
+	                };
+
+                    await s_authenticator.RefreshLoginAsync();
+	                APIHelper.AuthToken = Settings.AuthToken;
+	            }
+	            catch (Exception ex)
+	            {
+	                DependencyService.Get<IMetricsManagerService>().TrackException("UserRefreshFailed", ex);
+	                Settings.AuthToken = null;
+	                APIHelper.AuthToken = null;
+	            }
+	        }
+	    }
 
 	    public static async Task LogoutAsync()
 	    {
@@ -112,10 +141,10 @@ namespace PITCSurveyApp
 
         protected override void OnStart ()
 		{
-			// Handle when your app starts
+            // Handle when your app starts
 		}
 
-		protected override void OnSleep ()
+        protected override void OnSleep ()
 		{
 			// Handle when your app sleeps
 		}

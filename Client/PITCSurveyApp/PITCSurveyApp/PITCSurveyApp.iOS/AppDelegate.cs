@@ -1,12 +1,10 @@
-﻿
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Foundation;
-using UIKit;
-
 using HockeyApp.iOS;
 using Microsoft.WindowsAzure.MobileServices;
 using PITCSurveyApp.Helpers;
 using PITCSurveyApp.Services;
+using UIKit;
 
 namespace PITCSurveyApp.iOS
 {
@@ -16,6 +14,12 @@ namespace PITCSurveyApp.iOS
     [Register("AppDelegate")]
     public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate, IAuthenticate
     {
+        public MobileServiceUser User
+        {
+            get { return SurveyCloudService.ApiClient.CurrentUser; }
+            set { SurveyCloudService.ApiClient.CurrentUser = value; }
+        }
+
         //
         // This method is invoked when the application has loaded and is ready to run. In this 
         // method you should instantiate the window, load the UI into it and then make the window
@@ -37,18 +41,16 @@ namespace PITCSurveyApp.iOS
             return base.FinishedLaunching(app, options);
         }
 
-        public async Task<MobileServiceUser> AuthenticateAsync(MobileServiceAuthenticationProvider provider)
+        public Task<MobileServiceUser> LoginAsync(MobileServiceAuthenticationProvider provider)
         {
-            try
-            {
-                return await SurveyCloudService.ApiClient.LoginAsync(
-                    UIApplication.SharedApplication.KeyWindow.RootViewController,
-                    MobileServiceAuthenticationProvider.Facebook);
-            }
-            catch
-            {
-                return null;
-            }
+            return SurveyCloudService.ApiClient.LoginAsync(
+                UIApplication.SharedApplication.KeyWindow.RootViewController,
+                provider);
+        }
+
+        public Task RefreshLoginAsync()
+        {
+            return SurveyCloudService.ApiClient.RefreshUserAsync();
         }
 
         public Task LogoutAsync()

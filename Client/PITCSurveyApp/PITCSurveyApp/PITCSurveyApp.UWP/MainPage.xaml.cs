@@ -13,16 +13,20 @@ namespace PITCSurveyApp.UWP
             LoadApplication(new PITCSurveyApp.App());
         }
 
-        public async Task<MobileServiceUser> AuthenticateAsync(MobileServiceAuthenticationProvider provider)
+        public MobileServiceUser User
         {
-            try
-            {
-                return await SurveyCloudService.ApiClient.LoginAsync(provider);
-            }
-            catch
-            {
-                return null;
-            }
+            get { return SurveyCloudService.ApiClient.CurrentUser; }
+            set { SurveyCloudService.ApiClient.CurrentUser = value; }
+        }
+
+        public Task<MobileServiceUser> LoginAsync(MobileServiceAuthenticationProvider provider)
+        {
+            return SurveyCloudService.ApiClient.LoginAsync(provider);
+        }
+
+        public Task RefreshLoginAsync()
+        {
+            return SurveyCloudService.ApiClient.RefreshUserAsync();
         }
 
         public Task LogoutAsync()

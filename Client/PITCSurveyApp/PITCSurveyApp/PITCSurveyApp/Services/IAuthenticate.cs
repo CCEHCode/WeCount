@@ -5,7 +5,11 @@ namespace PITCSurveyApp.Services
 {
     public interface IAuthenticate
     {
-        Task<MobileServiceUser> AuthenticateAsync(MobileServiceAuthenticationProvider provider);
+        MobileServiceUser User { get; set; }
+
+        Task<MobileServiceUser> LoginAsync(MobileServiceAuthenticationProvider provider);
+
+        Task RefreshLoginAsync();
 
         Task LogoutAsync();
     }
