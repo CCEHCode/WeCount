@@ -76,7 +76,11 @@ namespace PITCSurveyApp
 	        {
 	            DependencyService.Get<IMetricsManagerService>().TrackEvent("UserLogin");
 	            var properties = provider == MobileServiceAuthenticationProvider.Google
-                    ? new Dictionary<string, string> { {"access_type", "offline"} }
+                    ? new Dictionary<string, string>
+	                {
+	                    { "access_type", "offline" },
+                        { "scope", "profile,email" },
+	                }
                     : new Dictionary<string, string>(0);
 
 	            var user = await s_authenticator.LoginAsync(provider, properties);

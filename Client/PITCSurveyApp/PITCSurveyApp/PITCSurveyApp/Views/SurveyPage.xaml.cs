@@ -37,7 +37,7 @@ namespace PITCSurveyApp.Views
 
 	    private void UpdateQuestion()
 	    {
-	        AnswerOptionsStackLayout.Children.Clear();
+            AnswerOptionsScrollView.Content = null;
 
 	        if (_viewModel.IsSurveyEnded)
 	        {
@@ -52,20 +52,19 @@ namespace PITCSurveyApp.Views
 	            QuestionLabel.Text = q.QuestionText;
 	            HelpTextLabel.Text = q.QuestionHelpText;
 
-	            var listView = new ListView
+	            var answerOptionsStackLayout = new StackLayout();
+                var choices = CreateChoices(q, _viewModel.CurrentAnswers);
+	            foreach (var choice in choices)
 	            {
-	                HasUnevenRows = true,
-	                ItemTemplate = new DataTemplate(typeof(WrappedItemSelectionTemplate)),
-	                ItemsSource = CreateChoices(q, _viewModel.CurrentAnswers),
-	            };
+	                var view = new SurveyAnswerItemView(choice);
+	                var stackLayout = new StackLayout();
+	                stackLayout.Children.Add(view);
+                    answerOptionsStackLayout.Children.Add(stackLayout);
+	            }
 
-	            listView.ItemSelected += (sender, e) =>
-	            {
-	                var answer = (WrappedAnswerChoice) e.SelectedItem;
-	                answer.IsSelected = !answer.IsSelected;
-	            };
+	            answerOptionsStackLayout.Children.Add(NavigationButtonStackLayout);
 
-	            AnswerOptionsStackLayout.Children.Add(listView);
+	            AnswerOptionsScrollView.Content = answerOptionsStackLayout;
 	        }
 	        catch
 	        {
@@ -79,29 +78,30 @@ namespace PITCSurveyApp.Views
             Title = "Survey Complete";
             QuestionLabel.Text = "Thank you for participating.";
             HelpTextLabel.Text = "Uploading survey, please wait...";
+            AnswerOptionsScrollView.Content = NavigationButtonStackLayout;
 
             try
             {
                 await _viewModel.UploadAsync();
                 HelpTextLabel.Text = $"Survey uploaded at {DateTime.Now.ToString("t", CultureInfo.CurrentCulture)}.";
             }
-            catch
+            catch (Exception ex)
             {
                 HelpTextLabel.Text = "Failed to upload survey, please try again from My Surveys menu page.";
             }
         }
 
-        private IList<WrappedAnswerChoice> CreateChoices(
+        private IList<SurveyAnswerItemViewModel> CreateChoices(
             SurveyQuestionModel q, 
             IList<SurveyQuestionAnswerChoiceResponseModel> previousAnswers)
         {
-            var choices = new List<WrappedAnswerChoice>(q.AnswerChoices.Count);
+            var choices = new List<SurveyAnswerItemViewModel>(q.AnswerChoices.Count);
             foreach (var choice in q.AnswerChoices)
             {
                 var previousAnswer = previousAnswers.FirstOrDefault(a => a.AnswerChoiceID == choice.AnswerChoiceID);
                 choices.Add(previousAnswer != null
-                    ? new WrappedAnswerChoice(choice, previousAnswer, true)
-                    : new WrappedAnswerChoice(
+                    ? new SurveyAnswerItemViewModel(choice, previousAnswer, true)
+                    : new SurveyAnswerItemViewModel(
                         choice,
                         new SurveyQuestionAnswerChoiceResponseModel
                         {
@@ -114,7 +114,7 @@ namespace PITCSurveyApp.Views
             {
                 choice.PropertyChanged += (sender, e) =>
                 {
-                    if (e.PropertyName == nameof(WrappedAnswerChoice.IsSelected))
+                    if (e.PropertyName == nameof(SurveyAnswerItemViewModel.IsSelected))
                     {
                         if (!q.AllowMultipleAnswers && choice.IsSelected)
                         {
@@ -142,134 +142,6 @@ namespace PITCSurveyApp.Views
             }
 
             return choices;
-        }
-
-        class WrappedAnswerChoice : INotifyPropertyChanged
-        {
-            private readonly SurveyQuestionAnswerChoiceModel _item;
-            private readonly SurveyQuestionAnswerChoiceResponseModel _answer;
-
-            private bool _isSelected = false;
-            private bool _isSpecifiable = false;
-            private Keyboard _keyboard = Keyboard.Default;
-
-            public WrappedAnswerChoice(
-                SurveyQuestionAnswerChoiceModel item,
-                SurveyQuestionAnswerChoiceResponseModel answer)
-                : this(item, answer, false)
-            {
-            }
-
-            public WrappedAnswerChoice(
-                SurveyQuestionAnswerChoiceModel item, 
-                SurveyQuestionAnswerChoiceResponseModel answer, 
-                bool isSelected)
-            {
-                _item = item;
-                _answer = answer;
-                _isSelected = isSelected;
-                UpdateSpecifiable();
-            }
-
-            public event PropertyChangedEventHandler PropertyChanged;
-
-            public SurveyQuestionAnswerChoiceModel Item => _item;
-
-            public SurveyQuestionAnswerChoiceResponseModel Answer => _answer;
-
-            public string Name => _item.AnswerChoiceText;
-
-            public Keyboard Keyboard =>
-                Item.AdditionalAnswerDataFormat == AnswerFormat.Int
-                    ? Keyboard.Numeric
-                    : Keyboard.Default;
-
-            public string Placeholder =>
-                Item.AdditionalAnswerDataFormat == AnswerFormat.Date
-                    ? "MM/DD/YYYY"
-                    : string.Empty;
-
-            public bool IsSelected
-            {
-                get { return _isSelected; }
-                set
-                {
-                    if (_isSelected != value)
-                    {
-                        _isSelected = value;
-                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSelected))); // C# 6
-                        UpdateSpecifiable();
-                    }
-                }
-            }
-
-            public bool IsSpecifiable
-            {
-                get { return _isSpecifiable; }
-                set
-                {
-                    if (_isSpecifiable != value)
-                    {
-                        _isSpecifiable = value;
-                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSpecifiable)));
-                    }
-                }
-            }
-
-            public string Text
-            {
-                get { return _answer.AdditionalAnswerData; }
-                set { _answer.AdditionalAnswerData = value; }
-            }
-
-            private void UpdateSpecifiable()
-            {
-                IsSpecifiable = _isSelected && Item.AdditionalAnswerDataFormat != AnswerFormat.None;
-            }
-        }
-
-        class WrappedItemSelectionTemplate : ViewCell
-        {
-            public WrappedItemSelectionTemplate()
-            {
-                var name = new Label
-                {
-                    HorizontalOptions = LayoutOptions.StartAndExpand,
-                    VerticalOptions = LayoutOptions.FillAndExpand,
-                };
-
-                name.SetBinding(Label.TextProperty, new Binding(nameof(WrappedAnswerChoice.Name)));
-
-                var mainSwitch = new Switch
-                {
-                    HorizontalOptions = LayoutOptions.EndAndExpand,
-                    VerticalOptions = LayoutOptions.FillAndExpand,
-                };
-
-                mainSwitch.SetBinding(Switch.IsToggledProperty, new Binding(nameof(WrappedAnswerChoice.IsSelected)));
-
-                var answerLayout = new StackLayout
-                {
-                    Orientation = StackOrientation.Horizontal,
-                };
-
-                answerLayout.Children.Add(name);
-                answerLayout.Children.Add(mainSwitch);
-                var entry = new Entry
-                {
-                    HorizontalOptions = LayoutOptions.Fill,
-                };
-
-                entry.SetBinding(Entry.PlaceholderProperty, new Binding(nameof(WrappedAnswerChoice.Placeholder)));
-                entry.SetBinding(InputView.KeyboardProperty, new Binding(nameof(WrappedAnswerChoice.Keyboard)));
-                entry.SetBinding(IsVisibleProperty, new Binding(nameof(WrappedAnswerChoice.IsSpecifiable)));
-                entry.SetBinding(Entry.TextProperty, new Binding(nameof(WrappedAnswerChoice.Text), BindingMode.TwoWay));
-
-                var stackLayout = new StackLayout();
-                stackLayout.Children.Add(answerLayout);
-                stackLayout.Children.Add(entry);
-                View = stackLayout;
-            }
         }
     }
 }

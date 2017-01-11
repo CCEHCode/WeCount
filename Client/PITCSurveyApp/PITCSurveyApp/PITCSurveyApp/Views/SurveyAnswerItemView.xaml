@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="PITCSurveyApp.Views.SurveyAnswerItemView">
+  <ContentView.Content>
+    <StackLayout>
+      <Button Text="{Binding Name}"
+              BackgroundColor="{Binding BackgroundColor}"
+              Command="{Binding AnswerSelectedCommand}"/>
+      <Entry IsVisible="{Binding IsSpecifiable}" 
+             Text="{Binding SpecifiedText}" 
+             Placeholder="{Binding Placeholder}"
+             Keyboard="{Binding Keyboard}"/>
+    </StackLayout>
+  </ContentView.Content>
+</ContentView>

@@ -5,23 +5,10 @@
              Title="Survey">
   <!-- This page uses a survey template where the question and multiple choice answers
        are loaded dynamically in code behind. -->
-  <Grid Padding="12">
-    <Grid.RowDefinitions>
-      <RowDefinition Height="Auto" />
-      <RowDefinition Height="*" />
-      <RowDefinition Height="Auto" />
-      <RowDefinition Height="64" />
-    </Grid.RowDefinitions>
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="*" />
-      <ColumnDefinition Width="*" />
-    </Grid.ColumnDefinitions>
+  <StackLayout Padding="12">
 
     <!-- Question & Help text -->
-    <StackLayout Margin="12"
-                 Grid.Row="0"
-                 Grid.Column="0"
-                 Grid.ColumnSpan="2" >
+    <StackLayout Margin="12">
       <Label x:Name="QuestionLabel"
              Text="Loading question..."
              Margin="12,12,12,0"/>
@@ -33,27 +20,27 @@
     </StackLayout>
 
     <!-- The dynamic answers are loaded here -->
-    <StackLayout x:Name="AnswerOptionsStackLayout"
-           Grid.Row="1"
-           Grid.Column="0"
-           Grid.ColumnSpan="2"
-           Margin="12">
-    </StackLayout>
-    
-    <!-- Buttons at the bottom of the screen to navigate the survey -->
-    <Button Grid.Row="3"
-            Grid.Column="0"
-            Text="Previous"
-            TextColor="Black"
-            BackgroundColor="Silver"
-            Command="{Binding PreviousQuestionCommand}"/>
-    <Button Grid.Row="3"
-            Grid.Column="1"
-            Text="Next"
-            TextColor="White"
-            BackgroundColor="Green"
-            Command="{Binding NextQuestionCommand}"/>
-  </Grid>
+    <ScrollView x:Name="AnswerOptionsScrollView">
+      <!-- Buttons at the bottom of the screen to navigate the survey -->
+      <StackLayout x:Name="NavigationButtonStackLayout"
+                   Margin="12"
+                   Orientation="Horizontal" 
+                   HeightRequest="64">
+        <Button Text="Previous"
+                TextColor="Black"
+                BackgroundColor="Silver"
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand"
+                Command="{Binding PreviousQuestionCommand}"/>
+        <Button Text="Next"
+                TextColor="White"
+                BackgroundColor="Green"
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand"
+                Command="{Binding NextQuestionCommand}"/>
+      </StackLayout>
+    </ScrollView>    
+  </StackLayout>
   <ContentPage.ToolbarItems>
     <ToolbarItem Text="Location"
                  Command="{Binding EditLocationCommand}"

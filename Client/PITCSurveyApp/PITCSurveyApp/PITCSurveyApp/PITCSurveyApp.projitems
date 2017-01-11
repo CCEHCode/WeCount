@@ -34,6 +34,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MySurveysViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MySurveysItemViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SettingsViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SurveyAnswerItemViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SurveyLocationViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SurveyViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\HomePage.xaml.cs">
@@ -58,6 +59,10 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\SurveyAnswerItemView.xaml.cs">
+      <DependentUpon>SurveyAnswerItemView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\SurveyLocationPage.xaml.cs">
@@ -119,6 +124,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\SurveyLocationPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\SurveyAnswerItemView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
