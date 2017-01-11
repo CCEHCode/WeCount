@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
@@ -37,12 +38,12 @@ namespace PITCSurveyApp.Droid
             set { SurveyCloudService.ApiClient.CurrentUser = value; }
         }
 
-        public Task<MobileServiceUser> LoginAsync(MobileServiceAuthenticationProvider provider)
+        public Task<MobileServiceUser> LoginAsync(MobileServiceAuthenticationProvider provider, IDictionary<string, string> parameters)
 	    {
-	        return SurveyCloudService.ApiClient.LoginAsync(this, provider);
+	        return SurveyCloudService.ApiClient.LoginAsync(this, provider, parameters);
 	    }
 
-	    public Task RefreshLoginAsync()
+	    public Task<MobileServiceUser> RefreshLoginAsync()
 	    {
 	        return SurveyCloudService.ApiClient.RefreshUserAsync();
         }

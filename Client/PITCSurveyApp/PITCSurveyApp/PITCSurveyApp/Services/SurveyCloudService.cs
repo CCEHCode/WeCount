@@ -1,7 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.WindowsAzure.MobileServices;
-using PITCSurveyLib.Models;
-using PITCSurveyLib;
+﻿using Microsoft.WindowsAzure.MobileServices;
 
 namespace PITCSurveyApp.Services
 {

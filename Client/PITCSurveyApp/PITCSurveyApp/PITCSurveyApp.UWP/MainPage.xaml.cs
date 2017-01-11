@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.WindowsAzure.MobileServices;
 using PITCSurveyApp.Services;
 
@@ -19,12 +20,12 @@ namespace PITCSurveyApp.UWP
             set { SurveyCloudService.ApiClient.CurrentUser = value; }
         }
 
-        public Task<MobileServiceUser> LoginAsync(MobileServiceAuthenticationProvider provider)
+        public Task<MobileServiceUser> LoginAsync(MobileServiceAuthenticationProvider provider, IDictionary<string, string> parameters)
         {
-            return SurveyCloudService.ApiClient.LoginAsync(provider);
+            return SurveyCloudService.ApiClient.LoginAsync(provider, parameters);
         }
 
-        public Task RefreshLoginAsync()
+        public Task<MobileServiceUser> RefreshLoginAsync()
         {
             return SurveyCloudService.ApiClient.RefreshUserAsync();
         }

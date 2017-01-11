@@ -84,7 +84,11 @@ namespace PITCSurveyApp
 	        try
 	        {
 	            DependencyService.Get<IMetricsManagerService>().TrackEvent("UserLogin");
-	            var user = await s_authenticator.LoginAsync(provider);
+	            var properties = provider == MobileServiceAuthenticationProvider.Google
+                    ? new Dictionary<string, string> { {"access_type", "offline"} }
+                    : new Dictionary<string, string>(0);
+
+	            var user = await s_authenticator.LoginAsync(provider, properties);
 	            Settings.AuthToken = user?.MobileServiceAuthenticationToken;
 	            Settings.UserId = user?.UserId;
 	            APIHelper.AuthToken = user?.MobileServiceAuthenticationToken;
@@ -107,9 +111,11 @@ namespace PITCSurveyApp
 	                    MobileServiceAuthenticationToken = Settings.AuthToken,
 	                };
 
-                    await s_authenticator.RefreshLoginAsync();
-	                APIHelper.AuthToken = Settings.AuthToken;
-	            }
+                    var user = await s_authenticator.RefreshLoginAsync();
+                    Settings.AuthToken = user?.MobileServiceAuthenticationToken;
+                    Settings.UserId = user?.UserId;
+                    APIHelper.AuthToken = user?.MobileServiceAuthenticationToken;
+                }
 	            catch (Exception ex)
 	            {
 	                DependencyService.Get<IMetricsManagerService>().TrackException("UserRefreshFailed", ex);

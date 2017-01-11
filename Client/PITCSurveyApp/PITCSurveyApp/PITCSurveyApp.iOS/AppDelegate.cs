@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Foundation;
 using HockeyApp.iOS;
 using Microsoft.WindowsAzure.MobileServices;
@@ -41,14 +42,15 @@ namespace PITCSurveyApp.iOS
             return base.FinishedLaunching(app, options);
         }
 
-        public Task<MobileServiceUser> LoginAsync(MobileServiceAuthenticationProvider provider)
+        public Task<MobileServiceUser> LoginAsync(MobileServiceAuthenticationProvider provider, IDictionary<string, string> parameters)
         {
             return SurveyCloudService.ApiClient.LoginAsync(
                 UIApplication.SharedApplication.KeyWindow.RootViewController,
-                provider);
+                provider,
+                parameters);
         }
 
-        public Task RefreshLoginAsync()
+        public Task<MobileServiceUser> RefreshLoginAsync()
         {
             return SurveyCloudService.ApiClient.RefreshUserAsync();
         }
