@@ -58,15 +58,6 @@ namespace PITCSurveyApp
                 BarBackgroundColor = (Color)Current.Resources["Primary"],
                 BarTextColor = Color.White
             };
-
-            await RefreshLoginAsync();
-
-            Settings.Initializing = false;
-
-            if (Settings.IsLoggedIn)
-            {
-                GoToMainPage();
-            }
         }
 
         public static async void GoToMainPage()

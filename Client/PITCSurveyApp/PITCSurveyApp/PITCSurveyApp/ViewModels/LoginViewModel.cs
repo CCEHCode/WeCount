@@ -1,5 +1,4 @@
-﻿using System.Windows.Input;
-using Microsoft.WindowsAzure.MobileServices;
+﻿using Microsoft.WindowsAzure.MobileServices;
 using PITCSurveyApp.Helpers;
 using Xamarin.Forms;
 
@@ -9,20 +8,22 @@ namespace PITCSurveyApp.ViewModels
     {
         public LoginViewModel()
         {
-            MicrosoftLoginCommand = new Command(() => SignIn(MobileServiceAuthenticationProvider.MicrosoftAccount));
-            GoogleLoginCommand = new Command(() => SignIn(MobileServiceAuthenticationProvider.Google));
-            NotNowCommand = new Command(App.GoToMainPage);
+            IsBusy = true;
+            MicrosoftLoginCommand = new Command(() => SignIn(MobileServiceAuthenticationProvider.MicrosoftAccount), () => IsNotBusy);
+            GoogleLoginCommand = new Command(() => SignIn(MobileServiceAuthenticationProvider.Google), () => IsNotBusy);
+            NotNowCommand = new Command(App.GoToMainPage, () => IsNotBusy);
+            RefreshUser();
         }
 
         public ImageSource UserImage => 
             ImageSource.FromFile(
                 CrossHelper.GetOSFullImagePath("profile_generic.png"));
 
-        public ICommand NotNowCommand { get; }
+        public Command NotNowCommand { get; }
 
-        public ICommand GoogleLoginCommand { get; }
+        public Command GoogleLoginCommand { get; }
 
-        public ICommand MicrosoftLoginCommand { get; }
+        public Command MicrosoftLoginCommand { get; }
 
         private async void SignIn(MobileServiceAuthenticationProvider provider)
         {
@@ -41,6 +42,25 @@ namespace PITCSurveyApp.ViewModels
                     App.GoToMainPage();
                 }
 #endif
+            }
+        }
+
+        private async void RefreshUser()
+        {
+            await App.RefreshLoginAsync();
+
+            Settings.Initializing = false;
+
+            if (Settings.IsLoggedIn)
+            {
+                App.GoToMainPage();
+            }
+            else
+            {
+                IsBusy = false;
+                MicrosoftLoginCommand.ChangeCanExecute();
+                GoogleLoginCommand.ChangeCanExecute();
+                NotNowCommand.ChangeCanExecute();
             }
         }
     }
