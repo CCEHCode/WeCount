@@ -33,6 +33,8 @@ namespace PITCSurveyEntities.Entities
 		public DateTimeOffset InterviewStarted { get; set; }
 		public DateTimeOffset InterviewCompleted { get; set; }
 
+		public DateTimeOffset DateUploaded { get; set; }
+
 		public DbGeography GPSLocation { get; set; }
 
 		public String LocationNotes { get; set; }

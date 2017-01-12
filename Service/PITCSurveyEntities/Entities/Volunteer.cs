@@ -19,6 +19,8 @@ namespace PITCSurveyEntities.Entities
 		public String HomePhone { get; set; }
 		public Address Address { get; set; } = new Address();
 
+		public Guid? DeviceId { get; set; }
+
 		[Obsolete("This is longer used, in favor of AuthProvider.")]
 		public AuthMethod AuthMethod { get; set; }
 
