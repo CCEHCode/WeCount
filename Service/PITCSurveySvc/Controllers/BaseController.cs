@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Security.Principal;
 using System.Web.Http;
 using System.Diagnostics;
+using System;
 
 namespace PITCSurveySvc.Controllers
 {
@@ -13,9 +14,11 @@ namespace PITCSurveySvc.Controllers
 
 		protected PITCSurveyContext db = new PITCSurveyContext();
 
-		protected Volunteer GetAuthenticatedVolunteer()
+		protected Volunteer GetAuthenticatedVolunteer(Guid? DeviceID = null)
 		{
 			Trace.TraceInformation($"User authenticated: {User.Identity.IsAuthenticated}");
+
+			Volunteer Volunteer = null;
 
 			if (User.Identity.IsAuthenticated)
 			{
@@ -23,15 +26,13 @@ namespace PITCSurveySvc.Controllers
 				{
 					Trace.TraceInformation($"User is authenticated. Name: {User.Identity?.Name}, {User.Identity?.AuthenticationType}");
 
-					var ClaimsPrincipal = this.User as ClaimsPrincipal;
+					var Claimant = (ClaimsIdentity)User.Identity;
 
-					Trace.TraceInformation($"NameIdentifier: {((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier)?.Value}");
-
-					string sid = ClaimsPrincipal.FindFirst(ClaimTypes.NameIdentifier).Value;
+					string sid = Claimant.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
 					Trace.TraceInformation($"SID: {sid}");
 
-					var Volunteer = db.Volunteers.Where(v => v.AuthID == sid).SingleOrDefault();
+					Volunteer = db.Volunteers.Where(v => v.AuthID == sid).SingleOrDefault();
 
 					if (Volunteer == null)
 					{
@@ -39,39 +40,59 @@ namespace PITCSurveySvc.Controllers
 
 						// Volunteer not already recognized, add.
 
-						Volunteer = new Volunteer { AuthID = sid, AuthProvider = ClaimsPrincipal.FindFirst(IdentityProvider)?.Value };
+						Volunteer = new Volunteer { AuthID = sid, AuthProvider = Claimant.FindFirst(IdentityProvider)?.Value };
 
 						db.Volunteers.Add(Volunteer);
+
+						db.SaveChanges();
 					}
-
-					// If existing volunteer, update profile info
-
-					Volunteer.Email = ClaimsPrincipal.FindFirst(ClaimTypes.Email)?.Value;
-					Volunteer.FirstName = ClaimsPrincipal.FindFirst(ClaimTypes.GivenName)?.Value;
-					Volunteer.LastName = ClaimsPrincipal.FindFirst(ClaimTypes.Surname)?.Value;
-					Volunteer.HomePhone = ClaimsPrincipal.FindFirst(ClaimTypes.HomePhone)?.Value;
-					Volunteer.MobilePhone = ClaimsPrincipal.FindFirst(ClaimTypes.MobilePhone)?.Value;
-
-					Volunteer.Address.Street = ClaimsPrincipal.FindFirst(ClaimTypes.StreetAddress)?.Value;
-					Volunteer.Address.City = ClaimsPrincipal.FindFirst(ClaimTypes.Locality)?.Value;
-					Volunteer.Address.State = ClaimsPrincipal.FindFirst(ClaimTypes.StateOrProvince)?.Value;
-					Volunteer.Address.ZipCode = ClaimsPrincipal.FindFirst(ClaimTypes.PostalCode)?.Value;
-
-					// TODO: Use new scoped context, so as not to inadvertently save any other changes? UOW
-					// If so, return from primary context to allow attachment
-					db.SaveChanges();
-
-					Trace.TraceInformation($"Volunteer ID: {Volunteer.ID}");
-
-					return Volunteer;
 				}
 				catch (System.Exception ex)
 				{
 					Trace.TraceError("Error playing with creds: " + ex.ToString());
 				}
 			}
+			else if (DeviceID.HasValue && DeviceID.Value != Guid.Empty)
+			{
+				// Not authenticated, but does supply DeviceID, so also create record. Used when PUTing Volunteer info when not authenticated.
 
-			return null;
+				Volunteer = db.Volunteers.Where(v => v.DeviceId == DeviceID.Value).SingleOrDefault();
+
+				if (Volunteer == null)
+				{
+					Trace.TraceInformation("Adding new volunteer.");
+
+					// Volunteer not already recognized, add.
+
+					Volunteer = new Volunteer { DeviceId = DeviceID.Value };
+
+					db.Volunteers.Add(Volunteer);
+
+					db.SaveChanges();
+				}
+			}
+
+			if (Volunteer != null)
+			{
+				Trace.TraceInformation($"Volunteer ID: {Volunteer.ID}");
+				
+				// Link DeviceID
+
+				if (Volunteer.DeviceId == null && DeviceID.HasValue && DeviceID.Value != Guid.Empty)
+				{
+					// We have not previously associated this volunteer with a DeviceID, and one is available.
+
+					Volunteer.DeviceId = DeviceID;
+
+					// Link previously uploaded Responses from this DeviceID to this Volunteer (only for ones not already linked to a Volunteer)
+
+					db.SurveyResponses.Where(r => r.DeviceId == DeviceID.Value && r.Volunteer == null).ToList().ForEach(r => r.Volunteer = Volunteer);
+
+					db.SaveChanges();
+				}
+			}
+
+			return Volunteer;
 		}
 
 		#region "IDisposable"

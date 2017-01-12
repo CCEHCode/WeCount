@@ -2,6 +2,7 @@
 using PITCSurveyLib.Models;
 using PITCSurveySvc.Models;
 using Swashbuckle.Swagger.Annotations;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Web.Http;
@@ -13,7 +14,7 @@ namespace PITCSurveySvc.Controllers
     {
 
 		// GET: api/Volunteers
-		[SwaggerOperation("GetAuthenticatedVolunteer")]
+		[SwaggerOperation("GetVolunteer")]
 		[SwaggerResponse(HttpStatusCode.OK, "Volunteer found", typeof(VolunteerModel))]
 		[ResponseType(typeof(VolunteerModel))]
         public IHttpActionResult GetVolunteer()
@@ -21,9 +22,7 @@ namespace PITCSurveySvc.Controllers
             Volunteer Volunteer = GetAuthenticatedVolunteer();
 
             if (Volunteer == null)
-            {
                 return NotFound();
-            }
 
             return Ok(ModelConverter.ConvertToModel(Volunteer));
         }
@@ -32,19 +31,17 @@ namespace PITCSurveySvc.Controllers
 		[SwaggerOperation("UpdateVolunteer")]
 		[SwaggerResponse(HttpStatusCode.NoContent, "Volunteer updated")]
 		[ResponseType(typeof(void))]
-        public IHttpActionResult PutVolunteer(VolunteerModel Volunteer)
+        public IHttpActionResult PutVolunteer(VolunteerModel Volunteer, Guid DeviceId)
         {
-			Volunteer sv = GetAuthenticatedVolunteer();
+			Volunteer sv = GetAuthenticatedVolunteer(DeviceId);
 
 			if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
 			if (sv == null)
-			{
 				return BadRequest("The specified InterviewerID is not recognized. User not logged in?");
-			}
+
+			sv.DeviceId = DeviceId;
 
 			sv.FirstName = Volunteer.FirstName;
 			sv.LastName = Volunteer.LastName;
@@ -52,15 +49,14 @@ namespace PITCSurveySvc.Controllers
 			sv.HomePhone = Volunteer.HomePhone;
 			sv.MobilePhone = Volunteer.MobilePhone;
 
-			sv.Address.Street = Volunteer.Address.Street;
-			sv.Address.City = Volunteer.Address.City;
-			sv.Address.State = Volunteer.Address.State;
-			sv.Address.ZipCode = Volunteer.Address.ZipCode;
+			sv.Address.Street = Volunteer.Address?.Street;
+			sv.Address.City = Volunteer.Address?.City;
+			sv.Address.State = Volunteer.Address?.State;
+			sv.Address.ZipCode = Volunteer.Address?.ZipCode;
 
             db.SaveChanges();
 
             return StatusCode(HttpStatusCode.NoContent);
         }
-
 	}
 }

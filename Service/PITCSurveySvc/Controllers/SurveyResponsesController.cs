@@ -30,23 +30,27 @@ namespace PITCSurveySvc.Controllers
 		[ResponseType(typeof(void))]
 		[SwaggerOperation("PostSurveyResponse")]
 		[SwaggerResponse(HttpStatusCode.BadRequest, "The survey data wasn't acceptable (improper formatting, etc.).")]
-		[SwaggerResponse(HttpStatusCode.Conflict, "A SurveyResponse with the same ResponseIdentifier is already uploaded.")]
 		[SwaggerResponse(HttpStatusCode.NoContent, "SurveyResponse uploaded successfully.")]
 		[AllowAnonymous]
 		public IHttpActionResult PostSurveyResponse(SurveyResponseModel SurveyResponse, Guid DeviceId)
-        {
-			Volunteer sv = GetAuthenticatedVolunteer();
+		{
+			Volunteer sv = GetAuthenticatedVolunteer(DeviceId);
 
 			if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-			SurveyResponse sr = db.SurveyResponses.Where(r => r.ResponseIdentifier == SurveyResponse.ResponseIdentifier).SingleOrDefault();
-			if (sr != null)
-				//return BadRequest("Survey already uploaded.");
-				return StatusCode(HttpStatusCode.Conflict);
+				return BadRequest(ModelState);
 
 			if (sv == null)
 				return BadRequest("The specified InterviewerID is not recognized. User not logged in?");
+
+			SurveyResponse sr = db.SurveyResponses.Where(r => r.ResponseIdentifier == SurveyResponse.ResponseIdentifier).SingleOrDefault();
+			if (sr != null)
+			{
+				//return BadRequest("Survey already uploaded.");
+				//return StatusCode(HttpStatusCode.Conflict);
+
+				// Delete current response to replace with new one
+				db.SurveyResponses.Remove(sr);
+			}
 
 			try
 			{
@@ -58,6 +62,8 @@ namespace PITCSurveySvc.Controllers
 				Response.Volunteer = sv;
 
 				Response.DeviceId = DeviceId;
+
+				Response.DateUploaded = DateTime.UtcNow;
 
 				db.SurveyResponses.Add(Response);
 
