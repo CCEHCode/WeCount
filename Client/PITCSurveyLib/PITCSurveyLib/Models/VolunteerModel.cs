@@ -9,6 +9,6 @@ namespace PITCSurveyLib.Models
 		public String Email { get; set; }
 		public String MobilePhone { get; set; }
 		public String HomePhone { get; set; }
-	    public Address Address { get; set; } = new Address();
+		public Address Address { get; set; } = new Address();
 	}
 }
