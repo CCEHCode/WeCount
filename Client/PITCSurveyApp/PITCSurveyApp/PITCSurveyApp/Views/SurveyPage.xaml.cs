@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Models;
 using PITCSurveyApp.ViewModels;
 using PITCSurveyLib;
@@ -66,10 +67,10 @@ namespace PITCSurveyApp.Views
 
 	            AnswerOptionsScrollView.Content = answerOptionsStackLayout;
 	        }
-	        catch
+	        catch (Exception ex)
 	        {
-	            // TODO: provide better details, log in HockeyApp, etc.
-	            DisplayAlert("Error", "Something went wrong when loading this question.", "OK");
+                DependencyService.Get<IMetricsManagerService>().TrackException("SurveyQuestionFailed", ex);
+                DisplayAlert("Error", "Something went wrong when loading this question.", "OK");
 	        }
 	    }
 

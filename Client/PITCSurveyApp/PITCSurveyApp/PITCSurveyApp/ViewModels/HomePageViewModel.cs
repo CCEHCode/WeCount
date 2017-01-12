@@ -2,6 +2,7 @@
 using System.Windows.Input;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Helpers;
 using PITCSurveyApp.Services;
 using PITCSurveyApp.Views;
@@ -25,7 +26,7 @@ namespace PITCSurveyApp.ViewModels
             IsBusy = true;
             Init();
 
-            // TO DO: Need to populate this from the authentication service
+            // TODO: Need to populate this from the authentication service
             UserFullname = "Volunteer";
         }
 
@@ -80,7 +81,7 @@ namespace PITCSurveyApp.ViewModels
             try
             {
                 // TODO: add logic to only periodically check for survey updates
-                //var azureSurvey = await APIHelper.GetSurveyByIDAsync(1);	// TODO: Replace with actual SurveyID, from GetAvailableSurveysAsync()
+                DependencyService.Get<IMetricsManagerService>().TrackEvent("GetSurvey");
                 var azureSurvey = await SurveyCloudService.GetSurveyAsync(1); // TODO: Replace with actual SurveyID, from GetAvailableSurveysAsync()
                 if (App.LatestSurvey == null || App.LatestSurvey.Version < azureSurvey.Version)
                 {
@@ -90,9 +91,9 @@ namespace PITCSurveyApp.ViewModels
                     await fileHelper.WriteTextAsync(SurveyFileName, surveyText);
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                // TODO: capture exception in HockeyApp
+                DependencyService.Get<IMetricsManagerService>().TrackException("GetSurveyFailed", ex);
             }
 
             IsBusy = false;

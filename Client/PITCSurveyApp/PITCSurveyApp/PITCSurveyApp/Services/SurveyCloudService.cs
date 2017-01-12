@@ -4,16 +4,16 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.MobileServices;
 using Newtonsoft.Json.Linq;
+using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Helpers;
 using PITCSurveyLib.Models;
+using Xamarin.Forms;
 
 namespace PITCSurveyApp.Services
 {
     public static class SurveyCloudService
     {
         private const string AzureMobileAppUrl = "https://appname.azurewebsites.net";
-
-        private static readonly IDictionary<string, string> s_emptyParameters = new Dictionary<string, string>(0);
 
         public static MobileServiceClient ApiClient;
 
@@ -35,7 +35,7 @@ namespace PITCSurveyApp.Services
             }
             catch (Exception ex)
             {
-                // TODO: log exception
+                DependencyService.Get<IMetricsManagerService>().TrackException("GetSurveyFailed", ex);
                 return null;
             }
         }
@@ -44,7 +44,7 @@ namespace PITCSurveyApp.Services
         {
             var parameters = new Dictionary<string, string>
             {
-                {"DeviceId", DeviceSettings.DeviceId},
+                {"DeviceId", UserSettings.VolunteerId},
             };
 
             return ApiClient.InvokeApiAsync("SurveyResponses", JObject.FromObject(response), HttpMethod.Post, parameters);
@@ -55,11 +55,11 @@ namespace PITCSurveyApp.Services
             try
             {
 				var parameters = new Dictionary<string, string>
-			{
-				{"DeviceId", DeviceSettings.DeviceId},
-			};
+			    {
+				    {"DeviceId", UserSettings.VolunteerId},
+			    };
 
-				return await ApiClient.InvokeApiAsync<VolunteerModel>("Volunteers", HttpMethod.Get, parameters);
+				 return await ApiClient.InvokeApiAsync<VolunteerModel>("Volunteers", HttpMethod.Get, parameters);
             }
             catch (MobileServiceInvalidOperationException ex)
                 when (ex.Response.StatusCode == System.Net.HttpStatusCode.NotFound)
@@ -72,7 +72,7 @@ namespace PITCSurveyApp.Services
         {
 			var parameters = new Dictionary<string, string>
 			{
-				{"DeviceId", DeviceSettings.DeviceId},
+				{"DeviceId", UserSettings.VolunteerId},
 			};
 
 			return ApiClient.InvokeApiAsync("Volunteers", JObject.FromObject(volunteer), HttpMethod.Put, parameters);

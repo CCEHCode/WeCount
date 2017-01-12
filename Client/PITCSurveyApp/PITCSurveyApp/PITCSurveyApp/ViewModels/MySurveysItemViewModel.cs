@@ -117,7 +117,6 @@ namespace PITCSurveyApp.Models
             }
             catch (Exception ex)
             {
-                // TODO: log upload failure
                 App.DisplayAlert(
                     "Upload Failure",
                     "Failed to upload survey, please try again.",

@@ -13,14 +13,15 @@ namespace PITCSurveyApp.Helpers
     {
         private const string AuthTokenKey = "authtoken";
         private const string UserIdKey = "userid";
+        private const string DeviceIdKey = "deviceid";
 
         // HockeyApp App IDs, we have one for each supported platform
 #if WINDOWS_UWP
-        public static string HockeyAppId = "hockeyAppId";
+        public const string HockeyAppId = "hockeyAppId";
 #elif __ANDROID__
-        public static string HockeyAppId = "hockeyAppId";
+        public const string HockeyAppId = "hockeyAppId";
 #elif __IOS__
-        public static string HockeyAppId = "hockeyAppId";
+        public const string HockeyAppId = "hockeyAppId";
 #endif
 
         private static ISettings AppSettings => CrossSettings.Current;
@@ -53,6 +54,28 @@ namespace PITCSurveyApp.Helpers
 
         public static bool IsLoggedIn => !Initializing && !string.IsNullOrWhiteSpace(AuthToken);
 
-        public static VolunteerModel Volunteer { get; set; }
+        public static VolunteerModel Volunteer { get; set; } = new VolunteerModel();
+
+        public static string VolunteerId
+        {
+            get
+            {
+                string did = AppSettings.GetValueOrDefault(DeviceIdKey, default(string));
+
+                if (did == null)
+                {
+                    // Set initial value and save
+                    did = System.Guid.NewGuid().ToString();
+
+                    VolunteerId = did;
+                }
+
+                return did;
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue(DeviceIdKey, value);
+            }
+        }
     }
 }

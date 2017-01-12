@@ -99,26 +99,39 @@ namespace PITCSurveyApp
 	        {
 	            try
 	            {
-                    DependencyService.Get<IMetricsManagerService>().TrackEvent("UserRefresh");
-                    s_authenticator.User = new MobileServiceUser(UserSettings.UserId)
+	                DependencyService.Get<IMetricsManagerService>().TrackEvent("UserRefresh");
+	                s_authenticator.User = new MobileServiceUser(UserSettings.UserId)
 	                {
 	                    MobileServiceAuthenticationToken = UserSettings.AuthToken,
 	                };
 
-                    var user = await s_authenticator.RefreshLoginAsync();
+	                var user = await s_authenticator.RefreshLoginAsync();
 	                UserSettings.Volunteer = await SurveyCloudService.GetVolunteerAsync();
-                    UserSettings.AuthToken = user?.MobileServiceAuthenticationToken;
-                    UserSettings.UserId = user?.UserId;
-                }
+	                UserSettings.AuthToken = user?.MobileServiceAuthenticationToken;
+	                UserSettings.UserId = user?.UserId;
+	            }
 	            catch (Exception ex)
 	            {
 	                DependencyService.Get<IMetricsManagerService>().TrackException("UserRefreshFailed", ex);
-                    UserSettings.Volunteer = new VolunteerModel();
+	                UserSettings.Volunteer = new VolunteerModel();
+	                UserSettings.VolunteerId = null;
 	                UserSettings.AuthToken = null;
-                    UserSettings.UserId = null;
+	                UserSettings.UserId = null;
 	            }
 	        }
-	    }
+	        else
+	        {
+	            try
+	            {
+                    DependencyService.Get<IMetricsManagerService>().TrackEvent("GetAnonymousVolunteer");
+                    UserSettings.Volunteer = await SurveyCloudService.GetVolunteerAsync();
+	            }
+	            catch (Exception ex)
+	            {
+                    DependencyService.Get<IMetricsManagerService>().TrackException("GetAnonymousVolunteerFailed", ex);
+                }
+            }
+        }
 
 	    public static async Task LogoutAsync()
 	    {
@@ -127,7 +140,8 @@ namespace PITCSurveyApp
 	            DependencyService.Get<IMetricsManagerService>().TrackEvent("UserLogout");
 	            await s_authenticator.LogoutAsync();
                 UserSettings.Volunteer = new VolunteerModel();
-	            UserSettings.AuthToken = null;
+                UserSettings.VolunteerId = null;
+                UserSettings.AuthToken = null;
                 UserSettings.UserId = null;
             }
             catch (Exception ex)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.MobileServices;
+using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Helpers;
 using PITCSurveyApp.Services;
 using Xamarin.Forms;
@@ -57,6 +58,7 @@ namespace PITCSurveyApp.ViewModels
             ZipCode != _currentZipCode;
 
         public bool CanSaveProfile =>
+            !IsBusy &&
             !string.IsNullOrWhiteSpace(FirstName) &&
             !string.IsNullOrWhiteSpace(LastName) &&
             !string.IsNullOrWhiteSpace(Email) &&
@@ -241,17 +243,24 @@ namespace PITCSurveyApp.ViewModels
                 SaveButtonText = "Saving...";
                 IsBusy = true;
                 SaveProfileCommand.ChangeCanExecute();
+                DependencyService.Get<IMetricsManagerService>().TrackEvent("SaveVolunteer");
                 await SurveyCloudService.SaveVolunteerAsync(UserSettings.Volunteer);
-                IsBusy = false;
                 SaveButtonText = "Saved!";
                 UpdateCurrentInfo();
+                IsBusy = false;
                 SaveProfileCommand.ChangeCanExecute();
                 await Task.Delay(SaveButtonMessageDelay);
-                SaveButtonText = DefaultSaveButtonText;
             }
             catch (Exception ex)
             {
-                // TODO: log exception
+                DependencyService.Get<IMetricsManagerService>().TrackException("SaveVolunteerFailed", ex);
+                App.DisplayAlert("Profile Save Error", "Failed to update profile information. Please try again later.", "OK");
+            }
+            finally
+            {
+                IsBusy = false;
+                SaveProfileCommand.ChangeCanExecute();
+                SaveButtonText = DefaultSaveButtonText;
             }
         }
     }

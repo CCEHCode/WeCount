@@ -109,7 +109,6 @@ namespace PITCSurveyApp.ViewModels
                     }
                     catch
                     {
-                        // TODO: log failure
                         uploadFailed = true;
                     }
                 }));

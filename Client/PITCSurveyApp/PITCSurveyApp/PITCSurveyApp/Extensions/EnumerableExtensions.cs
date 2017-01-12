@@ -3,10 +3,13 @@ using System.Collections.Generic;
 
 namespace PITCSurveyApp.Extensions
 {
+    /// <summary>
+    /// Extensions for <see cref="IEnumerable{T}"/>.
+    /// </summary>
     static class EnumerableExtensions
     {
-        public static T MaxByOrDefault<T, TComparand>(this IEnumerable<T> enumerable, Func<T, TComparand> selector)
-            where TComparand : IComparable
+        public static T MaxByOrDefault<T, TComparable>(this IEnumerable<T> enumerable, Func<T, TComparable> selector)
+            where TComparable : IComparable
         {
             if (enumerable == null)
             {

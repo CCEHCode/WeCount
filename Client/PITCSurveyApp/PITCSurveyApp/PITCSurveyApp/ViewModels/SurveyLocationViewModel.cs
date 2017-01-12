@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Helpers;
 using PITCSurveyApp.Models;
@@ -193,6 +194,7 @@ namespace PITCSurveyApp.ViewModels
                     _response.Item.GPSLocation.Lat = position.Latitude;
                     _response.Item.GPSLocation.Lon = position.Longitude;
                     _response.Item.GPSLocation.Accuracy = (float) position.Accuracy;
+                    DependencyService.Get<IMetricsManagerService>().TrackEvent("ReverseGeocode");
                     var address = await Geocoder.ReverseGeocode(position.Latitude, position.Longitude);
                     if (address != null)
                     {
@@ -203,9 +205,9 @@ namespace PITCSurveyApp.ViewModels
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                // TODO: log exception
+                DependencyService.Get<IMetricsManagerService>().TrackException("ReverseGeocodeFailed", ex);
             }
             finally
             {
