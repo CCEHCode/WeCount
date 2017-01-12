@@ -3,6 +3,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Web.Http;
+using System.Diagnostics;
 
 namespace PITCSurveySvc.Controllers
 {
@@ -14,46 +15,63 @@ namespace PITCSurveySvc.Controllers
 
 		protected Volunteer GetAuthenticatedVolunteer()
 		{
+			Trace.TraceInformation($"User authenticated: {User.Identity.IsAuthenticated}");
+
 			if (User.Identity.IsAuthenticated)
 			{
-				var ClaimsPrincipal = this.User as ClaimsPrincipal;
-
-				string sid = ClaimsPrincipal.FindFirst(ClaimTypes.NameIdentifier).Value;
-
-				var Volunteer = db.Volunteers.Where(v => v.AuthID == sid).SingleOrDefault();
-
-				if (Volunteer == null)
+				try
 				{
-					// Volunteer not already recognized, add.
+					Trace.TraceInformation($"User is authenticated. Name: {User.Identity?.Name}, {User.Identity?.AuthenticationType}");
 
-					Volunteer = new Volunteer
+					var ClaimsPrincipal = this.User as ClaimsPrincipal;
+
+					Trace.TraceInformation($"NameIdentifier: {((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier)?.Value}");
+
+					string sid = ClaimsPrincipal.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+					Trace.TraceInformation($"SID: {sid}");
+
+					var Volunteer = db.Volunteers.Where(v => v.AuthID == sid).SingleOrDefault();
+
+					if (Volunteer == null)
 					{
-						AuthID = sid,
-						AuthProvider = ClaimsPrincipal.FindFirst(IdentityProvider).Value,
-						Email = ClaimsPrincipal.FindFirst(ClaimTypes.Email).Value,
-						FirstName = ClaimsPrincipal.FindFirst(ClaimTypes.GivenName).Value,
-						LastName = ClaimsPrincipal.FindFirst(ClaimTypes.Surname).Value,
-						HomePhone = ClaimsPrincipal.FindFirst(ClaimTypes.HomePhone).Value,
-						MobilePhone = ClaimsPrincipal.FindFirst(ClaimTypes.MobilePhone).Value
-					};
+						Trace.TraceInformation("Adding new volunteer.");
 
-					Volunteer.Address.Street = ClaimsPrincipal.FindFirst(ClaimTypes.StreetAddress).Value;
-					Volunteer.Address.City = ClaimsPrincipal.FindFirst(ClaimTypes.Locality).Value;
-					Volunteer.Address.State = ClaimsPrincipal.FindFirst(ClaimTypes.StateOrProvince).Value;
-					Volunteer.Address.ZipCode = ClaimsPrincipal.FindFirst(ClaimTypes.PostalCode).Value;
+						// Volunteer not already recognized, add.
 
-					db.Volunteers.Add(Volunteer);
+						Volunteer = new Volunteer { AuthID = sid, AuthProvider = ClaimsPrincipal.FindFirst(IdentityProvider)?.Value };
+
+						db.Volunteers.Add(Volunteer);
+					}
+
+					// If existing volunteer, update profile info
+
+					Volunteer.Email = ClaimsPrincipal.FindFirst(ClaimTypes.Email)?.Value;
+					Volunteer.FirstName = ClaimsPrincipal.FindFirst(ClaimTypes.GivenName)?.Value;
+					Volunteer.LastName = ClaimsPrincipal.FindFirst(ClaimTypes.Surname)?.Value;
+					Volunteer.HomePhone = ClaimsPrincipal.FindFirst(ClaimTypes.HomePhone)?.Value;
+					Volunteer.MobilePhone = ClaimsPrincipal.FindFirst(ClaimTypes.MobilePhone)?.Value;
+
+					Volunteer.Address.Street = ClaimsPrincipal.FindFirst(ClaimTypes.StreetAddress)?.Value;
+					Volunteer.Address.City = ClaimsPrincipal.FindFirst(ClaimTypes.Locality)?.Value;
+					Volunteer.Address.State = ClaimsPrincipal.FindFirst(ClaimTypes.StateOrProvince)?.Value;
+					Volunteer.Address.ZipCode = ClaimsPrincipal.FindFirst(ClaimTypes.PostalCode)?.Value;
 
 					// TODO: Use new scoped context, so as not to inadvertently save any other changes? UOW
+					// If so, return from primary context to allow attachment
 					db.SaveChanges();
-				}
 
-				return Volunteer;
+					Trace.TraceInformation($"Volunteer ID: {Volunteer.ID}");
+
+					return Volunteer;
+				}
+				catch (System.Exception ex)
+				{
+					Trace.TraceError("Error playing with creds: " + ex.ToString());
+				}
 			}
-			else
-			{
-				return null;
-			}
+
+			return null;
 		}
 
 		#region "IDisposable"
