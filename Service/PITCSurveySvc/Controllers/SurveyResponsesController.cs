@@ -19,20 +19,21 @@ namespace PITCSurveySvc.Controllers
 	/// </summary>
 	public class SurveyResponsesController : BaseController
     {
-        
+
 		// POST: api/SurveyResponses
 		/// <summary>
 		/// Submit a completed Survey Response.
 		/// </summary>
 		/// <param name="SurveyResponse"></param>
+		/// <param name="DeviceId"></param>
 		/// <returns></returns>
-        [ResponseType(typeof(void))]
+		[ResponseType(typeof(void))]
 		[SwaggerOperation("PostSurveyResponse")]
 		[SwaggerResponse(HttpStatusCode.BadRequest, "The survey data wasn't acceptable (improper formatting, etc.).")]
 		[SwaggerResponse(HttpStatusCode.Conflict, "A SurveyResponse with the same ResponseIdentifier is already uploaded.")]
 		[SwaggerResponse(HttpStatusCode.NoContent, "SurveyResponse uploaded successfully.")]
 		[AllowAnonymous]
-		public IHttpActionResult PostSurveyResponse(SurveyResponseModel SurveyResponse)
+		public IHttpActionResult PostSurveyResponse(SurveyResponseModel SurveyResponse, Guid DeviceId)
         {
 			Volunteer sv = GetAuthenticatedVolunteer();
 
@@ -44,7 +45,7 @@ namespace PITCSurveySvc.Controllers
 				//return BadRequest("Survey already uploaded.");
 				return StatusCode(HttpStatusCode.Conflict);
 
-			if (false) // (sv == null)
+			if (sv == null)
 				return BadRequest("The specified InterviewerID is not recognized. User not logged in?");
 
 			try
@@ -53,8 +54,10 @@ namespace PITCSurveySvc.Controllers
 
 				SurveyResponse Response = Converter.ConvertToEntity(SurveyResponse);
 
-				Response.Volunteer_ID = 1;
-				//Response.Volunteer = sv;
+				//Response.Volunteer_ID = 1;
+				Response.Volunteer = sv;
+
+				Response.DeviceId = DeviceId;
 
 				db.SurveyResponses.Add(Response);
 

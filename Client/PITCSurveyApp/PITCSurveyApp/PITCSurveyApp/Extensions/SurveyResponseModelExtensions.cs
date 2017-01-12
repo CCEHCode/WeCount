@@ -36,6 +36,7 @@ namespace PITCSurveyApp.Extensions
         {
             // TODO: log upload
             //await APIHelper.SubmitSurveyResponseAsync(response.Item);
+			// TODO: This returns bool for success/fail
             await SurveyCloudService.SubmitSurveyResponseAsync(response.Item);
             response.Uploaded = DateTime.Now;
             await response.SaveAsync();

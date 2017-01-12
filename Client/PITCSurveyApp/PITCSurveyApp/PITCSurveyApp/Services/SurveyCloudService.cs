@@ -23,7 +23,7 @@ namespace PITCSurveyApp.Services
         {
             var parameters = new Dictionary<string, string>
             {
-                { "id", "1" },
+                { "id", id.ToString() },
             };
 
             try
@@ -37,9 +37,23 @@ namespace PITCSurveyApp.Services
             }
         }
 
-        public static Task SubmitSurveyResponseAsync(SurveyResponseModel response)
+        public static async Task<bool> SubmitSurveyResponseAsync(SurveyResponseModel response)
         {
-            return ApiClient.InvokeApiAsync("SurveyResponses", JObject.FromObject(response));
-        }
+			var Params = new Dictionary<string, string>();
+
+			Params.Add("DeviceId", Helpers.Settings.DeviceId);
+
+			try
+			{
+				await ApiClient.InvokeApiAsync("SurveyResponses", JObject.FromObject(response), System.Net.Http.HttpMethod.Post, Params);
+
+				return true;
+			}
+			catch (Exception)
+			{
+				// TODO: log exception
+				return false;
+			}
+		}
     }
 }

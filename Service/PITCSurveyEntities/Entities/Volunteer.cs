@@ -17,7 +17,7 @@ namespace PITCSurveyEntities.Entities
 		public String Email { get; set; }
 		public String MobilePhone { get; set; }
 		public String HomePhone { get; set; }
-		public Address Address { get; set; }
+		public Address Address { get; set; } = new Address();
 
 		[Obsolete("This is longer used, in favor of AuthProvider.")]
 		public AuthMethod AuthMethod { get; set; }

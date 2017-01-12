@@ -12,6 +12,7 @@ namespace PITCSurveyApp.Helpers
     {
         private const string AuthTokenKey = "authtoken";
         private const string UserIdKey = "userid";
+		private const string DeviceIdKey = null;
 
         // HockeyApp App IDs, we have one for each supported platform
 #if WINDOWS_UWP
@@ -47,6 +48,28 @@ namespace PITCSurveyApp.Helpers
                 AppSettings.AddOrUpdateValue(AuthTokenKey, value);
             }
         }
+
+		public static string DeviceId
+		{
+			get
+			{
+				string did = AppSettings.GetValueOrDefault(DeviceIdKey, default(string));
+
+				if (did == null)
+				{
+					// Set initial value and save
+					did = System.Guid.NewGuid().ToString();
+
+					DeviceId = did;
+				}
+
+				return did;
+			}
+			set
+			{
+				AppSettings.AddOrUpdateValue(DeviceIdKey, value);
+			}
+		}
 
         public static bool Initializing { get; set; }
 
