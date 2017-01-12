@@ -37,7 +37,7 @@ namespace PITCSurveyApp.Services
             }
         }
 
-        public static async Task<bool> SubmitSurveyResponseAsync(SurveyResponseModel response)
+        public static Task SubmitSurveyResponseAsync(SurveyResponseModel response)
         {
             var parameters = new Dictionary<string, string>
             {
