@@ -39,21 +39,12 @@ namespace PITCSurveyApp.Services
 
         public static async Task<bool> SubmitSurveyResponseAsync(SurveyResponseModel response)
         {
-			var Params = new Dictionary<string, string>();
+            var parameters = new Dictionary<string, string>
+            {
+                {"DeviceId", Helpers.Settings.DeviceId},
+            };
 
-			Params.Add("DeviceId", Helpers.Settings.DeviceId);
-
-			try
-			{
-				await ApiClient.InvokeApiAsync("SurveyResponses", JObject.FromObject(response), System.Net.Http.HttpMethod.Post, Params);
-
-				return true;
-			}
-			catch (Exception)
-			{
-				// TODO: log exception
-				return false;
-			}
+			return ApiClient.InvokeApiAsync("SurveyResponses", JObject.FromObject(response), System.Net.Http.HttpMethod.Post, parameters);
 		}
     }
 }

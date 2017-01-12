@@ -12,7 +12,7 @@ namespace PITCSurveyApp.Helpers
     {
         private const string AuthTokenKey = "authtoken";
         private const string UserIdKey = "userid";
-		private const string DeviceIdKey = null;
+		private const string DeviceIdKey = "deviceid";
 
         // HockeyApp App IDs, we have one for each supported platform
 #if WINDOWS_UWP

@@ -79,7 +79,6 @@ namespace PITCSurveyApp
                     ? new Dictionary<string, string>
 	                {
 	                    { "access_type", "offline" },
-                        { "scope", "profile,email" },
 	                }
                     : new Dictionary<string, string>(0);
 
