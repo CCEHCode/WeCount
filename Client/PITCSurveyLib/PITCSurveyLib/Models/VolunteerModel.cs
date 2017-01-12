@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PITCSurveyLib.Models
 {
@@ -13,6 +9,6 @@ namespace PITCSurveyLib.Models
 		public String Email { get; set; }
 		public String MobilePhone { get; set; }
 		public String HomePhone { get; set; }
-		public Address Address { get; set; }
+	    public Address Address { get; set; } = new Address();
 	}
 }

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.MobileServices;
 using Newtonsoft.Json.Linq;
+using PITCSurveyApp.Helpers;
 using PITCSurveyLib.Models;
 
 namespace PITCSurveyApp.Services
@@ -11,7 +13,8 @@ namespace PITCSurveyApp.Services
     {
         private const string AzureMobileAppUrl = "https://appname.azurewebsites.net";
 
-		// TODO: Move this into APIHelper for consistency?
+        private static readonly IDictionary<string, string> s_emptyParameters = new Dictionary<string, string>(0);
+
         public static MobileServiceClient ApiClient;
 
         static SurveyCloudService()
@@ -23,12 +26,12 @@ namespace PITCSurveyApp.Services
         {
             var parameters = new Dictionary<string, string>
             {
-                { "id", id.ToString() },
+                {"id", id.ToString()},
             };
 
             try
             {
-                return await ApiClient.InvokeApiAsync<SurveyModel>("Surveys", System.Net.Http.HttpMethod.Get, parameters);
+                return await ApiClient.InvokeApiAsync<SurveyModel>("Surveys", HttpMethod.Get, parameters);
             }
             catch (Exception ex)
             {
@@ -41,10 +44,28 @@ namespace PITCSurveyApp.Services
         {
             var parameters = new Dictionary<string, string>
             {
-                {"DeviceId", Helpers.Settings.DeviceId},
+                {"DeviceId", DeviceSettings.DeviceId},
             };
 
-			return ApiClient.InvokeApiAsync("SurveyResponses", JObject.FromObject(response), System.Net.Http.HttpMethod.Post, parameters);
-		}
+            return ApiClient.InvokeApiAsync("SurveyResponses", JObject.FromObject(response), HttpMethod.Post, parameters);
+        }
+
+        public static async Task<VolunteerModel> GetVolunteerAsync()
+        {
+            try
+            {
+                return await ApiClient.InvokeApiAsync<VolunteerModel>("Volunteers", HttpMethod.Get, s_emptyParameters);
+            }
+            catch (MobileServiceInvalidOperationException ex)
+                when (ex.Response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return new VolunteerModel();
+            }
+        }
+
+        public static Task SaveVolunteerAsync(VolunteerModel volunteer)
+        {
+            return ApiClient.InvokeApiAsync("Volunteers", JObject.FromObject(volunteer), HttpMethod.Put, s_emptyParameters);
+        }
     }
 }

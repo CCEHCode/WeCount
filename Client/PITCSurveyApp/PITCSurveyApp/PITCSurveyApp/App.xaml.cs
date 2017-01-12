@@ -51,7 +51,7 @@ namespace PITCSurveyApp
 
         public static async void SetMainPage()
         {
-            Settings.Initializing = true;
+            UserSettings.Initializing = true;
 
             Current.MainPage = new NavigationPage(new LoginPage())
             {
@@ -82,10 +82,10 @@ namespace PITCSurveyApp
 	                }
                     : new Dictionary<string, string>(0);
 
-	            var user = await s_authenticator.LoginAsync(provider, properties);
-	            Settings.AuthToken = user?.MobileServiceAuthenticationToken;
-	            Settings.UserId = user?.UserId;
-	            APIHelper.AuthToken = user?.MobileServiceAuthenticationToken;
+                var user = await s_authenticator.LoginAsync(provider, properties);
+                UserSettings.Volunteer = await SurveyCloudService.GetVolunteerAsync();
+                UserSettings.AuthToken = user?.MobileServiceAuthenticationToken;
+	            UserSettings.UserId = user?.UserId;
 	        }
 	        catch (Exception ex)
 	        {
@@ -95,26 +95,27 @@ namespace PITCSurveyApp
 
 	    public static async Task RefreshLoginAsync()
 	    {
-	        if (!string.IsNullOrEmpty(Settings.AuthToken))
+	        if (!string.IsNullOrEmpty(UserSettings.AuthToken))
 	        {
 	            try
 	            {
                     DependencyService.Get<IMetricsManagerService>().TrackEvent("UserRefresh");
-                    s_authenticator.User = new MobileServiceUser(Settings.UserId)
+                    s_authenticator.User = new MobileServiceUser(UserSettings.UserId)
 	                {
-	                    MobileServiceAuthenticationToken = Settings.AuthToken,
+	                    MobileServiceAuthenticationToken = UserSettings.AuthToken,
 	                };
 
                     var user = await s_authenticator.RefreshLoginAsync();
-                    Settings.AuthToken = user?.MobileServiceAuthenticationToken;
-                    Settings.UserId = user?.UserId;
-                    APIHelper.AuthToken = user?.MobileServiceAuthenticationToken;
+	                UserSettings.Volunteer = await SurveyCloudService.GetVolunteerAsync();
+                    UserSettings.AuthToken = user?.MobileServiceAuthenticationToken;
+                    UserSettings.UserId = user?.UserId;
                 }
 	            catch (Exception ex)
 	            {
 	                DependencyService.Get<IMetricsManagerService>().TrackException("UserRefreshFailed", ex);
-	                Settings.AuthToken = null;
-	                APIHelper.AuthToken = null;
+                    UserSettings.Volunteer = new VolunteerModel();
+	                UserSettings.AuthToken = null;
+                    UserSettings.UserId = null;
 	            }
 	        }
 	    }
@@ -125,10 +126,11 @@ namespace PITCSurveyApp
 	        {
 	            DependencyService.Get<IMetricsManagerService>().TrackEvent("UserLogout");
 	            await s_authenticator.LogoutAsync();
-	            Settings.AuthToken = null;
-	            APIHelper.AuthToken = null;
-	        }
-	        catch (Exception ex)
+                UserSettings.Volunteer = new VolunteerModel();
+	            UserSettings.AuthToken = null;
+                UserSettings.UserId = null;
+            }
+            catch (Exception ex)
 	        {
                 DependencyService.Get<IMetricsManagerService>().TrackException("UserLogoutFailed", ex);
             }

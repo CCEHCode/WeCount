@@ -8,13 +8,13 @@ namespace PITCSurveyApp.ViewModels
     {
         public ICommand GoHomeCommand { get; set; }
         public ICommand GoMySurveysCommand { get; set; }
-        public ICommand GoSettingsCommand { get; set; }
+        public ICommand GoProfileCommand { get; set; }
 
         public MenuPageViewModel()
         {
             GoHomeCommand = new Command(GoHome);
             GoMySurveysCommand = new Command(GoMySurveys);
-            GoSettingsCommand = new Command(GoSettings);
+            GoProfileCommand = new Command(GoProfile);
         }
 
         void GoHome(object obj)
@@ -29,9 +29,9 @@ namespace PITCSurveyApp.ViewModels
             App.MenuIsPresented = false;
         }
 
-        void GoSettings(object obj)
+        void GoProfile(object obj)
         {
-            App.NavigationPage.Navigation.PushAsync(new SettingsPage());
+            App.NavigationPage.Navigation.PushAsync(new ProfilePage());
             App.MenuIsPresented = false;
         }
     }

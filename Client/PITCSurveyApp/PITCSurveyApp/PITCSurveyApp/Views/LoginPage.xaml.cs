@@ -24,7 +24,7 @@ namespace PITCSurveyApp.Views
             // we change the main page here to avoid an internal state
             // exception that occurs when we try to change the main page
             // before the login modal has closed.
-            if (Settings.IsLoggedIn)
+            if (UserSettings.IsLoggedIn)
             {
                 App.GoToMainPage();
             }

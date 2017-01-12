@@ -31,7 +31,7 @@ namespace PITCSurveyApp.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             var manager = BITHockeyManager.SharedHockeyManager;
-            manager.Configure(Settings.HockeyAppId);
+            manager.Configure(DeviceSettings.HockeyAppId);
             manager.StartManager();
             manager.Authenticator.AuthenticateInstallation();
                 // This line is obsolete in crash only builds (do we need it then?)

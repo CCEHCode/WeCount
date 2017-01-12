@@ -36,7 +36,7 @@ namespace PITCSurveyApp.UWP
             this.InitializeComponent();
             this.Suspending += OnSuspending;
 
-            Microsoft.HockeyApp.HockeyClient.Current.Configure(Settings.HockeyAppId);
+            Microsoft.HockeyApp.HockeyClient.Current.Configure(DeviceSettings.HockeyAppId);
         }
 
         /// <summary>

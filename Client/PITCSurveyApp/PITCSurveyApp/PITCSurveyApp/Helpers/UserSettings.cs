@@ -1,4 +1,5 @@
-﻿using Plugin.Settings;
+﻿using PITCSurveyLib.Models;
+using Plugin.Settings;
 using Plugin.Settings.Abstractions;
 
 namespace PITCSurveyApp.Helpers
@@ -8,11 +9,10 @@ namespace PITCSurveyApp.Helpers
     /// of your client applications. All settings are laid out the same exact way with getters
     /// and setters. 
     /// </summary>
-    public static class Settings
+    public static class UserSettings
     {
         private const string AuthTokenKey = "authtoken";
         private const string UserIdKey = "userid";
-		private const string DeviceIdKey = "deviceid";
 
         // HockeyApp App IDs, we have one for each supported platform
 #if WINDOWS_UWP
@@ -49,30 +49,10 @@ namespace PITCSurveyApp.Helpers
             }
         }
 
-		public static string DeviceId
-		{
-			get
-			{
-				string did = AppSettings.GetValueOrDefault(DeviceIdKey, default(string));
-
-				if (did == null)
-				{
-					// Set initial value and save
-					did = System.Guid.NewGuid().ToString();
-
-					DeviceId = did;
-				}
-
-				return did;
-			}
-			set
-			{
-				AppSettings.AddOrUpdateValue(DeviceIdKey, value);
-			}
-		}
-
         public static bool Initializing { get; set; }
 
         public static bool IsLoggedIn => !Initializing && !string.IsNullOrWhiteSpace(AuthToken);
+
+        public static VolunteerModel Volunteer { get; set; }
     }
 }

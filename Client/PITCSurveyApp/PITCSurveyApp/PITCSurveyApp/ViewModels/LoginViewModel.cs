@@ -37,7 +37,7 @@ namespace PITCSurveyApp.ViewModels
                 // Updating the main page here will cause an exception for Android
                 // Instead, for Android and iOS, we wait for the view to send the
                 // `OnAppearing` event and update the main page then.
-                if (Settings.IsLoggedIn)
+                if (UserSettings.IsLoggedIn)
                 {
                     App.GoToMainPage();
                 }
@@ -49,9 +49,9 @@ namespace PITCSurveyApp.ViewModels
         {
             await App.RefreshLoginAsync();
 
-            Settings.Initializing = false;
+            UserSettings.Initializing = false;
 
-            if (Settings.IsLoggedIn)
+            if (UserSettings.IsLoggedIn)
             {
                 App.GoToMainPage();
             }

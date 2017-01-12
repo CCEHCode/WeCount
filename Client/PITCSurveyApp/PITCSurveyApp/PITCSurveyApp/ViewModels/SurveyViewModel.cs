@@ -6,7 +6,6 @@ using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Helpers;
 using PITCSurveyApp.Models;
 using PITCSurveyApp.Views;
-using PITCSurveyLib;
 using PITCSurveyLib.Models;
 using Xamarin.Forms;
 

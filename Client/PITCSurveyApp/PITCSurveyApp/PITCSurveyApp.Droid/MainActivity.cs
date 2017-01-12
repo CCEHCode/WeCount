@@ -22,9 +22,9 @@ namespace PITCSurveyApp.Droid
 
             base.OnCreate (bundle);
 
-            CrashManager.Register(this, Settings.HockeyAppId);
+            CrashManager.Register(this, UserSettings.HockeyAppId);
 
-            MetricsManager.Register(Application, Settings.HockeyAppId);
+            MetricsManager.Register(Application, UserSettings.HockeyAppId);
             MetricsManager.EnableUserMetrics();
 
             global::Xamarin.Forms.Forms.Init (this, bundle);
