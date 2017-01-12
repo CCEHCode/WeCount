@@ -54,7 +54,12 @@ namespace PITCSurveyApp.Services
         {
             try
             {
-                return await ApiClient.InvokeApiAsync<VolunteerModel>("Volunteers", HttpMethod.Get, s_emptyParameters);
+				var parameters = new Dictionary<string, string>
+			{
+				{"DeviceId", DeviceSettings.DeviceId},
+			};
+
+				return await ApiClient.InvokeApiAsync<VolunteerModel>("Volunteers", HttpMethod.Get, parameters);
             }
             catch (MobileServiceInvalidOperationException ex)
                 when (ex.Response.StatusCode == System.Net.HttpStatusCode.NotFound)
@@ -65,7 +70,12 @@ namespace PITCSurveyApp.Services
 
         public static Task SaveVolunteerAsync(VolunteerModel volunteer)
         {
-            return ApiClient.InvokeApiAsync("Volunteers", JObject.FromObject(volunteer), HttpMethod.Put, s_emptyParameters);
+			var parameters = new Dictionary<string, string>
+			{
+				{"DeviceId", DeviceSettings.DeviceId},
+			};
+
+			return ApiClient.InvokeApiAsync("Volunteers", JObject.FromObject(volunteer), HttpMethod.Put, parameters);
         }
     }
 }
