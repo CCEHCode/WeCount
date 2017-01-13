@@ -35,7 +35,7 @@
         <Entry HorizontalOptions="FillAndExpand"
                IsEnabled="{Binding IsNotBusy}"
                Text="{Binding ZipCode, Mode=TwoWay}"/>
-        <Label Text="Location Notes"
+        <Label Text="Location Notes (Optional)"
                FontAttributes="Bold"/>
         <Entry HorizontalOptions="FillAndExpand"
                Text="{Binding LocationNotes, Mode=TwoWay}"/>
