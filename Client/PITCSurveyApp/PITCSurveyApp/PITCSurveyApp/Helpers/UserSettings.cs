@@ -52,7 +52,7 @@ namespace PITCSurveyApp.Helpers
 
         public static bool Initializing { get; set; }
 
-        public static bool IsLoggedIn => !Initializing && !string.IsNullOrWhiteSpace(AuthToken);
+        public static bool IsLoggedIn => !Initializing && App.Authenticator.User != null;
 
         public static VolunteerModel Volunteer { get; set; } = new VolunteerModel();
 
@@ -62,7 +62,7 @@ namespace PITCSurveyApp.Helpers
             {
                 string did = AppSettings.GetValueOrDefault(DeviceIdKey, default(string));
 
-                if (did == null)
+                if (string.IsNullOrEmpty(did))
                 {
                     // Set initial value and save
                     did = System.Guid.NewGuid().ToString();

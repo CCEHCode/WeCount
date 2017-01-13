@@ -16,11 +16,11 @@ namespace PITCSurveyApp
 	{
         public static SurveyModel LatestSurvey { get; set; }
 
-	    private static IAuthenticate s_authenticator;
+	    public static IAuthenticate Authenticator;
 
         public static void Init(IAuthenticate authenticator)
         {
-            s_authenticator = authenticator;
+            Authenticator = authenticator;
         }
 
         public static IDictionary<string, string> LoginParameters => null;
@@ -51,8 +51,6 @@ namespace PITCSurveyApp
 
         public static async void SetMainPage()
         {
-            UserSettings.Initializing = true;
-
             Current.MainPage = new NavigationPage(new LoginPage())
             {
                 BarBackgroundColor = (Color)Current.Resources["Primary"],
@@ -82,11 +80,11 @@ namespace PITCSurveyApp
 	                }
                     : new Dictionary<string, string>(0);
 
-                var user = await s_authenticator.LoginAsync(provider, properties);
+                var user = await Authenticator.LoginAsync(provider, properties);
                 UserSettings.Volunteer = await SurveyCloudService.GetVolunteerAsync();
                 UserSettings.AuthToken = user?.MobileServiceAuthenticationToken;
-	            UserSettings.UserId = user?.UserId;
-	        }
+                UserSettings.UserId = user?.UserId;
+            }
 	        catch (Exception ex)
 	        {
                 DependencyService.Get<IMetricsManagerService>().TrackException("UserLoginFailed", ex);
@@ -100,12 +98,13 @@ namespace PITCSurveyApp
 	            try
 	            {
 	                DependencyService.Get<IMetricsManagerService>().TrackEvent("UserRefresh");
-	                s_authenticator.User = new MobileServiceUser(UserSettings.UserId)
+                    Authenticator.User = new MobileServiceUser(UserSettings.UserId)
 	                {
 	                    MobileServiceAuthenticationToken = UserSettings.AuthToken,
 	                };
 
-	                var user = await s_authenticator.RefreshLoginAsync();
+                    var user = await Authenticator.RefreshLoginAsync();
+                    Authenticator.User = user;
 	                UserSettings.Volunteer = await SurveyCloudService.GetVolunteerAsync();
 	                UserSettings.AuthToken = user?.MobileServiceAuthenticationToken;
 	                UserSettings.UserId = user?.UserId;
@@ -113,7 +112,8 @@ namespace PITCSurveyApp
 	            catch (Exception ex)
 	            {
 	                DependencyService.Get<IMetricsManagerService>().TrackException("UserRefreshFailed", ex);
-	                UserSettings.Volunteer = new VolunteerModel();
+                    Authenticator.User = null;
+                    UserSettings.Volunteer = new VolunteerModel();
 	                UserSettings.VolunteerId = null;
 	                UserSettings.AuthToken = null;
 	                UserSettings.UserId = null;
@@ -138,7 +138,7 @@ namespace PITCSurveyApp
 	        try
 	        {
 	            DependencyService.Get<IMetricsManagerService>().TrackEvent("UserLogout");
-	            await s_authenticator.LogoutAsync();
+	            await Authenticator.LogoutAsync();
                 UserSettings.Volunteer = new VolunteerModel();
                 UserSettings.VolunteerId = null;
                 UserSettings.AuthToken = null;

@@ -47,9 +47,16 @@ namespace PITCSurveyApp.ViewModels
 
         private async void RefreshUser()
         {
-            await App.RefreshLoginAsync();
+            UserSettings.Initializing = true;
 
-            UserSettings.Initializing = false;
+            try
+            {
+                await App.RefreshLoginAsync();
+            }
+            finally
+            {
+                UserSettings.Initializing = false;
+            }
 
             if (UserSettings.IsLoggedIn)
             {
