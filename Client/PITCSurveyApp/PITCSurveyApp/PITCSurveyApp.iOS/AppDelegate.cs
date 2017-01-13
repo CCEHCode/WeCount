@@ -37,6 +37,7 @@ namespace PITCSurveyApp.iOS
                 // This line is obsolete in crash only builds (do we need it then?)
 
             global::Xamarin.Forms.Forms.Init();
+			App.Init(this);
             LoadApplication(new PITCSurveyApp.App());
 
             return base.FinishedLaunching(app, options);
