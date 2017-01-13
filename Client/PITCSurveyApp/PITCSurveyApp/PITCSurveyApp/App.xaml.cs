@@ -49,7 +49,7 @@ namespace PITCSurveyApp
             SetMainPage();
         }
 
-        public static async void SetMainPage()
+        public static void SetMainPage()
         {
             Current.MainPage = new NavigationPage(new LoginPage())
             {
@@ -58,7 +58,7 @@ namespace PITCSurveyApp
             };
         }
 
-        public static async void GoToMainPage()
+        public static void GoToMainPage()
         {
             var menuPage = new MenuPage();
             NavigationPage = new NavigationPage(new HomePage());
@@ -150,10 +150,15 @@ namespace PITCSurveyApp
             }
         }
 
-	    public static void DisplayAlert(string title, string message, string cancel)
+	    public static Task DisplayAlertAsync(string title, string message, string cancel)
 	    {
-	        RootPage.DisplayAlert(title, message, cancel);
+	        return RootPage.DisplayAlert(title, message, cancel);
 	    }
+
+        public static Task<bool> DisplayAlertAsync(string title, string message, string accept, string cancel)
+        {
+            return RootPage.DisplayAlert(title, message, accept, cancel);
+        }
 
         protected override void OnStart ()
 		{

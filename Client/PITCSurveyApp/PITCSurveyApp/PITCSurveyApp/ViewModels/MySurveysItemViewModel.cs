@@ -118,9 +118,9 @@ namespace PITCSurveyApp.Models
                 DependencyService.Get<IMetricsManagerService>().TrackEvent("MySurveysItemUpload");
                 await UploadAsync();
             }
-            catch (Exception ex)
+            catch
             {
-                App.DisplayAlert(
+                await App.DisplayAlertAsync(
                     "Upload Failure",
                     "Failed to upload survey, please try again.",
                     "OK");

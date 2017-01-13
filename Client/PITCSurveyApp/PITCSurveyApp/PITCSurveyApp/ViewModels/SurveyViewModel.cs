@@ -7,6 +7,7 @@ using PITCSurveyApp.Helpers;
 using PITCSurveyApp.Models;
 using PITCSurveyApp.Services;
 using PITCSurveyApp.Views;
+using PITCSurveyLib;
 using PITCSurveyLib.Models;
 using Xamarin.Forms;
 
@@ -99,6 +100,34 @@ namespace PITCSurveyApp.ViewModels
 
         private async void NextQuestion()
         {
+            var shouldPrompt = false;
+            var questionAnswers = CurrentQuestion.AnswerChoices.ToDictionary(a => a.AnswerChoiceID, a => a);
+            foreach (var answer in CurrentAnswers)
+            {
+                if (string.IsNullOrEmpty(answer.AdditionalAnswerData))
+                {
+                    var questionAnswer = default(SurveyQuestionAnswerChoiceModel);
+                    if (questionAnswers.TryGetValue(answer.AnswerChoiceID, out questionAnswer) && questionAnswer.AdditionalAnswerDataFormat != AnswerFormat.None)
+                    {
+                        shouldPrompt = true;
+                        break;
+                    }
+                }
+            }
+
+            if (shouldPrompt)
+            {
+                var shouldContinue = await App.DisplayAlertAsync(
+                    "Incomplete Answer",
+                    "At least one answer requires more infomration, are you sure you want to continue?", "yes",
+                    "no");
+
+                if (!shouldContinue)
+                {
+                    return;
+                }
+            }
+
             var properties = new Dictionary<string, string>
             {
                 {"CurrentQuestionID", CurrentQuestion?.QuestionID.ToString()},

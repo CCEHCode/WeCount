@@ -263,7 +263,7 @@ namespace PITCSurveyApp.ViewModels
             catch (Exception ex)
             {
                 DependencyService.Get<IMetricsManagerService>().TrackException("SaveVolunteerFailed", ex);
-                App.DisplayAlert("Profile Save Error", "Failed to update profile information. Please try again later.", "OK");
+                await App.DisplayAlertAsync("Profile Save Error", "Failed to update profile information. Please try again later.", "OK");
             }
             finally
             {

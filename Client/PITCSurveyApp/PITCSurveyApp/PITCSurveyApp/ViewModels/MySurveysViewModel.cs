@@ -91,7 +91,7 @@ namespace PITCSurveyApp.ViewModels
             }
             catch
             {
-                App.DisplayAlert(
+                await App.DisplayAlertAsync(
                     "Upload Failed",
                     "Failed to upload survey. Please try again.",
                     "OK");
@@ -122,7 +122,7 @@ namespace PITCSurveyApp.ViewModels
             await Task.WhenAll(tasks);
             if (uploadFailed)
             {
-                App.DisplayAlert(
+                await App.DisplayAlertAsync(
                     "Upload Failed",
                     "At least one survey upload failed. Please try again.",
                     "OK");
