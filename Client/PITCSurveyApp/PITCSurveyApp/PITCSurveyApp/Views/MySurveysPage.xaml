@@ -30,7 +30,8 @@
         </DataTemplate>
       </ListView.ItemTemplate>
     </ListView>
-    <StackLayout Orientation="Horizontal">
+    <StackLayout Orientation="Horizontal"
+                 IsVisible="{Binding IsNotLoadOnly}">
       <Button Text="Upload Selected"
               HorizontalOptions="FillAndExpand"
               TextColor="White"

@@ -67,7 +67,7 @@ namespace PITCSurveyApp.ViewModels
         private void LoadSurvey(object obj)
         {
             DependencyService.Get<IMetricsManagerService>().TrackEvent("HomePageLoadSurvey");
-            App.NavigationPage.Navigation.PushAsync(new MySurveysPage());
+            App.NavigationPage.Navigation.PushAsync(new MySurveysPage(true));
         }
 
         private async void Init()

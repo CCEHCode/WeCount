@@ -104,6 +104,11 @@ namespace PITCSurveyApp.Models
             Update();
         }
 
+        public async Task EditAsync()
+        {
+            await App.NavigationPage.PushAsync(new SurveyPage(_response));
+        }
+
         private async void Delete()
         {
             DependencyService.Get<IMetricsManagerService>().TrackEvent("MySurveysItemDelete");
@@ -127,10 +132,10 @@ namespace PITCSurveyApp.Models
             }
         }
 
-        public async void Edit()
+        private async void Edit()
         {
             DependencyService.Get<IMetricsManagerService>().TrackEvent("MySurveysItemEdit");
-            await App.NavigationPage.PushAsync(new SurveyPage(_response));
+            await EditAsync();
         }
 
         private void Update()

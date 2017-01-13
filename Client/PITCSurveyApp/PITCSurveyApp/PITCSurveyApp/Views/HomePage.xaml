@@ -33,12 +33,11 @@
             BackgroundColor="{StaticResource DarkBackgroundColor}"
             HorizontalOptions="FillAndExpand"
             Command="{Binding NewSurveyCommand}"/>
-    <!-- This button is temporarily disabled until the feature is added to the app -->
     <Button x:Name="BtnLoadSurvey"
             Grid.Row="2"
             Text="Load Survey"
-            IsEnabled="False"
             BackgroundColor="{StaticResource DarkBackgroundColor}"
-            HorizontalOptions="FillAndExpand"/>
+            HorizontalOptions="FillAndExpand"
+            Command="{Binding LoadSurveyCommand}"/>
   </Grid>
 </ContentPage>

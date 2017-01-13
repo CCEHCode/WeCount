@@ -12,11 +12,13 @@ namespace PITCSurveyApp.ViewModels
 {
     class MySurveysViewModel : BaseViewModel
     {
+        private readonly bool _isLoadOnly;
         private ObservableCollection<MySurveysItemViewModel> _surveys;
         private MySurveysItemViewModel _selectedItem;
 
-        public MySurveysViewModel()
+        public MySurveysViewModel(bool isLoadOnly)
         {
+            _isLoadOnly = isLoadOnly;
             UploadSelectedCommand = new Command(UploadSelected, () => SelectedItem != null);
             UploadAllCommand = new Command(UploadAll, () => Surveys?.Count > 0);
         }
@@ -24,6 +26,8 @@ namespace PITCSurveyApp.ViewModels
         public Command UploadSelectedCommand { get; }
 
         public Command UploadAllCommand { get; }
+
+        public bool IsNotLoadOnly => !_isLoadOnly;
 
         public ObservableCollection<MySurveysItemViewModel> Surveys
         {
@@ -52,6 +56,10 @@ namespace PITCSurveyApp.ViewModels
             {
                 SetProperty(ref _selectedItem, value);
                 UploadSelectedCommand.ChangeCanExecute();
+                if (_isLoadOnly)
+                {
+                    EditSelectedItem();
+                }
             }
         }
 
@@ -74,6 +82,15 @@ namespace PITCSurveyApp.ViewModels
             Surveys = new ObservableCollection<MySurveysItemViewModel>(managers);
         }
 
+        private async void EditSelectedItem()
+        {
+            if (_selectedItem != null)
+            {
+                DependencyService.Get<IMetricsManagerService>().TrackEvent("MySurveysLoadOnlyEdit");
+                await _selectedItem.EditAsync();
+                SelectedItem = null;
+            }
+        }
 
         private async void UploadSelected()
         {

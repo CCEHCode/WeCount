@@ -7,18 +7,21 @@ namespace PITCSurveyApp.Views
 	{
 	    private readonly MySurveysViewModel _viewModel;
 
-		public MySurveysPage ()
-		{
-			InitializeComponent ();
+	    public MySurveysPage()
+	        : this(false)
+	    {
+	    }
 
-		    _viewModel = new MySurveysViewModel();
+        public MySurveysPage(bool loadOnly)
+        {
+			InitializeComponent();
+		    _viewModel = new MySurveysViewModel(loadOnly);
 		    BindingContext = _viewModel;
 		}
 
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-
             await _viewModel.RefreshAsync();
         }
     }
