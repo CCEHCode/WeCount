@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PITCSurveyApp.Views.ContentButton"
+             x:Name="ContentButtonView">
+  <ContentView.GestureRecognizers>
+    <TapGestureRecognizer Tapped="TapGestureRecognizer_OnTapped" Command="{Binding Source={x:Reference ContentButtonView}, Path=Command}"></TapGestureRecognizer>
+  </ContentView.GestureRecognizers>
+
+</ContentView>

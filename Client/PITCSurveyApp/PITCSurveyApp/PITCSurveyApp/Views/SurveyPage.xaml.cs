@@ -73,7 +73,7 @@ namespace PITCSurveyApp.Views
                 }
             }
             catch (Exception ex)
-	        {
+            {
                 DependencyService.Get<IMetricsManagerService>().TrackException("SurveyQuestionFailed", ex);
                 await DisplayAlert("Error", "Something went wrong when loading this question.", "OK");
 	        }
