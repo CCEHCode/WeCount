@@ -34,6 +34,7 @@ namespace PITCSurveyApp.ViewModels
             _response = response;
             NextQuestionCommand = new Command(NextQuestion, () => CanGoForward);
             PreviousQuestionCommand = new Command(PreviousQuestion, () => CanGoBack);
+            NewSurveyCommand = new Command(NewSurvey);
             EditLocationCommand = new Command(EditLocation);
             Init();
         }
@@ -44,11 +45,25 @@ namespace PITCSurveyApp.ViewModels
 
         public Command PreviousQuestionCommand { get; }
 
+        public Command NewSurveyCommand { get; }
+
         public Command EditLocationCommand { get; }
 
         public SurveyQuestionModel CurrentQuestion => Question(_index);
 
-        public bool IsSurveyEnded => _isSurveyEnded;
+        public bool IsSurveyEnded
+        {
+            get { return _isSurveyEnded; }
+            set
+            {
+                if (SetProperty(ref _isSurveyEnded, value))
+                {
+                    OnPropertyChanged(nameof(IsSurveyActive));
+                }
+            }
+        }
+
+        public bool IsSurveyActive => !_isSurveyEnded;
 
         public IList<SurveyQuestionAnswerChoiceResponseModel> CurrentAnswers
         {
@@ -119,8 +134,9 @@ namespace PITCSurveyApp.ViewModels
             {
                 var shouldContinue = await App.DisplayAlertAsync(
                     "Incomplete Answer",
-                    "At least one answer requires more infomration, are you sure you want to continue?", "yes",
-                    "no");
+                    "At least one answer requires more infomration, are you sure you want to continue?", 
+                    "Yes",
+                    "No");
 
                 if (!shouldContinue)
                 {
@@ -164,7 +180,7 @@ namespace PITCSurveyApp.ViewModels
             var previousId = int.MinValue;
             if (_isSurveyEnded)
             {
-                _isSurveyEnded = false;
+                IsSurveyEnded = false;
                 previousId = _response.Item.QuestionResponses.Max(q => q.QuestionID);
             }
             else
@@ -188,6 +204,14 @@ namespace PITCSurveyApp.ViewModels
             QuestionChanged?.Invoke(this, new EventArgs());
         }
 
+        private async void NewSurvey()
+        {
+            DependencyService.Get<IMetricsManagerService>().TrackEvent("SurveyPageNewSurvey");
+            var currentPage = App.NavigationPage.CurrentPage;
+            await App.NavigationPage.PushAsync(new SurveyLocationPage());
+            App.NavigationPage.Navigation.RemovePage(currentPage);
+        }
+
         private async void EditLocation()
         {
             DependencyService.Get<IMetricsManagerService>().TrackEvent("SurveyEditLocation");
@@ -207,7 +231,7 @@ namespace PITCSurveyApp.ViewModels
 
         private void EndSurvey()
         {
-            _isSurveyEnded = true;
+            IsSurveyEnded = true;
             _response.Item.EndTime = DateTimeOffset.Now;
         }
 
@@ -254,7 +278,7 @@ namespace PITCSurveyApp.ViewModels
             _index = nextQuestionIndex > lastIndex ? nextQuestionIndex : lastIndex + 1;
             if ((matchingAnswer?.EndSurvey ?? false) || nextQuestionIndex < 0)
             {
-                _isSurveyEnded = true;
+                IsSurveyEnded = true;
             }
         }
     }

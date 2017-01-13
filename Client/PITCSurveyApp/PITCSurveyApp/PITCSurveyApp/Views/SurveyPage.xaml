@@ -37,7 +37,15 @@
                 BackgroundColor="Green"
                 HorizontalOptions="FillAndExpand"
                 VerticalOptions="FillAndExpand"
+                IsVisible="{Binding IsSurveyActive}"                
                 Command="{Binding NextQuestionCommand}"/>
+        <Button Text="New Survey"
+                TextColor="White"
+                BackgroundColor="Green"
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand"
+                IsVisible="{Binding IsSurveyEnded}"
+                Command="{Binding NewSurveyCommand}"/>
       </StackLayout>
     </ScrollView>    
   </StackLayout>
