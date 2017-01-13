@@ -34,11 +34,11 @@ namespace PITCSurveyApp.Views
             UpdateQuestion();
         }
 
-	    private void UpdateQuestion()
+	    private async void UpdateQuestion()
 	    {
             AnswerOptionsScrollView.Content = null;
 
-	        if (_viewModel.IsSurveyEnded)
+            if (_viewModel.IsSurveyEnded)
 	        {
 	            EndSurvey();
                 return;
@@ -64,8 +64,13 @@ namespace PITCSurveyApp.Views
 	            answerOptionsStackLayout.Children.Add(NavigationButtonStackLayout);
 
 	            AnswerOptionsScrollView.Content = answerOptionsStackLayout;
-	        }
-	        catch (Exception ex)
+
+                if (AnswerOptionsScrollView.ScrollY > 0)
+                {
+                    await AnswerOptionsScrollView.ScrollToAsync(0, 0, false);
+                }
+            }
+            catch (Exception ex)
 	        {
                 DependencyService.Get<IMetricsManagerService>().TrackException("SurveyQuestionFailed", ex);
                 DisplayAlert("Error", "Something went wrong when loading this question.", "OK");
