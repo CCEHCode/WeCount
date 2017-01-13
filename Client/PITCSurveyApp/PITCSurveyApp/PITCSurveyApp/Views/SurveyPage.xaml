@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PITCSurveyApp.Views.SurveyPage"
-             Title="Survey">
+             Title="Survey Questions">
   <!-- This page uses a survey template where the question and multiple choice answers
        are loaded dynamically in code behind. -->
   <StackLayout Padding="12">

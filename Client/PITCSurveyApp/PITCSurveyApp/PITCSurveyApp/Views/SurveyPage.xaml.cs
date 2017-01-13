@@ -47,8 +47,10 @@ namespace PITCSurveyApp.Views
 	        var q = _viewModel.CurrentQuestion;
 	        try
 	        {
-	            Title = $"Survey Question {q.QuestionNum} of {_viewModel.SurveyQuestionsCount}";
-	            QuestionLabel.Text = q.QuestionText;
+#if !WINDOWS_UWP
+                Title = $"Survey Question {q.QuestionNum}";
+#endif
+                QuestionLabel.Text = q.QuestionText;
 	            HelpTextLabel.Text = q.QuestionHelpText;
 
 	            var answerOptionsStackLayout = new StackLayout();
