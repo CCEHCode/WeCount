@@ -7,11 +7,11 @@
   <ContentPage.BindingContext>
     <vm:HomePageViewModel />
   </ContentPage.BindingContext>
-  <Grid Padding="20,40,20,20" ColumnSpacing="10" RowSpacing="20">
+  <Grid Padding="20,20,20,20" ColumnSpacing="10" RowSpacing="20">
     <Grid.RowDefinitions>
       <RowDefinition Height="*"/>
-      <RowDefinition Height="100"/>
-      <RowDefinition Height="100"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*"/>
@@ -19,7 +19,7 @@
 	  <StackLayout Grid.Row="0" Padding="12">
       <Image Source="{Binding BannerImage}" HorizontalOptions="Center" />
       <Label Text="We Count Survey App" Margin="0,12,0,0" HorizontalOptions="Center" />
-      <StackLayout Orientation="Horizontal" Margin="0,24,0,0" >
+      <StackLayout Orientation="Horizontal" Margin="0,12,0,0" >
         <Label Text="Survey Version: "/>
         <Label Text="{Binding SurveyVersion}"/>
       </StackLayout>
