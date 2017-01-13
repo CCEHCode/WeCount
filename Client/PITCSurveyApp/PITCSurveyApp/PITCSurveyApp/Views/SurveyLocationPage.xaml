@@ -7,38 +7,40 @@
   <Grid Padding="10,10,10,10" ColumnSpacing="10" RowSpacing="10">
     <Grid.RowDefinitions>
       <RowDefinition Height="*"/>
-      <RowDefinition Height="75"/>
-      <RowDefinition Height="75"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
-    <StackLayout VerticalOptions="StartAndExpand" Padding="10">
-      <Label Text="GPS Location"
-             FontAttributes="Bold"/>
-      <Label Text="{Binding Position}" Margin="5"/>
-      <Label Text="Street"
-             FontAttributes="Bold"/>
-      <Entry HorizontalOptions="FillAndExpand"
-             IsEnabled="{Binding IsNotBusy}"
-             Text="{Binding Street, Mode=TwoWay}"/>
-      <Label Text="City"
-             FontAttributes="Bold"/>
-      <Entry HorizontalOptions="FillAndExpand"
-             IsEnabled="{Binding IsNotBusy}"
-             Text="{Binding City, Mode=TwoWay}"/>
-      <Label Text="State"
-             FontAttributes="Bold"/>
-      <Entry HorizontalOptions="FillAndExpand"
-             IsEnabled="{Binding IsNotBusy}"
-             Text="{Binding State, Mode=TwoWay}"/>
-      <Label Text="Zip Code"
-             FontAttributes="Bold"/>
-      <Entry HorizontalOptions="FillAndExpand"
-             IsEnabled="{Binding IsNotBusy}"
-             Text="{Binding ZipCode, Mode=TwoWay}"/>
-      <Label Text="Location Notes"
-             FontAttributes="Bold"/>
-      <Entry HorizontalOptions="FillAndExpand"
-             Text="{Binding LocationNotes, Mode=TwoWay}"/>
-    </StackLayout>
+    <ScrollView>
+      <StackLayout VerticalOptions="StartAndExpand" Padding="10">
+        <Label Text="GPS Location"
+               FontAttributes="Bold"/>
+        <Label Text="{Binding Position}" Margin="5"/>
+        <Label Text="Street"
+               FontAttributes="Bold"/>
+        <Entry HorizontalOptions="FillAndExpand"
+               IsEnabled="{Binding IsNotBusy}"
+               Text="{Binding Street, Mode=TwoWay}"/>
+        <Label Text="City"
+               FontAttributes="Bold"/>
+        <Entry HorizontalOptions="FillAndExpand"
+               IsEnabled="{Binding IsNotBusy}"
+               Text="{Binding City, Mode=TwoWay}"/>
+        <Label Text="State"
+               FontAttributes="Bold"/>
+        <Entry HorizontalOptions="FillAndExpand"
+               IsEnabled="{Binding IsNotBusy}"
+               Text="{Binding State, Mode=TwoWay}"/>
+        <Label Text="Zip Code"
+               FontAttributes="Bold"/>
+        <Entry HorizontalOptions="FillAndExpand"
+               IsEnabled="{Binding IsNotBusy}"
+               Text="{Binding ZipCode, Mode=TwoWay}"/>
+        <Label Text="Location Notes"
+               FontAttributes="Bold"/>
+        <Entry HorizontalOptions="FillAndExpand"
+               Text="{Binding LocationNotes, Mode=TwoWay}"/>
+      </StackLayout>
+    </ScrollView>
     <Button Text="Use Last Location"
             Grid.Row="1"
             BackgroundColor="{StaticResource DarkBackgroundColor}"
