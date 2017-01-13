@@ -102,7 +102,7 @@ namespace PITCSurveyApp.Views
             IList<SurveyQuestionAnswerChoiceResponseModel> previousAnswers)
         {
             var choices = new List<SurveyAnswerItemViewModel>(q.AnswerChoices.Count);
-            foreach (var choice in q.AnswerChoices)
+            foreach (var choice in q.AnswerChoices.OrderBy(a => a.AnswerChoiceNum))
             {
                 var previousAnswer = previousAnswers.FirstOrDefault(a => a.AnswerChoiceID == choice.AnswerChoiceID);
                 choices.Add(previousAnswer != null
