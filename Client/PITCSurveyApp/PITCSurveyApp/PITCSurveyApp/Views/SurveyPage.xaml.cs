@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Models;
+using PITCSurveyApp.Services;
 using PITCSurveyApp.ViewModels;
-using PITCSurveyLib;
 using PITCSurveyLib.Models;
 using Xamarin.Forms;
 
@@ -76,6 +74,8 @@ namespace PITCSurveyApp.Views
 
         private async void EndSurvey()
         {
+            DependencyService.Get<IMetricsManagerService>().TrackEvent("SurveyEnded");
+
             Title = "Survey Complete";
             QuestionLabel.Text = "Thank you for participating.";
             HelpTextLabel.Text = "Uploading survey, please wait...";
@@ -86,7 +86,7 @@ namespace PITCSurveyApp.Views
                 await _viewModel.UploadAsync();
                 HelpTextLabel.Text = $"Survey uploaded at {DateTime.Now.ToString("t", CultureInfo.CurrentCulture)}.";
             }
-            catch (Exception ex)
+            catch
             {
                 HelpTextLabel.Text = "Failed to upload survey, please try again from My Surveys menu page.";
             }

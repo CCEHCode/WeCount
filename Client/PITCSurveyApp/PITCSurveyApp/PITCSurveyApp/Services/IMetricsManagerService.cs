@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace PITCSurveyApp.Extensions
+namespace PITCSurveyApp.Services
 {
     public interface IMetricsManagerService
     {

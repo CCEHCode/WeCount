@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using PITCSurveyApp.Helpers;
 using PITCSurveyApp.Models;
+using PITCSurveyApp.Services;
 using Xamarin.Forms;
 
 namespace PITCSurveyApp.ViewModels
@@ -76,6 +77,8 @@ namespace PITCSurveyApp.ViewModels
 
         private async void UploadSelected()
         {
+            DependencyService.Get<IMetricsManagerService>().TrackEvent("MySurveysUploadSelected");
+
             var selectedItem = SelectedItem;
             if (selectedItem == null)
             {
@@ -97,6 +100,8 @@ namespace PITCSurveyApp.ViewModels
 
         private async void UploadAll()
         {
+            DependencyService.Get<IMetricsManagerService>().TrackEvent("MySurveysUploadAll");
+
             var uploadFailed = false;
             var tasks = new List<Task>();
             foreach (var item in Surveys)

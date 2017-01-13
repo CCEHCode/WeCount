@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Helpers;
 using PITCSurveyApp.Models;
+using PITCSurveyApp.Services;
 using PITCSurveyApp.Views;
 using PITCSurveyLib.Models;
 using Plugin.Geolocator;
@@ -169,12 +170,14 @@ namespace PITCSurveyApp.ViewModels
 
         private void UseCurrentLocation()
         {
+            DependencyService.Get<IMetricsManagerService>().TrackEvent("UseCurrentLocation");
             IsBusy = true;
             InitializeLocation();
         }
 
         private void UpdateLastLocation()
         {
+            DependencyService.Get<IMetricsManagerService>().TrackEvent("UseLastLocation");
             s_lastStreet = Street;
             s_lastCity = City;
             s_lastState = State;
@@ -194,7 +197,6 @@ namespace PITCSurveyApp.ViewModels
                     _response.Item.GPSLocation.Lat = position.Latitude;
                     _response.Item.GPSLocation.Lon = position.Longitude;
                     _response.Item.GPSLocation.Accuracy = (float) position.Accuracy;
-                    DependencyService.Get<IMetricsManagerService>().TrackEvent("ReverseGeocode");
                     var address = await Geocoder.ReverseGeocode(position.Latitude, position.Longitude);
                     if (address != null)
                     {

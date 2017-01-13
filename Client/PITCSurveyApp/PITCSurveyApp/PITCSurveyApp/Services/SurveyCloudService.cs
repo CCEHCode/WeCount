@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.MobileServices;
 using Newtonsoft.Json.Linq;
-using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Helpers;
 using PITCSurveyLib.Models;
 using Xamarin.Forms;
@@ -31,7 +30,10 @@ namespace PITCSurveyApp.Services
 
             try
             {
-                return await ApiClient.InvokeApiAsync<SurveyModel>("Surveys", HttpMethod.Get, parameters);
+                using (new LatencyMetric("GetSurvey"))
+                {
+                    return await ApiClient.InvokeApiAsync<SurveyModel>("Surveys", HttpMethod.Get, parameters);
+                }
             }
             catch (Exception ex)
             {
@@ -47,7 +49,10 @@ namespace PITCSurveyApp.Services
                 {"DeviceId", UserSettings.VolunteerId},
             };
 
-            return ApiClient.InvokeApiAsync("SurveyResponses", JObject.FromObject(response), HttpMethod.Post, parameters);
+            using (new LatencyMetric("SubmitSurveyResponse"))
+            {
+                return ApiClient.InvokeApiAsync("SurveyResponses", JObject.FromObject(response), HttpMethod.Post, parameters);
+            }
         }
 
         public static async Task<VolunteerModel> GetVolunteerAsync()
@@ -59,7 +64,10 @@ namespace PITCSurveyApp.Services
 				    {"DeviceId", UserSettings.VolunteerId},
 			    };
 
-				 return await ApiClient.InvokeApiAsync<VolunteerModel>("Volunteers", HttpMethod.Get, parameters);
+                using (new LatencyMetric("GetVolunteer"))
+                {
+                    return await ApiClient.InvokeApiAsync<VolunteerModel>("Volunteers", HttpMethod.Get, parameters);
+                }
             }
             catch (MobileServiceInvalidOperationException ex)
                 when (ex.Response.StatusCode == System.Net.HttpStatusCode.NotFound)
@@ -75,7 +83,10 @@ namespace PITCSurveyApp.Services
 				{"DeviceId", UserSettings.VolunteerId},
 			};
 
-			return ApiClient.InvokeApiAsync("Volunteers", JObject.FromObject(volunteer), HttpMethod.Put, parameters);
+            using (new LatencyMetric("SaveVolunteer"))
+            {
+                return ApiClient.InvokeApiAsync("Volunteers", JObject.FromObject(volunteer), HttpMethod.Put, parameters);
+            }
         }
     }
 }

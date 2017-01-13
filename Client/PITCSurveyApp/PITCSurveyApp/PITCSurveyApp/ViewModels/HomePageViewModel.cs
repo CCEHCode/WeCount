@@ -60,11 +60,13 @@ namespace PITCSurveyApp.ViewModels
 
         private void NewSurvey(object obj)
         {
+            DependencyService.Get<IMetricsManagerService>().TrackEvent("HomePageNewSurvey");
             App.NavigationPage.Navigation.PushAsync(new SurveyLocationPage());
         }
 
         private void LoadSurvey(object obj)
         {
+            DependencyService.Get<IMetricsManagerService>().TrackEvent("HomePageLoadSurvey");
             App.NavigationPage.Navigation.PushAsync(new MySurveysPage());
         }
 
@@ -81,7 +83,6 @@ namespace PITCSurveyApp.ViewModels
             try
             {
                 // TODO: add logic to only periodically check for survey updates
-                DependencyService.Get<IMetricsManagerService>().TrackEvent("GetSurvey");
                 var azureSurvey = await SurveyCloudService.GetSurveyAsync(1); // TODO: Replace with actual SurveyID, from GetAvailableSurveysAsync()
                 if (App.LatestSurvey == null || App.LatestSurvey.Version < azureSurvey.Version)
                 {

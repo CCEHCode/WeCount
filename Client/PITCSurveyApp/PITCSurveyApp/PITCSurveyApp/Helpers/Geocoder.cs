@@ -1,7 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using PITCSurveyApp.Services;
+using Xamarin.Forms;
 
 namespace PITCSurveyApp.Helpers
 {
@@ -15,6 +18,7 @@ namespace PITCSurveyApp.Helpers
             var webRequest = WebRequest.Create(queryString);
             try
             {
+                using (new LatencyMetric("ReverseGeocode"))
                 using (var response = await webRequest.GetResponseAsync())
                 using (var stream = response.GetResponseStream())
                 using (var streamReader = new StreamReader(stream))
@@ -25,8 +29,9 @@ namespace PITCSurveyApp.Helpers
                     return addressJson?.ToObject<AddressResult>();
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                DependencyService.Get<IMetricsManagerService>().TrackException("ReverseGeocodeFailed", ex);
                 return null;
             }
         }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Helpers;
 using PITCSurveyApp.Models;
+using PITCSurveyApp.Services;
 using PITCSurveyApp.Views;
 using PITCSurveyLib.Models;
 using Xamarin.Forms;
@@ -98,6 +99,13 @@ namespace PITCSurveyApp.ViewModels
 
         private async void NextQuestion()
         {
+            var properties = new Dictionary<string, string>
+            {
+                {"CurrentQuestionID", CurrentQuestion?.QuestionID.ToString()},
+            };
+
+            DependencyService.Get<IMetricsManagerService>().TrackEvent("SurveyNextQuestion", properties, null);
+
             await _response.SaveAsync();
             var currentAnswerIds = new HashSet<int>(CurrentAnswers.Select(a => a.AnswerChoiceID));
             var matchingAnswer = CurrentQuestion.AnswerChoices.FirstOrDefault(a => currentAnswerIds.Contains(a.AnswerChoiceID));
@@ -116,6 +124,13 @@ namespace PITCSurveyApp.ViewModels
 
         private async void PreviousQuestion()
         {
+            var properties = new Dictionary<string, string>
+            {
+                {"CurrentQuestionID", CurrentQuestion?.QuestionID.ToString()},
+            };
+
+            DependencyService.Get<IMetricsManagerService>().TrackEvent("SurveyPreviousQuestion", properties, null);
+
             await _response.SaveAsync();
             var previousId = int.MinValue;
             if (_isSurveyEnded)
@@ -146,6 +161,7 @@ namespace PITCSurveyApp.ViewModels
 
         private async void EditLocation()
         {
+            DependencyService.Get<IMetricsManagerService>().TrackEvent("SurveyEditLocation");
             await App.NavigationPage.Navigation.PushAsync(new SurveyLocationPage(_response, true));
         }
 

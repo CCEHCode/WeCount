@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Helpers;
+using PITCSurveyApp.Services;
 using PITCSurveyApp.ViewModels;
 using PITCSurveyApp.Views;
 using PITCSurveyLib;
@@ -105,6 +106,7 @@ namespace PITCSurveyApp.Models
 
         private async void Delete()
         {
+            DependencyService.Get<IMetricsManagerService>().TrackEvent("MySurveysItemDelete");
             await _fileHelper.DeleteAsync(_filename);
             Deleted?.Invoke(this, new EventArgs());
         }
@@ -113,6 +115,7 @@ namespace PITCSurveyApp.Models
         {
             try
             {
+                DependencyService.Get<IMetricsManagerService>().TrackEvent("MySurveysItemUpload");
                 await UploadAsync();
             }
             catch (Exception ex)
@@ -126,6 +129,7 @@ namespace PITCSurveyApp.Models
 
         public async void Edit()
         {
+            DependencyService.Get<IMetricsManagerService>().TrackEvent("MySurveysItemEdit");
             await App.NavigationPage.PushAsync(new SurveyPage(_response));
         }
 

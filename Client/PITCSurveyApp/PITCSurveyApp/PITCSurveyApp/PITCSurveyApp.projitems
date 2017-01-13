@@ -14,17 +14,18 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EnumerableExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\FileHelperExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\IMetricsManagerService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\SurveyResponseModelExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\AddressResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\CrossHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\FileHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Geocoder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\IFileHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\LatencyMetric.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ObservableObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\UserSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\UploadedItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\IAuthenticate.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\IMetricsManagerService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\SurveyCloudService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\BaseViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\HomePageViewModel.cs" />

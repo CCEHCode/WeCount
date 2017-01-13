@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.HockeyApp;
-using PITCSurveyApp.Extensions;
+using PITCSurveyApp.Services;
 
 [assembly: Xamarin.Forms.Dependency(typeof(PITCSurveyApp.UWP.MetricsManagerService))]
 

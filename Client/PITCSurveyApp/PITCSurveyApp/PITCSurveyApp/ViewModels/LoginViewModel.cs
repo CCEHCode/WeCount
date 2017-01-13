@@ -1,5 +1,7 @@
-﻿using Microsoft.WindowsAzure.MobileServices;
+﻿using System.Collections.Generic;
+using Microsoft.WindowsAzure.MobileServices;
 using PITCSurveyApp.Helpers;
+using PITCSurveyApp.Services;
 using Xamarin.Forms;
 
 namespace PITCSurveyApp.ViewModels
@@ -11,7 +13,7 @@ namespace PITCSurveyApp.ViewModels
             IsBusy = true;
             MicrosoftLoginCommand = new Command(() => SignIn(MobileServiceAuthenticationProvider.MicrosoftAccount), () => IsNotBusy);
             GoogleLoginCommand = new Command(() => SignIn(MobileServiceAuthenticationProvider.Google), () => IsNotBusy);
-            NotNowCommand = new Command(App.GoToMainPage, () => IsNotBusy);
+            NotNowCommand = new Command(SkipLogin, () => IsNotBusy);
             RefreshUser();
         }
 
@@ -25,10 +27,22 @@ namespace PITCSurveyApp.ViewModels
 
         public Command MicrosoftLoginCommand { get; }
 
+        private void SkipLogin()
+        {
+            DependencyService.Get<IMetricsManagerService>().TrackEvent("LoginPageSkipLogin");
+            App.GoToMainPage();
+        }
+
         private async void SignIn(MobileServiceAuthenticationProvider provider)
         {
             try
             {
+                var properties = new Dictionary<string, string>
+                {
+                    {"LoginProvider", provider.ToString()}
+                };
+
+                DependencyService.Get<IMetricsManagerService>().TrackEvent("LoginPageLogin", properties, null);
                 await App.LoginAsync(provider);
             }
             finally

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.MobileServices;
 using PITCSurveyApp.Extensions;
@@ -220,6 +221,13 @@ namespace PITCSurveyApp.ViewModels
 
         private async void SignIn(MobileServiceAuthenticationProvider provider)
         {
+            var properties = new Dictionary<string, string>
+            {
+                {"LoginProvider", provider.ToString()}
+            };
+
+            DependencyService.Get<IMetricsManagerService>().TrackEvent("ProfilePageLogin", properties, null);
+
             await App.LoginAsync(provider);
             OnPropertyChanged(nameof(IsAnonymous));
             OnPropertyChanged(nameof(IsLoggedIn));
@@ -229,6 +237,7 @@ namespace PITCSurveyApp.ViewModels
 
         private async void Logout()
         {
+            DependencyService.Get<IMetricsManagerService>().TrackEvent("ProfilePageLogout");
             await App.LogoutAsync();
             OnPropertyChanged(nameof(IsAnonymous));
             OnPropertyChanged(nameof(IsLoggedIn));
@@ -237,7 +246,7 @@ namespace PITCSurveyApp.ViewModels
         }
 
         private async void SaveProfile()
-        {
+        {        
             try
             {
                 SaveButtonText = "Saving...";
