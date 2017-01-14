@@ -1,3 +1,4 @@
+using PhoneNumbers;
 using PITCSurveyApp.Helpers;
 using System;
 using Xamarin.Forms;
@@ -16,8 +17,17 @@ namespace PITCSurveyApp.UWP.Helpers
 
 		public bool IsValidPhone(string PhoneNumber)
 		{
-			// UWP doesn't seem to be supported by Google's libphonenumber
-			return true;
+			var Util = PhoneNumberUtil.GetInstance();
+
+			try
+			{
+				var PhNum = Util.Parse(PhoneNumber, "US");
+				return Util.IsValidNumber(PhNum);
+			}
+			catch (Exception)
+			{
+				return false;
+			}
 		}
 	}
 }
