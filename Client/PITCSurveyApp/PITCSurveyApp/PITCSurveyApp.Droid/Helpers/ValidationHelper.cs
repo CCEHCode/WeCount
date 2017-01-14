@@ -4,7 +4,7 @@ using System;
 using System.Net.Mail;
 using Xamarin.Forms;
 
-[assembly: Dependency(typeof(PITCSurveyApp.Droid.Helpers.FileHelper))]
+[assembly: Dependency(typeof(PITCSurveyApp.Droid.Helpers.ValidationHelper))]
 
 namespace PITCSurveyApp.Droid.Helpers
 {

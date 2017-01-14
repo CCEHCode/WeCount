@@ -14,6 +14,8 @@ namespace PITCSurveyApp.ViewModels
         private const int SaveButtonMessageDelay = 3000;
         private const string DefaultSaveButtonText = "Save Profile";
 
+		private IValidationHelper _ValidationHelper = new ValidationHelper();
+
         private string _saveButtonText = DefaultSaveButtonText;
 
         private string _currentFirstName;
@@ -64,6 +66,10 @@ namespace PITCSurveyApp.ViewModels
             !string.IsNullOrWhiteSpace(LastName) &&
             !string.IsNullOrWhiteSpace(Email) &&
             !string.IsNullOrWhiteSpace(MobilePhone) &&
+			// Validation
+			_ValidationHelper.IsValidEmail(Email) &&
+			_ValidationHelper.IsValidPhone(MobilePhone) &&
+			// End validation
             HasProfileChanged;
 
         public string SaveButtonText
