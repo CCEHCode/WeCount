@@ -7,6 +7,8 @@ using System.Diagnostics;
 using System;
 using Microsoft.ApplicationInsights;
 using System.Collections.Generic;
+using Microsoft.Azure.Mobile.Server.Authentication;
+using System.Threading.Tasks;
 
 namespace PITCSurveySvc.Controllers
 {
@@ -20,7 +22,7 @@ namespace PITCSurveySvc.Controllers
 
 		protected Volunteer GetAuthenticatedVolunteer(Guid? DeviceID = null)
 		{
-			Trace.TraceInformation($"User authenticated: {User.Identity.IsAuthenticated}, DeviceID: {DeviceID.ToString()}");
+			Trace.TraceInformation($"User authenticated: {User.Identity.IsAuthenticated}, DeviceID: {DeviceID?.ToString()}");
 
 			Volunteer Volunteer = null;
 
@@ -30,11 +32,7 @@ namespace PITCSurveySvc.Controllers
 				{
 					Trace.TraceInformation($"User is authenticated. Name: {User.Identity?.Name}, {User.Identity?.AuthenticationType}");
 
-					ClaimsIdentity ci = (ClaimsIdentity)User.Identity;
-
-					Trace.TraceInformation($"User email (via provider): {ci.FindFirst(ClaimTypes.Email)?.Value}");
-
-					var Claimant = (ClaimsIdentity)User.Identity;
+					ClaimsIdentity Claimant = (ClaimsIdentity)User.Identity;
 
 					string sid = Claimant.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -44,18 +42,15 @@ namespace PITCSurveySvc.Controllers
 
 					if (Volunteer == null)
 					{
+						// TODO: If we have a DeviceID match, should we link this to that volunteer? Probably...
+
 						Trace.TraceInformation("Adding new volunteer.");
 
 						// Volunteer not already recognized, add.
 
-						Volunteer = new Volunteer
-						{
-							AuthID = sid,
-							AuthProvider = Claimant.FindFirst(IdentityProvider)?.Value,
-							FirstName = ci.FindFirst(ClaimTypes.GivenName)?.Value,
-							LastName = ci.FindFirst(ClaimTypes.Surname)?.Value,
-							Email = ci.FindFirst(ClaimTypes.Email)?.Value
-						};
+						Volunteer = new Volunteer()	{ AuthID = sid, AuthProvider = Claimant.FindFirst(IdentityProvider)?.Value };
+
+						FillProviderDetails(Claimant, Volunteer);
 
 						db.Volunteers.Add(Volunteer);
 
@@ -63,6 +58,9 @@ namespace PITCSurveySvc.Controllers
 
 						Telemetry.TrackEvent("NewVolunteer", new Dictionary<string, string>() { { "IdType", Volunteer.AuthProvider }, { "VolunteerId", Volunteer.ID.ToString() } });
 					}
+
+					// TODO: Remove this later, for now useful for debugging
+					FillProviderDetails(Claimant, Volunteer);
 				}
 				catch (System.Exception ex)
 				{
@@ -149,6 +147,59 @@ namespace PITCSurveySvc.Controllers
 			}
 
 			return Volunteer;
+		}
+
+		private void FillProviderDetails(ClaimsIdentity Claimant, Volunteer Volunteer)
+		{
+			Trace.TraceInformation($"User email (via provider): {Claimant?.FindFirst(ClaimTypes.Email)?.Value}");
+
+			ProviderCredentials Creds = null;
+
+			switch (Claimant.FindFirst(IdentityProvider)?.Value)
+			{
+				case "google":
+					Trace.TraceInformation("Trying to get Google profile info...");
+					Creds = AwaitTask(this.User.GetAppServiceIdentityAsync<GoogleCredentials>(this.Request), 2000);
+					break;
+
+				case "microsoftaccount":
+					Trace.TraceInformation("Trying to get Microsoft profile info...");
+					Creds = AwaitTask(this.User.GetAppServiceIdentityAsync<MicrosoftAccountCredentials>(this.Request), 2000);
+					break;
+			}
+
+			Trace.TraceInformation($"Creds null: {(Creds == null)}, id: {Creds?.UserId}, count: {Creds?.UserClaims.Count().ToString()}");
+
+			if (Claimant != null && Claimant.Claims.Any())
+			{
+				Trace.TraceInformation("ClaimsIdentity claims:");
+
+				foreach (var Claim in Claimant.Claims)
+				{
+					Trace.TraceInformation($"    {Claim.Type} = {Claim.Value}");
+				}
+			}
+
+			if (Creds != null && Creds.UserClaims.Any())
+			{
+				Trace.TraceInformation("ProviderCredentials claims:");
+
+				foreach (var Claim in Creds.UserClaims)
+				{
+					Trace.TraceInformation($"    {Claim.Type} = {Claim.Value}");
+				}
+			}
+			
+			Volunteer.FirstName = Claimant?.FindFirst(ClaimTypes.GivenName)?.Value;
+			Volunteer.LastName = Claimant?.FindFirst(ClaimTypes.Surname)?.Value;
+			Volunteer.Email = Claimant?.FindFirst(ClaimTypes.Email)?.Value;
+		}
+
+		static T AwaitTask<T>(Task<T> Task, int Timeout) where T : class
+		{
+			Task.Wait(Timeout);
+
+			return (Task.IsCompleted) ? Task.Result : null;
 		}
 
 		#region "IDisposable"
