@@ -2,7 +2,7 @@
   "dependencies": {
     "HockeySDK.UWP": "4.1.5",
     "libphonenumber_uwp": "1.0.0",
-    "Microsoft.Azure.Mobile.Client": "3.0.3",
+    "Microsoft.Azure.Mobile.Client": "3.1.0",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
     "Microsoft.Rest.ClientRuntime": "2.3.4",
     "Newtonsoft.Json": "9.0.1",
