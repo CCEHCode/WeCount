@@ -4,6 +4,11 @@ using PITCSurveyLib;
 using PITCSurveyLib.Models;
 using PITCSurveyEntities.Entities;
 using System.Linq;
+using Microsoft.WindowsAzure.MobileServices;
+using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace PITCSurveySvc.Tests
 {
@@ -11,6 +16,9 @@ namespace PITCSurveySvc.Tests
 	public class APITests
 	{
 		private const string APIURL = "https://appname.azurewebsites.net";
+		private readonly string _DeviceId = "07678abf-857c-4266-a1e1-4552c97db13c";
+
+		private MobileServiceClient ApiClient = new MobileServiceClient(APIURL);
 
 		private PITCSurveyContext db = new PITCSurveyContext();
 
@@ -19,16 +27,39 @@ namespace PITCSurveySvc.Tests
 		{
 			try
 			{
-				var result = APIHelper.SubmitSurveyResponse(null);
+				SubmitSurveyResponse(null, _DeviceId);
 
-				Assert.IsFalse(result, "Null submission should be rejected.");
+				Assert.Fail("Null submission should be rejected.");
+			}
+			catch (AssertFailedException)
+			{
+				throw;
 			}
 			catch (Exception ex)
 			{
 				System.Diagnostics.Trace.WriteLine("Null response error: " + ex.ToString());
-				//Assert.Fail(ex.Message);
 			}
+		}
 
+		[TestMethod]
+		public void TestSubmitResponse_NoAuthNoDeviceId()
+		{
+			try
+			{
+				var Resp = TestHelpers.GenerateRandomResponseForSurvey(db.Surveys.Where(s => s.ID == 1).Single());
+
+				SubmitSurveyResponse(Resp, null);
+
+				Assert.Fail("Unauthenticated, null DeviceId submission should be rejected.");
+			}
+			catch (AssertFailedException)
+			{
+				throw;
+			}
+			catch (Exception ex)
+			{
+				System.Diagnostics.Trace.WriteLine("Unauth no DeviceId response error: " + ex.ToString());
+			}
 		}
 
 		[TestMethod]
@@ -36,22 +67,10 @@ namespace PITCSurveySvc.Tests
 		{
 			var Resp = TestHelpers.GenerateRandomResponseForSurvey(db.Surveys.Where(s => s.ID == 1).Single());
 
-			Resp.ResponseIdentifier = Guid.NewGuid();
-
-			try
-			{
-				var result = APIHelper.SubmitSurveyResponse(Resp);
-
-				Assert.IsTrue(result, "This should have worked.");
-			}
-			catch (APIException ex)
-			{
-				//Assert.Fail("Response submission failed: " + ex.Message);
-				Assert.Fail(ex.Message);
-			}
-
+			SubmitSurveyResponse(Resp, _DeviceId);
 		}
 
+		/*
 		[TestMethod]
 		public void TestSubmitResponse_MakeABunch()
 		{
@@ -59,21 +78,10 @@ namespace PITCSurveySvc.Tests
 			{
 				var Resp = TestHelpers.GenerateRandomResponseForSurvey(db.Surveys.Where(s => s.ID == 1).Single());
 
-				Resp.ResponseIdentifier = Guid.NewGuid();
-
-				try
-				{
-					var result = APIHelper.SubmitSurveyResponse(Resp);
-
-					//Assert.IsTrue(result, "This should have worked.");
-				}
-				catch (APIException ex)
-				{
-					//Assert.Fail("Response submission failed: " + ex.Message);
-					Assert.Fail(ex.Message);
-				}
+				var result = SubmitSurveyResponse(Resp, DeviceId);
 			}
 		}
+		*/
 
 		[TestMethod]
 		public void TestSubmitResponse_Duplicate()
@@ -82,19 +90,17 @@ namespace PITCSurveySvc.Tests
 
 			Resp.ResponseIdentifier = Guid.Empty;
 
-			try
-			{
-				var result = APIHelper.SubmitSurveyResponse(Resp);
+			SubmitSurveyResponse(Resp, _DeviceId);
+		}
 
-				// NOTE: API spec is to accept this. So, ok then.
-				// Assert.IsFalse(result, "Duplicate submission should have failed.");
-			}
-			catch (APIException ex)
+		private void SubmitSurveyResponse(SurveyResponseModel Response, String DeviceId)
+		{
+			var parameters = new Dictionary<string, string>
 			{
-				System.Diagnostics.Trace.WriteLine("Duplicate response error: " + ex.ToString());
-				Assert.Fail(ex.Message);
-			}
+				{"DeviceId", DeviceId },
+			};
 
+			ApiClient.InvokeApiAsync("SurveyResponses", JObject.FromObject(Response), HttpMethod.Post, parameters).Wait();
 		}
 	}
 }
