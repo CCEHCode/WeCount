@@ -55,7 +55,7 @@ namespace PITCSurveySvc.Models
 						AnswerChoiceNum = ac.AnswerChoiceNum,
 						AnswerChoiceText = ac.AnswerChoice.AnswerText,
 						AdditionalAnswerDataFormat = ac.AnswerChoice.AdditionalAnswerDataFormat,
-						NextQuestionID = (ac.EndSurvey) ? SurveyQuestionAnswerChoiceModel.END_SURVEY : ac.NextSurveyQuestion_ID,
+						NextQuestionID = (ac.EndSurvey) ? SurveyQuestionAnswerChoiceModel.END_SURVEY : ac.NextSurveyQuestion?.Question_ID,
 						EndSurvey = ac.EndSurvey
 					};
 
@@ -260,8 +260,7 @@ namespace PITCSurveySvc.Models
 			{
 				Survey_ID = Model.SurveyID,
 				Survey_Version = Model.Survey_Version,
-				//Volunteer_ID = _db.Volunteers.Where(v => v.AuthID == Model.InterviewerID).Single().ID,
-				GPSLocation = (Model.GPSLocation != null) ? System.Data.Entity.Spatial.DbGeography.PointFromText($"Point({Model.GPSLocation.Lon} {Model.GPSLocation.Lat})", CoordinateSystemID) : null,
+				GPSLocation = (Model.GPSLocation?.Lat != null && Model.GPSLocation?.Lon != null) ? System.Data.Entity.Spatial.DbGeography.PointFromText($"Point({Model.GPSLocation.Lon} {Model.GPSLocation.Lat})", CoordinateSystemID) : null,
 				LocationNotes = Model.LocationNotes,
 				NearestAddress = Model.NearestAddress ?? new PITCSurveyLib.Address(),
 				ResponseIdentifier = Model.ResponseIdentifier,
