@@ -12,7 +12,7 @@ using PITCSurveyApp.Services;
 
 namespace PITCSurveyApp.Droid
 {
-    [Activity (Label = "PITC Survey App", Theme = "@style/MainTheme", Icon = "@drawable/icon", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity (Label = "We Count Survey", Theme = "@style/MainTheme", Icon = "@drawable/icon", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
 	public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity, IAuthenticate
 	{
         protected override void OnCreate (Bundle bundle)
