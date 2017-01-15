@@ -68,7 +68,7 @@ namespace PITCSurveySvc.Controllers
 			// We don't use this here, but it ensures the volunteer record is created if it doesn't exist yet.
 			Volunteer sv = GetAuthenticatedVolunteer();
 			
-			Survey Survey = db.Surveys.Where(s => s.ID == ID).SingleOrDefault();
+			Survey Survey = db.Surveys.Include("SurveyQuestions").Include("SurveyQuestions.Question").Include("SurveyQuestions.AnswerChoices").Where(s => s.ID == ID).SingleOrDefault();
 			if (Survey == null)
 				return NotFound();
 

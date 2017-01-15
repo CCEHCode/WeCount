@@ -5,6 +5,7 @@ using Swashbuckle.Swagger.Annotations;
 using System;
 using System.Data;
 using System.Data.Entity.Validation;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -32,25 +33,25 @@ namespace PITCSurveySvc.Controllers
 		[SwaggerResponse(HttpStatusCode.BadRequest, "The survey data wasn't acceptable (improper formatting, etc.).")]
 		[SwaggerResponse(HttpStatusCode.NoContent, "SurveyResponse uploaded successfully.")]
 		[AllowAnonymous]
-		public IHttpActionResult PostSurveyResponse(SurveyResponseModel SurveyResponse, Guid DeviceId)
+		public IHttpActionResult PostSurveyResponse(SurveyResponseModel SurveyResponse, Guid? DeviceId)
 		{
 			Volunteer sv = GetAuthenticatedVolunteer(DeviceId);
 
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 
+			if (!DeviceId.HasValue)
+				return BadRequest("The DeviceId was not specified.");
+			else if (DeviceId.Value == Guid.Empty)
+				return BadRequest("The DeviceId was not valid.");
+
 			if (sv == null)
 				return BadRequest("The specified InterviewerID is not recognized. User not logged in?");
 
 			SurveyResponse sr = db.SurveyResponses.Where(r => r.ResponseIdentifier == SurveyResponse.ResponseIdentifier).SingleOrDefault();
 			if (sr != null)
-			{
-				//return BadRequest("Survey already uploaded.");
-				//return StatusCode(HttpStatusCode.Conflict);
-
 				// Delete current response to replace with new one
 				db.SurveyResponses.Remove(sr);
-			}
 
 			try
 			{
@@ -58,10 +59,9 @@ namespace PITCSurveySvc.Controllers
 
 				SurveyResponse Response = Converter.ConvertToEntity(SurveyResponse);
 
-				//Response.Volunteer_ID = 1;
 				Response.Volunteer = sv;
 
-				Response.DeviceId = DeviceId;
+				Response.DeviceId = DeviceId.Value;
 
 				Response.DateUploaded = DateTime.UtcNow;
 
@@ -84,10 +84,12 @@ namespace PITCSurveySvc.Controllers
 						sb.AppendLine($"{ve.PropertyName}: {ve.ErrorMessage}");
 					}
 				}
+				Trace.TraceError("Error processing SurveyResponse: " + evex.ToString());
 				throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, sb.ToString())); // InternalServerError(new ApplicationException(sb.ToString(), evex));
 			}
 			catch (Exception ex)
 			{
+				Trace.TraceError("Error processing SurveyResponse: " + ex.ToString());
 				throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.ToString()));	// return Content(HttpStatusCode.InternalServerError, ex.ToString()); // InternalServerError(ex);
 			}
 		}

@@ -17,9 +17,10 @@ namespace PITCSurveySvc.Controllers
 		[SwaggerOperation("GetVolunteer")]
 		[SwaggerResponse(HttpStatusCode.OK, "Volunteer found", typeof(VolunteerModel))]
 		[ResponseType(typeof(VolunteerModel))]
-        public IHttpActionResult GetVolunteer()
+		[AllowAnonymous]
+		public IHttpActionResult GetVolunteer(Guid DeviceId)
         {
-            Volunteer Volunteer = GetAuthenticatedVolunteer();
+            Volunteer Volunteer = GetAuthenticatedVolunteer(DeviceId);
 
             if (Volunteer == null)
                 return NotFound();
@@ -31,7 +32,8 @@ namespace PITCSurveySvc.Controllers
 		[SwaggerOperation("UpdateVolunteer")]
 		[SwaggerResponse(HttpStatusCode.NoContent, "Volunteer updated")]
 		[ResponseType(typeof(void))]
-        public IHttpActionResult PutVolunteer(VolunteerModel Volunteer, Guid DeviceId)
+		[AllowAnonymous]
+		public IHttpActionResult PutVolunteer(VolunteerModel Volunteer, Guid DeviceId)
         {
 			Volunteer sv = GetAuthenticatedVolunteer(DeviceId);
 
