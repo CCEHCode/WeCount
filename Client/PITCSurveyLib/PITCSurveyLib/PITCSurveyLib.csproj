@@ -41,6 +41,7 @@
     <Compile Include="Address.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="GPSLocation.cs" />
+    <Compile Include="Models\ContactInfoModels.cs" />
     <Compile Include="Models\SurveyModels.cs" />
     <Compile Include="Models\SurveyResponseModels.cs" />
     <Compile Include="Models\SurveySummaryModels.cs" />
