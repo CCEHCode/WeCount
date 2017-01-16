@@ -17,7 +17,8 @@ namespace PITCSurveyApp.Helpers
 			}
 			catch (Exception ex)
 			{
-				System.Diagnostics.Trace.TraceError($"Validation for PhoneNumber failed: {ex.Message}");
+				// Used for testing in Droid & iOS. Have to block out for UWP - somehow, again, the Windows platform is the only one that doesn't support much of .NET!
+				//System.Diagnostics.Trace.TraceError($"Validation for PhoneNumber failed: {ex.Message}");
 				return false;
 			}
 		}
@@ -30,7 +31,8 @@ namespace PITCSurveyApp.Helpers
 			}
 			catch (Exception ex)
 			{
-				System.Diagnostics.Trace.TraceError($"Validation for EmailAddress failed: {ex.Message}");
+				// Used for testing in Droid & iOS. Have to block out for UWP - somehow, again, the Windows platform is the only one that doesn't support much of .NET!
+				//System.Diagnostics.Trace.TraceError($"Validation for EmailAddress failed: {ex.Message}");
 				return false;
 			}
 		}
