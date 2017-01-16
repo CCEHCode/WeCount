@@ -11,6 +11,7 @@ namespace PITCSurveyApp.Droid.Helpers
 {
     class FileHelper : IFileHelper
     {
+		/* ATY: I believe these can all be handled in the PCL
         public Task<bool> ExistsAsync(string filename)
         {
             var filepath = GetFilePath(filename);
@@ -60,10 +61,11 @@ namespace PITCSurveyApp.Droid.Helpers
         {
             return Path.Combine(GetDocsPath(), filename);
         }
+		*/
 
-        string GetDocsPath()
+		public Task<string> GetDocsPath()
         {
-            return Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            return Task.FromResult(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
         }
     }
 }

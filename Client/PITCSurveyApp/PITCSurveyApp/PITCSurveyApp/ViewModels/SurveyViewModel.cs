@@ -18,7 +18,8 @@ namespace PITCSurveyApp.ViewModels
     /// </summary>
     public class SurveyViewModel : BaseViewModel
     {
-        private readonly IFileHelper _fileHelper = new FileHelper();
+		//private readonly IFileHelper _fileHelper = new FileHelper();
+		private readonly FileHelper _fileHelper = new FileHelper();
         private readonly UploadedItem<SurveyResponseModel> _response;
 
         private int _index;

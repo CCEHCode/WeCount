@@ -16,7 +16,8 @@ namespace PITCSurveyApp.Models
 {
     class MySurveysItemViewModel : BaseViewModel
     {
-        private readonly IFileHelper _fileHelper = new FileHelper();
+		//private readonly IFileHelper _fileHelper = new FileHelper();
+		private readonly FileHelper _fileHelper = new FileHelper();
         private readonly string _filename;
 
         private UploadedItem<SurveyResponseModel> _response;
