@@ -21,17 +21,16 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>MinimumOSVersion</key>
-	<string>6.0</string>
+	<string>7.0</string>
 	<key>CFBundleDisplayName</key>
 	<string>PITCSurveyApp</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.CECH.PITCSurveyApp</string>
+	<string>org.cceh.pitcsurveyapp</string>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>CFBundleIconFiles</key>
 	<array>
 		<string>Icon-60@2x.png</string>
-		<string>Icon-60@3x.png</string>
 		<string>Icon-76.png</string>
 		<string>Icon-76@2x.png</string>
 		<string>Default.png</string>
@@ -41,10 +40,8 @@
 		<string>Default-Portrait@2x.png</string>
 		<string>Icon-Small-40.png</string>
 		<string>Icon-Small-40@2x.png</string>
-		<string>Icon-Small-40@3x.png</string>
 		<string>Icon-Small.png</string>
 		<string>Icon-Small@2x.png</string>
-		<string>Icon-Small@3x.png</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen.storyboard</string>
@@ -54,5 +51,7 @@
 	<string>Can we use your location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>We are using your location</string>
+	<key>CFBundleShortVersionString</key>
+	<string></string>
 </dict>
 </plist>
