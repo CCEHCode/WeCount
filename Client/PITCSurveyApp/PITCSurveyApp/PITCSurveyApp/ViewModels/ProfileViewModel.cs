@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.MobileServices;
-using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Helpers;
 using PITCSurveyApp.Services;
 using Xamarin.Forms;
@@ -14,7 +13,7 @@ namespace PITCSurveyApp.ViewModels
         private const int SaveButtonMessageDelay = 3000;
         private const string DefaultSaveButtonText = "Save Profile";
 
-		private IValidationHelper _ValidationHelper = new ValidationHelper();
+		private IValidationHelper _validationHelper = new ValidationHelper();
 
         private string _saveButtonText = DefaultSaveButtonText;
 
@@ -66,10 +65,8 @@ namespace PITCSurveyApp.ViewModels
             !string.IsNullOrWhiteSpace(LastName) &&
             !string.IsNullOrWhiteSpace(Email) &&
             !string.IsNullOrWhiteSpace(MobilePhone) &&
-			// Validation
-			_ValidationHelper.IsValidEmail(Email) &&
-			_ValidationHelper.IsValidPhone(MobilePhone) &&
-			// End validation
+			_validationHelper.IsValidEmail(Email) &&
+			_validationHelper.IsValidPhone(MobilePhone) &&
             HasProfileChanged;
 
         public string SaveButtonText

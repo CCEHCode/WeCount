@@ -1,39 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using PITCSurveyApp.Services;
 using Xamarin.Forms;
 
 namespace PITCSurveyApp.Helpers
 {
     class ValidationHelper: IValidationHelper
     {
-		private readonly IValidationHelper _ValidationHelper = DependencyService.Get<IValidationHelper>();
+		private readonly IValidationHelper _validationHelper = DependencyService.Get<IValidationHelper>();
 
-		public bool IsValidPhone(string PhoneNumber)
+		public bool IsValidPhone(string phoneNumber)
 		{
 			try
 			{
-				return _ValidationHelper.IsValidPhone(PhoneNumber);
+				return _validationHelper.IsValidPhone(phoneNumber);
 			}
 			catch (Exception ex)
 			{
-				// Used for testing in Droid & iOS. Have to block out for UWP - somehow, again, the Windows platform is the only one that doesn't support much of .NET!
-				//System.Diagnostics.Trace.TraceError($"Validation for PhoneNumber failed: {ex.Message}");
+			    DependencyService.Get<IMetricsManagerService>().TrackException("PhoneValidationFailure", ex);
 				return false;
 			}
 		}
 
-		public bool IsValidEmail(string EmailAddress)
+		public bool IsValidEmail(string emailAddress)
 		{
 			try
 			{
-				return _ValidationHelper.IsValidEmail(EmailAddress);
+				return _validationHelper.IsValidEmail(emailAddress);
 			}
 			catch (Exception ex)
 			{
-				// Used for testing in Droid & iOS. Have to block out for UWP - somehow, again, the Windows platform is the only one that doesn't support much of .NET!
-				//System.Diagnostics.Trace.TraceError($"Validation for EmailAddress failed: {ex.Message}");
-				return false;
+                DependencyService.Get<IMetricsManagerService>().TrackException("PhoneValidationFailure", ex);
+                return false;
 			}
 		}
     }

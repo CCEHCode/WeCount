@@ -47,6 +47,5 @@ namespace PITCSurveyApp.ViewModels
 			App.NavigationPage.Navigation.PushAsync(new ContactInfoPage());
 			App.MenuIsPresented = false;
 		}
-
 	}
 }

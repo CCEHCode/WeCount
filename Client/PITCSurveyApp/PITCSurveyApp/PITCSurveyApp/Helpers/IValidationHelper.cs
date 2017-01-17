@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PITCSurveyApp.Helpers
+﻿namespace PITCSurveyApp.Helpers
 {
     interface IValidationHelper
     {
-		bool IsValidPhone(string PhoneNumber);
+		bool IsValidPhone(string phoneNumber);
 
-		bool IsValidEmail(string EmailAddress);
+		bool IsValidEmail(string emailAddress);
 	}
 }

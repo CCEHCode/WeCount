@@ -10,13 +10,13 @@ namespace PITCSurveyApp.iOS.Helpers
 {
 	class ValidationHelper : IValidationHelper
 	{
-		public bool IsValidEmail(string EmailAddress)
+		public bool IsValidEmail(string emailAddress)
 		{
 			try
 			{
 
 				// This is RFC-5322 compliant.
-				MailAddress Addr = new MailAddress(EmailAddress);
+				var address = new MailAddress(emailAddress);
 				return true;
 			}
 			catch (Exception)
@@ -25,14 +25,14 @@ namespace PITCSurveyApp.iOS.Helpers
 			}
 		}
 
-		public bool IsValidPhone(string PhoneNumber)
+		public bool IsValidPhone(string phoneNumber)
 		{
-			var Util = PhoneNumberUtil.getInstance();
+			var util = PhoneNumberUtil.getInstance();
 
 			try
 			{
-				var PhNum = Util.parse(PhoneNumber, "US");
-				return Util.isValidNumber(PhNum);
+				var parsedPhoneNumber = util.parse(phoneNumber, "US");
+				return util.isValidNumber(parsedPhoneNumber);
 			}
 			catch (Exception)
 			{
