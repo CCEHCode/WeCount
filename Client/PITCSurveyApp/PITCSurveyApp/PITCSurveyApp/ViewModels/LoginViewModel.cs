@@ -37,6 +37,8 @@ namespace PITCSurveyApp.ViewModels
         {
             try
             {
+                IsBusy = true;
+
                 var properties = new Dictionary<string, string>
                 {
                     {"LoginProvider", provider.ToString()}
@@ -47,7 +49,7 @@ namespace PITCSurveyApp.ViewModels
             }
             finally
             {
-#if WINDOWS_UWP
+#if !__ANDROID__
                 // Updating the main page here will cause an exception for Android
                 // Instead, for Android and iOS, we wait for the view to send the
                 // `OnAppearing` event and update the main page then.
@@ -55,7 +57,9 @@ namespace PITCSurveyApp.ViewModels
                 {
                     App.GoToMainPage();
                 }
+
 #endif
+                IsBusy = false;
             }
         }
 

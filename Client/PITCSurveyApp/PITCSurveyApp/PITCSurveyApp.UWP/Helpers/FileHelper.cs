@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
@@ -19,7 +20,7 @@ namespace PITCSurveyApp.UWP.Helpers
             {
 				await localFolder.GetFileAsync(filename);
             }
-            catch
+            catch (FileNotFoundException)
             {
                 return false;
             }

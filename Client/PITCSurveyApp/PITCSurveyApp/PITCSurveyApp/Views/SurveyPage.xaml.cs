@@ -57,8 +57,12 @@ namespace PITCSurveyApp.Views
                 var choices = CreateChoices(q, _viewModel.CurrentAnswers);
 	            foreach (var choice in choices)
 	            {
-	                var view = new SurveyAnswerItemView(choice);
-	                var stackLayout = new StackLayout();
+#if __ANDROID__
+                    var view = new SurveyAnswerItemAndroidView(choice);
+#else
+                    var view = new SurveyAnswerItemView(choice);
+#endif
+                    var stackLayout = new StackLayout();
 	                stackLayout.Children.Add(view);
                     answerOptionsStackLayout.Children.Add(stackLayout);
 	            }

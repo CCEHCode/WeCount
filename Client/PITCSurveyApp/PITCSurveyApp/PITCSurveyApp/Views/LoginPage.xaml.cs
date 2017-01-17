@@ -15,7 +15,7 @@ namespace PITCSurveyApp.Views
 			InitializeComponent ();
 		}
 
-#if !WINDOWS_UWP
+#if __ANDROID__
         protected override void OnAppearing()
         {
             // Windows does not fire the event after returning from the
