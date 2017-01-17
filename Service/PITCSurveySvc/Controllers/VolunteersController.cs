@@ -3,7 +3,6 @@ using PITCSurveyLib.Models;
 using PITCSurveySvc.Models;
 using Swashbuckle.Swagger.Annotations;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Web.Http;
 using System.Web.Http.Description;

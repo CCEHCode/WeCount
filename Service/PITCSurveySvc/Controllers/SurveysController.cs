@@ -17,8 +17,8 @@ namespace PITCSurveySvc.Controllers
 	/// Controller for Surveys (blank forms).
 	/// </summary>
 	public class SurveysController : BaseController
-    {
-		
+	{
+
 		// GET: api/Surveys
 		/// <summary>
 		/// Get a list of available Surveys and metadata.
@@ -29,8 +29,8 @@ namespace PITCSurveySvc.Controllers
 		[ResponseType(typeof(IEnumerable<SurveySummaryModel>))]
 		[SwaggerResponse(HttpStatusCode.OK, "All mai Survey are belong 2 u <3", typeof(IEnumerable<SurveySummaryModel>))]
 		[AllowAnonymous]
-		public IEnumerable<SurveySummaryModel> GetSurveys(bool ActiveOnly)
-        {
+		public IHttpActionResult GetSurveys(bool ActiveOnly = true)
+		{
 			// We don't use this here, but it ensures the volunteer record is created if it doesn't exist yet.
 			Volunteer sv = GetAuthenticatedVolunteer();
 
@@ -49,8 +49,8 @@ namespace PITCSurveySvc.Controllers
 				});
 			}
 
-			return Models;
-        }
+			return Ok(Models);
+		}
 
 		// GET: api/Surveys/5
 		/// <summary>

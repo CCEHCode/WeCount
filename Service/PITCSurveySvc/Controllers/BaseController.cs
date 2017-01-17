@@ -1,14 +1,14 @@
-﻿using PITCSurveyEntities.Entities;
+﻿using Microsoft.ApplicationInsights;
+using Microsoft.Azure.Mobile.Server.Authentication;
+using PITCSurveyEntities.Entities;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
-using System.Web.Http;
-using System.Diagnostics;
-using System;
-using Microsoft.ApplicationInsights;
-using System.Collections.Generic;
-using Microsoft.Azure.Mobile.Server.Authentication;
 using System.Threading.Tasks;
+using System.Web.Http;
 
 namespace PITCSurveySvc.Controllers
 {
@@ -149,52 +149,84 @@ namespace PITCSurveySvc.Controllers
 			return Volunteer;
 		}
 
+		/// <summary>
+		/// Attempts to pull user details from provider to set initial defaults.
+		/// </summary>
+		/// <param name="Claimant"></param>
+		/// <param name="Volunteer"></param>
 		private void FillProviderDetails(ClaimsIdentity Claimant, Volunteer Volunteer)
 		{
 			Trace.TraceInformation($"User email (via provider): {Claimant?.FindFirst(ClaimTypes.Email)?.Value}");
+			
+			// Show claims in HttpContext.User.Identity.Claims
+			
+			//foreach (var Claim in (ClaimsPrincipal)HttpContext.Current.User.Identity)
+			{
+
+			}
+
+			// Show claims in ClaimsIdentity
+			if (Claimant != null && Claimant.Claims.Any())
+			{
+				Trace.TraceInformation("ClaimsIdentity claims:");
+				Trace.Indent();
+
+				foreach (var Claim in Claimant.Claims)
+				{
+					Trace.TraceInformation($"Type: {Claim.Type}, Value: {Claim.Value}, Subject: {Claim.Subject}");
+				}
+
+				Trace.Unindent();
+
+				Volunteer.FirstName = Claimant?.FindFirst(ClaimTypes.GivenName)?.Value;
+				Volunteer.LastName = Claimant?.FindFirst(ClaimTypes.Surname)?.Value;
+				Volunteer.Email = Claimant?.FindFirst(ClaimTypes.Email)?.Value;
+			}
 
 			ProviderCredentials Creds = null;
 
+			// Try to get details from provider
 			switch (Claimant.FindFirst(IdentityProvider)?.Value)
 			{
 				case "google":
 					Trace.TraceInformation("Trying to get Google profile info...");
-					Creds = AwaitTask(this.User.GetAppServiceIdentityAsync<GoogleCredentials>(this.Request), 2000);
+					Creds = AwaitTask(this.User.GetAppServiceIdentityAsync<GoogleCredentials>(this.Request), 3000);
 					break;
 
 				case "microsoftaccount":
 					Trace.TraceInformation("Trying to get Microsoft profile info...");
-					Creds = AwaitTask(this.User.GetAppServiceIdentityAsync<MicrosoftAccountCredentials>(this.Request), 2000);
+					Creds = AwaitTask(this.User.GetAppServiceIdentityAsync<MicrosoftAccountCredentials>(this.Request), 3000);
 					break;
 			}
 
+			Trace.Indent();
+
 			Trace.TraceInformation($"Creds null: {(Creds == null)}, id: {Creds?.UserId}, count: {Creds?.UserClaims.Count().ToString()}");
 
-			if (Claimant != null && Claimant.Claims.Any())
-			{
-				Trace.TraceInformation("ClaimsIdentity claims:");
-
-				foreach (var Claim in Claimant.Claims)
-				{
-					Trace.TraceInformation($"    {Claim.Type} = {Claim.Value}");
-				}
-			}
-
+			// Show claims in ProviderCredentials
 			if (Creds != null && Creds.UserClaims.Any())
 			{
 				Trace.TraceInformation("ProviderCredentials claims:");
+				Trace.Indent();
 
 				foreach (var Claim in Creds.UserClaims)
 				{
-					Trace.TraceInformation($"    {Claim.Type} = {Claim.Value}");
+					Trace.TraceInformation($"Type: {Claim.Type}, Value: {Claim.Value}, Subject: {Claim.Subject}");
 				}
+
+				Trace.Unindent();
 			}
-			
-			Volunteer.FirstName = Claimant?.FindFirst(ClaimTypes.GivenName)?.Value;
-			Volunteer.LastName = Claimant?.FindFirst(ClaimTypes.Surname)?.Value;
-			Volunteer.Email = Claimant?.FindFirst(ClaimTypes.Email)?.Value;
+
+			Trace.Unindent();
 		}
 
+		/// <summary>
+		/// Helper to return sync value from async task.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="Task"></param>
+		/// <param name="Timeout"></param>
+		/// <returns></returns>
 		static T AwaitTask<T>(Task<T> Task, int Timeout) where T : class
 		{
 			Task.Wait(Timeout);
