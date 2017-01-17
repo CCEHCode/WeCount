@@ -11,14 +11,13 @@ namespace PITCSurveyApp.UWP.Helpers
 {
     class FileHelper : IFileHelper
     {
-		/* ATY: I believe these can all be handled in the PCL
         public async Task<bool> ExistsAsync(string filename)
         {
             var localFolder = ApplicationData.Current.LocalFolder;
 
-            try
+			try
             {
-                await localFolder.GetFileAsync(filename);
+				await localFolder.GetFileAsync(filename);
             }
             catch
             {
@@ -63,11 +62,5 @@ namespace PITCSurveyApp.UWP.Helpers
             var storageFile = await localFolder.GetFileAsync(filename);
             await storageFile.DeleteAsync();
         }
-		*/
-
-		public Task<string> GetDocsPath()
-		{
-			return Task.FromResult(ApplicationData.Current.LocalFolder.Path);
-		}
 	}
 }

@@ -6,7 +6,6 @@ namespace PITCSurveyApp.Helpers
 {
     public interface IFileHelper
     {
-		/* ATY: I believe these can all be handled in the PCL
 		Task<bool> ExistsAsync(string filename);
 
         Task<DateTime> LastModifiedAsync(string filename);
@@ -18,8 +17,5 @@ namespace PITCSurveyApp.Helpers
         Task<IEnumerable<string>> GetFilesAsync();
 
         Task DeleteAsync(string filename);
-		*/
-
-		Task<string> GetDocsPath();
     }
 }

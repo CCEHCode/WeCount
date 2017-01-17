@@ -5,7 +5,6 @@ using PITCSurveyApp.Helpers;
 
 namespace PITCSurveyApp.Extensions
 {
-	/* ATY: Not needed?
 	static class FileHelperExtensions
     {
 		//public static Task SaveAsync<T>(this IFileHelper fileHelper, string filename, T item)
@@ -24,5 +23,4 @@ namespace PITCSurveyApp.Extensions
             return jsonItem.ToObject<T>();
         }
     }
-	*/
 }

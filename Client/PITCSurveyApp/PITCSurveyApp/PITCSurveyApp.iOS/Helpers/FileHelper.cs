@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using PITCSurveyApp.Helpers;
 using Xamarin.Forms;
+using System.Linq;
 
 [assembly: Dependency(typeof(PITCSurveyApp.iOS.Helpers.FileHelper))]
 
@@ -11,31 +12,26 @@ namespace PITCSurveyApp.iOS.Helpers
 {
     class FileHelper : IFileHelper
     {
-		/* ATY: I believe these can all be handled in the PCL
         public Task<bool> ExistsAsync(string filename)
         {
-            var filepath = GetFilePath(filename);
-            var exists = File.Exists(filepath);
-            return Task.FromResult(exists);
-        }
+			return Task.FromResult(File.Exists(filename));
+		}
 
-        public Task<DateTime> LastModifiedAsync(string filename)
+		public Task<DateTime> LastModifiedAsync(string filename)
         {
-            var filepath = GetFilePath(filename);
-            var lastModified = File.GetLastWriteTime(filepath);
-            return Task.FromResult(lastModified);
-        }
+			return Task.FromResult(File.GetLastWriteTime(filename));
+		}
 
-        public async Task WriteTextAsync(string filename, string text)
+		public async Task WriteTextAsync(string filename, string text)
         {
-            var filepath = GetFilePath(filename);
-            using (var streamWriter = File.CreateText(filepath))
-            {
-                await streamWriter.WriteAsync(text);
-            }
-        }
+			var filepath = GetFilePath(filename);
+			using (var streamWriter = File.CreateText(filepath))
+			{
+				await streamWriter.WriteAsync(text);
+			}
+		}
 
-        public async Task<string> ReadTextAsync(string filename)
+		public async Task<string> ReadTextAsync(string filename)
         {
             var filepath = GetFilePath(filename);
             using (StreamReader reader = File.OpenText(filepath))
@@ -44,16 +40,16 @@ namespace PITCSurveyApp.iOS.Helpers
             }
         }
 
-        public Task<IEnumerable<string>> GetFilesAsync()
+        public async Task<IEnumerable<string>> GetFilesAsync()
         {
             var files = Directory.GetFiles(GetDocsPath());
-            return Task.FromResult<IEnumerable<string>>(files);
+			return await Task.FromResult<IEnumerable<string>>(files.AsEnumerable());
         }
 
-        public Task DeleteAsync(string filename)
+        public async Task DeleteAsync(string filename)
         {
-            File.Delete(GetFilePath(filename));
-            return Task.CompletedTask;
+            await Task.Run(() => File.Delete(GetFilePath(filename)));
+			return;
         }
 
         // Private methods.
@@ -61,11 +57,10 @@ namespace PITCSurveyApp.iOS.Helpers
         {
             return Path.Combine(GetDocsPath(), filename);
         }
-		*/
 
-        public Task<string> GetDocsPath()
+        string GetDocsPath()
         {
-            return Task.FromResult(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
+            return Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         }
     }
 }
