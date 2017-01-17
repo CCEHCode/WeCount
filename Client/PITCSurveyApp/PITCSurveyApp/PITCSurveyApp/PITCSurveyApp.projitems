@@ -30,6 +30,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\IMetricsManagerService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\SurveyCloudService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\BaseViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ContactInfoViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\HomePageViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\LoginViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MenuPageViewModel.cs" />
@@ -39,6 +40,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SurveyAnswerItemViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SurveyLocationViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SurveyViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\ContactInfoPage.xaml.cs">
+      <DependentUpon>ContactInfoPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -132,6 +137,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\SurveyAnswerItemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\ContactInfoPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

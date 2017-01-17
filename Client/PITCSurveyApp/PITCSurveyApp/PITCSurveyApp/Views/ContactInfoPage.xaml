@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:PITCSurveyApp.ViewModels"
+             x:Class="PITCSurveyApp.Views.ContactInfoPage"
+             Title="Contact Info">
+    <ContentPage.BindingContext>
+        <vm:ContactInfoViewModel/>
+    </ContentPage.BindingContext>
+    <ScrollView>
+        <StackLayout>
+            <Label Text="{Binding Note}"/>
+            <Label Text="{Binding ContactInfo}"/>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

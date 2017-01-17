@@ -10,12 +10,14 @@ namespace PITCSurveyApp.ViewModels
         public ICommand GoHomeCommand { get; set; }
         public ICommand GoMySurveysCommand { get; set; }
         public ICommand GoProfileCommand { get; set; }
+		public ICommand GoContactInfoCommand { get; set; }
 
-        public MenuPageViewModel()
+		public MenuPageViewModel()
         {
             GoHomeCommand = new Command(GoHome);
             GoMySurveysCommand = new Command(GoMySurveys);
             GoProfileCommand = new Command(GoProfile);
+			GoContactInfoCommand = new Command(GoContactInfo);
         }
 
         void GoHome(object obj)
@@ -38,5 +40,13 @@ namespace PITCSurveyApp.ViewModels
             App.NavigationPage.Navigation.PushAsync(new ProfilePage());
             App.MenuIsPresented = false;
         }
-    }
+
+		void GoContactInfo(object obj)
+		{
+			DependencyService.Get<IMetricsManagerService>().TrackEvent("MenuContactInfo");
+			App.NavigationPage.Navigation.PushAsync(new ContactInfoPage());
+			App.MenuIsPresented = false;
+		}
+
+	}
 }

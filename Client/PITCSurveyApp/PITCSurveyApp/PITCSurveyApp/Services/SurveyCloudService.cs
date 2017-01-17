@@ -88,5 +88,19 @@ namespace PITCSurveyApp.Services
                 return ApiClient.InvokeApiAsync("Volunteers", JObject.FromObject(volunteer), HttpMethod.Put, parameters);
             }
         }
-    }
+
+		public static async Task<ContactInfoModel> GetContactInfoAsync(int? SurveyId = null)
+		{
+			var parameters = new Dictionary<string, string>
+			{
+				{ "SurveyId", SurveyId.ToString() },
+				{ "DeviceId", UserSettings.VolunteerId},
+			};
+
+			using (new LatencyMetric("GetContactInfo"))
+			{
+				return await ApiClient.InvokeApiAsync<ContactInfoModel>("ContactInfo", HttpMethod.Get, parameters);
+			}
+		}
+	}
 }
