@@ -29,7 +29,7 @@ namespace PITCSurveyApp.Helpers
 			}
 			catch (Exception ex)
 			{
-                DependencyService.Get<IMetricsManagerService>().TrackException("PhoneValidationFailure", ex);
+                DependencyService.Get<IMetricsManagerService>().TrackException("EmailValidationFailure", ex);
                 return false;
 			}
 		}
