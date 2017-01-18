@@ -21,6 +21,7 @@ namespace PITCSurveyApp.ViewModels
 		private readonly IFileHelper _fileHelper = new FileHelper();
 		private readonly UploadedItem<SurveyResponseModel> _response;
 
+        private string _maxQuestion;
         private int _index;
         private bool _isSurveyEnded;
 
@@ -78,7 +79,23 @@ namespace PITCSurveyApp.ViewModels
 
         private bool CanGoBack => _index > 0;
 
-        public int SurveyQuestionsCount => App.LatestSurvey?.Questions?.Count ?? 0;
+        public string MaximumQuestionNumber
+        {
+            get
+            {
+                if (_maxQuestion == null)
+                {
+                    _maxQuestion = App.LatestSurvey?
+                        .Questions?
+                        .MaxByOrDefault(
+                            q => q.QuestionNum, 
+                            SurveyQuestionNumberComparer.Instance)?
+                        .QuestionNum;
+                }
+
+                return _maxQuestion;
+            }
+        }
 
         public async Task UploadAndDeleteAsync()
         {

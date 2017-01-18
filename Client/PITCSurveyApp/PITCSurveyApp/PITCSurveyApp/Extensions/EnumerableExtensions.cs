@@ -11,6 +11,11 @@ namespace PITCSurveyApp.Extensions
         public static T MaxByOrDefault<T, TComparable>(this IEnumerable<T> enumerable, Func<T, TComparable> selector)
             where TComparable : IComparable
         {
+            return MaxByOrDefault(enumerable, selector, ComparableComparer<TComparable>.Instance);
+        }
+
+        public static T MaxByOrDefault<T, TComparable>(this IEnumerable<T> enumerable, Func<T, TComparable> selector, IComparer<TComparable> comparer)
+        {
             if (enumerable == null)
             {
                 throw new NullReferenceException(nameof(enumerable));
@@ -34,7 +39,7 @@ namespace PITCSurveyApp.Extensions
                 {
                     var current = enumerator.Current;
                     var comparand = selector(current);
-                    if (comparand.CompareTo(max) > 0)
+                    if (comparer.Compare(comparand, max) > 0)
                     {
                         value = current;
                         max = comparand;
@@ -42,6 +47,19 @@ namespace PITCSurveyApp.Extensions
                 }
 
                 return value;
+            }
+        }
+
+        class ComparableComparer<T> : IComparer<T>
+            where T : IComparable
+        {
+            private ComparableComparer() { }
+
+            public static readonly ComparableComparer<T> Instance = new ComparableComparer<T>();
+
+            public int Compare(T x, T y)
+            {
+                return x.CompareTo(y);
             }
         }
     }

@@ -48,7 +48,7 @@ namespace PITCSurveyApp.Views
 	        try
 	        {
 #if !WINDOWS_UWP
-                Title = $"Survey Question {q.QuestionNum}";
+                Title = $"Survey Question {q.QuestionNum} of {_viewModel.MaximumQuestionNumber}";
                 QuestionLabel.Text = q.QuestionText;
 #else
                 QuestionLabel.Text = $"{q.QuestionNum}. {q.QuestionText}";
