@@ -11,9 +11,9 @@
     <Grid Padding="20,40,20,20" RowSpacing="10">
       <Grid.RowDefinitions>
         <RowDefinition Height="Auto"/>
-        <RowDefinition Height="48"/>
-        <RowDefinition Height="48"/>
-        <RowDefinition Height="48"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
         <RowDefinition Height="*"/>
       </Grid.RowDefinitions>
       <StackLayout Spacing="30">
