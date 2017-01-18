@@ -12,6 +12,10 @@ namespace PITCSurveyApp.ViewModels
 {
     class MySurveysViewModel : BaseViewModel
     {
+        public const int UploadDeleteDelayMilliseconds = 3000;
+
+        private static readonly TimeSpan s_maxAge = TimeSpan.FromDays(2);
+
         private readonly bool _isLoadOnly;
         private ObservableCollection<MySurveysItemViewModel> _surveys;
         private MySurveysItemViewModel _selectedItem;
@@ -66,20 +70,40 @@ namespace PITCSurveyApp.ViewModels
         public async Task RefreshAsync()
         {
             Surveys?.Clear();
-            var fileHelper = new FileHelper();
-            var files = await fileHelper.GetFilesAsync();
-            var surveyFiles = files.Where(f => f.EndsWith(".survey.json"));
-            var managers = new List<MySurveysItemViewModel>();
-            foreach (var surveyFile in surveyFiles)
+            try
             {
-                var manager = new MySurveysItemViewModel(surveyFile);
-                manager.Deleted += ResponseDeleted;
-                await manager.LoadAsync();
-                managers.Add(manager);
-            }
+                var fileHelper = new FileHelper();
+                var files = await fileHelper.GetFilesAsync();
+                var surveyFiles = files.Where(f => f.EndsWith(".survey.json"));
+                var managers = new List<MySurveysItemViewModel>();
+                foreach (var surveyFile in surveyFiles)
+                {
+                    // Clean up surveys older than maximum age.
+                    var lastModified = await fileHelper.LastModifiedAsync(surveyFile);
+                    if (DateTime.Now - lastModified > s_maxAge)
+                    {
+                        await fileHelper.DeleteAsync(surveyFile);
+                    }
+                    else
+                    {
+                        var manager = new MySurveysItemViewModel(surveyFile);
+                        manager.Deleted += ResponseDeleted;
+                        await manager.LoadAsync();
+                        managers.Add(manager);
+                    }
+                }
 
-            managers.Sort((x, y) => -CompareDateTime(x.LastModified, y.LastModified));
-            Surveys = new ObservableCollection<MySurveysItemViewModel>(managers);
+                managers.Sort((x, y) => -CompareDateTime(x.LastModified, y.LastModified));
+                Surveys = new ObservableCollection<MySurveysItemViewModel>(managers);
+            }
+            catch (Exception ex)
+            {
+                DependencyService.Get<IMetricsManagerService>().TrackException("MySurveysRefreshAsyncFailed", ex);
+                await App.DisplayAlertAsync(
+                    "My Surveys Refresh Failed", 
+                    "Failed to refresh stored surveys, please try again.",
+                    "OK");
+            }
         }
 
         private async void EditSelectedItem()
@@ -118,32 +142,25 @@ namespace PITCSurveyApp.ViewModels
         private async void UploadAll()
         {
             DependencyService.Get<IMetricsManagerService>().TrackEvent("MySurveysUploadAll");
-
-            var uploadFailed = false;
-            var tasks = new List<Task>();
-            foreach (var item in Surveys)
+            var surveys = new List<MySurveysItemViewModel>(Surveys);
+            foreach (var item in surveys)
             {
-                tasks.Add(Task.Run(async () =>
+                try
                 {
-                    try
-                    {
-                        await item.UploadAsync();
-                    }
-                    catch
-                    {
-                        uploadFailed = true;
-                    }
-                }));
+                    await item.UploadAsync(false);
+                    await item.DeleteAsync();
+                }
+                catch
+                {
+                    await App.DisplayAlertAsync(
+                        "Upload Failed",
+                        "At least one survey upload failed. Please try again.",
+                        "OK");
+                }
             }
 
-            await Task.WhenAll(tasks);
-            if (uploadFailed)
-            {
-                await App.DisplayAlertAsync(
-                    "Upload Failed",
-                    "At least one survey upload failed. Please try again.",
-                    "OK");
-            }
+            await Task.Delay(UploadDeleteDelayMilliseconds);
+            await RefreshAsync();
         }
 
         private int CompareDateTime(DateTime? x, DateTime? y)

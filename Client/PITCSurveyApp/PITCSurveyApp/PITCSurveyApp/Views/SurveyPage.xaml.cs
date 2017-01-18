@@ -96,7 +96,7 @@ namespace PITCSurveyApp.Views
 
             try
             {
-                await _viewModel.UploadAsync();
+                await _viewModel.UploadAndDeleteAsync();
                 HelpTextLabel.Text = $"Survey uploaded at {DateTime.Now.ToString("t", CultureInfo.CurrentCulture)}.";
             }
             catch

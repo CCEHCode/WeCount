@@ -98,10 +98,22 @@ namespace PITCSurveyApp.Models
             }
         }
 
-        public async Task UploadAsync()
+        public Task UploadAsync()
+        {
+            return UploadAsync(true);
+        }
+
+        public async Task UploadAsync(bool delete)
         {
             await _response.UploadAsync();
             Update();
+            if (delete)
+            {
+                DependencyService.Get<IMetricsManagerService>().TrackEvent("MySurveysDeleteAfterUpload");
+                await DeleteAsync();
+                await Task.Delay(MySurveysViewModel.UploadDeleteDelayMilliseconds);
+                Deleted?.Invoke(this, new EventArgs());
+            }
         }
 
         public async Task EditAsync()
@@ -109,11 +121,27 @@ namespace PITCSurveyApp.Models
             await App.NavigationPage.PushAsync(new SurveyPage(_response));
         }
 
+        public Task DeleteAsync()
+        {
+            return _response.DeleteAsync();
+        }
+
         private async void Delete()
         {
             DependencyService.Get<IMetricsManagerService>().TrackEvent("MySurveysItemDelete");
-            await _fileHelper.DeleteAsync(_filename);
-            Deleted?.Invoke(this, new EventArgs());
+            try
+            {
+                await DeleteAsync();
+                Deleted?.Invoke(this, new EventArgs());
+            }
+            catch (Exception ex)
+            {
+                DependencyService.Get<IMetricsManagerService>().TrackException("MySurveysItemDeleteFailed", ex);
+                await App.DisplayAlertAsync(
+                    "Delete Failure",
+                    "Failed to delete survey, please try again.",
+                    "OK");
+            }
         }
 
         private async void Upload()
@@ -123,8 +151,9 @@ namespace PITCSurveyApp.Models
                 DependencyService.Get<IMetricsManagerService>().TrackEvent("MySurveysItemUpload");
                 await UploadAsync();
             }
-            catch
+            catch (Exception ex)
             {
+                DependencyService.Get<IMetricsManagerService>().TrackException("MySurveysItemUploadFailed", ex);
                 await App.DisplayAlertAsync(
                     "Upload Failure",
                     "Failed to upload survey, please try again.",

@@ -71,6 +71,17 @@ namespace PITCSurveyApp.Extensions
         }
 
         /// <summary>
+        /// Deletes the survey from local storage asynchronously.
+        /// </summary>
+        /// <param name="response">The survey response.</param>
+        /// <returns>A task to await the delete operation.</returns>
+        public static Task DeleteAsync(this UploadedItem<SurveyResponseModel> response)
+        {
+            var fileHelper = new FileHelper();
+            return fileHelper.DeleteAsync(response.Item.GetFilename());
+        }
+
+        /// <summary>
         /// Initializes a new survey response.
         /// </summary>
         /// <returns>The survey response.</returns>

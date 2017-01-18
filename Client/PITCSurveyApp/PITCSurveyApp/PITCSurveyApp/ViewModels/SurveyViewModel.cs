@@ -80,9 +80,10 @@ namespace PITCSurveyApp.ViewModels
 
         public int SurveyQuestionsCount => App.LatestSurvey?.Questions?.Count ?? 0;
 
-        public Task UploadAsync()
+        public async Task UploadAndDeleteAsync()
         {
-            return _response.UploadAsync();
+            await _response.UploadAsync();
+            await _response.DeleteAsync();
         }
 
         public void AddAnswer(SurveyQuestionAnswerChoiceResponseModel answer)
