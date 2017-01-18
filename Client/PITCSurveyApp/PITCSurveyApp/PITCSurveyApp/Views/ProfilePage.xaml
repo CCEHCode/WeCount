@@ -7,6 +7,12 @@
   <ContentPage.BindingContext>
     <vm:ProfileViewModel/>
   </ContentPage.BindingContext>
+  <ContentPage.Padding>
+    <OnPlatform x:TypeArguments="Thickness"
+                iOS="12, 12"
+                Android="12, 12"
+                WinPhone="12, 12" />
+  </ContentPage.Padding>
   <StackLayout>
     <Button Text="Sign in with Microsoft Account"
             IsVisible="{Binding IsAnonymous}"
