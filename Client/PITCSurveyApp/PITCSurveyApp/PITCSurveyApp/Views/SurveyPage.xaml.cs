@@ -49,8 +49,10 @@ namespace PITCSurveyApp.Views
 	        {
 #if !WINDOWS_UWP
                 Title = $"Survey Question {q.QuestionNum}";
-#endif
                 QuestionLabel.Text = q.QuestionText;
+#else
+                QuestionLabel.Text = $"{q.QuestionNum}. {q.QuestionText}";
+#endif
 	            HelpTextLabel.Text = q.QuestionHelpText;
 
 	            var answerOptionsStackLayout = new StackLayout();
@@ -108,7 +110,7 @@ namespace PITCSurveyApp.Views
             IList<SurveyQuestionAnswerChoiceResponseModel> previousAnswers)
         {
             var choices = new List<SurveyAnswerItemViewModel>(q.AnswerChoices.Count);
-            foreach (var choice in q.AnswerChoices.OrderBy(a => a.AnswerChoiceNum))
+            foreach (var choice in q.AnswerChoices.OrderBy(a => a.AnswerChoiceNum, StringComparer.Ordinal))
             {
                 var previousAnswer = previousAnswers.FirstOrDefault(a => a.AnswerChoiceID == choice.AnswerChoiceID);
                 choices.Add(previousAnswer != null

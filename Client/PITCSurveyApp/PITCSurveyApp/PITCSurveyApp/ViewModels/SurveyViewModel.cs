@@ -74,7 +74,7 @@ namespace PITCSurveyApp.ViewModels
             }
         }
 
-        private bool CanGoForward => !_isSurveyEnded && CurrentAnswers.Count > 0;
+        private bool CanGoForward => !_isSurveyEnded && (CurrentQuestion.AllowMultipleAnswers || CurrentAnswers.Count > 0);
 
         private bool CanGoBack => _index > 0;
 
@@ -115,6 +115,17 @@ namespace PITCSurveyApp.ViewModels
 
         private async void NextQuestion()
         {
+            // Add empty answers if necessary
+            var questionResponse = _response.Item.QuestionResponses.FirstOrDefault(r => r.QuestionID == CurrentQuestion?.QuestionID);
+            if (questionResponse == null)
+            {
+                _response.Item.QuestionResponses.Add(new SurveyQuestionResponseModel
+                {
+                    QuestionID = CurrentQuestion.QuestionID,
+                });
+            }
+
+            // Check if we should prompt for unspecified information
             var shouldPrompt = false;
             var questionAnswers = CurrentQuestion.AnswerChoices.ToDictionary(a => a.AnswerChoiceID, a => a);
             foreach (var answer in CurrentAnswers)
@@ -154,11 +165,9 @@ namespace PITCSurveyApp.ViewModels
             await _response.SaveAsync();
             var currentAnswerIds = new HashSet<int>(CurrentAnswers.Select(a => a.AnswerChoiceID));
             var matchingAnswer = CurrentQuestion.AnswerChoices.FirstOrDefault(a => currentAnswerIds.Contains(a.AnswerChoiceID));
-            var nextQuestionIndex = QuestionIndex(matchingAnswer?.NextQuestionID);
-            // TODO: This is a hack because of a bug in the survey where the NextQuestionID produces a cycle. 
-            // Confirm that question IDs are always increasing.
-            _index = nextQuestionIndex > _index ? nextQuestionIndex : _index + 1;
-            if ((matchingAnswer?.EndSurvey ?? false) || nextQuestionIndex < 0)
+            var nextQuestionIndex = QuestionIndex(matchingAnswer?.NextQuestionID) ?? NextQuestion(CurrentQuestion.QuestionNum);
+            _index = nextQuestionIndex ?? _index + 1;
+            if ((matchingAnswer?.EndSurvey ?? false) || nextQuestionIndex == null)
             {
                 EndSurvey();
             }
@@ -199,7 +208,7 @@ namespace PITCSurveyApp.ViewModels
                 }
             }
 
-            _index = QuestionIndex(previousId);
+            _index = QuestionIndex(previousId) ?? 0;
             UpdateCommands();
             QuestionChanged?.Invoke(this, new EventArgs());
         }
@@ -235,7 +244,7 @@ namespace PITCSurveyApp.ViewModels
             _response.Item.EndTime = DateTimeOffset.Now;
         }
 
-        private int QuestionIndex(int? questionID)
+        private int? QuestionIndex(int? questionID)
         {
             var questions = App.LatestSurvey?.Questions;
             if (questions != null)
@@ -249,7 +258,25 @@ namespace PITCSurveyApp.ViewModels
                 }
             }
 
-            return -1;
+            return null;
+        }
+
+        private int? NextQuestion(string currentQuestionNumber)
+        {
+            var allQuestions = App.LatestSurvey.Questions.OrderBy(q => q.QuestionNum, SurveyQuestionNumberComparer.Instance);
+            using (var allQuestionsEnumerator = allQuestions.GetEnumerator())
+            {
+                while (allQuestionsEnumerator.MoveNext())
+                {
+                    if (allQuestionsEnumerator.Current.QuestionNum == currentQuestionNumber &&
+                        allQuestionsEnumerator.MoveNext())
+                    {
+                        return QuestionIndex(allQuestionsEnumerator.Current.QuestionID);
+                    }
+                }
+            }
+
+            return null;
         }
 
         private void Init()
@@ -273,10 +300,9 @@ namespace PITCSurveyApp.ViewModels
 
             var lastAnswerIds = new HashSet<int>(lastAnswer.AnswerChoiceResponses.Select(a => a.AnswerChoiceID));
             var matchingAnswer = lastQuestion.AnswerChoices.FirstOrDefault(a => lastAnswerIds.Contains(a.AnswerChoiceID));
-            var nextQuestionIndex = QuestionIndex(matchingAnswer?.NextQuestionID);
-            var lastIndex = QuestionIndex(lastAnswer.QuestionID);
-            _index = nextQuestionIndex > lastIndex ? nextQuestionIndex : lastIndex + 1;
-            if ((matchingAnswer?.EndSurvey ?? false) || nextQuestionIndex < 0)
+            var nextQuestionIndex = QuestionIndex(matchingAnswer?.NextQuestionID) ?? NextQuestion(lastQuestion.QuestionNum);
+            _index = nextQuestionIndex ?? 0;
+            if ((matchingAnswer?.EndSurvey ?? false) || nextQuestionIndex == null)
             {
                 IsSurveyEnded = true;
             }
