@@ -8,6 +8,17 @@ namespace PITCSurveyApp.Extensions
     /// </summary>
     static class EnumerableExtensions
     {
+        public static T MinByOrDefault<T, TComparable>(this IEnumerable<T> enumerable, Func<T, TComparable> selector)
+            where TComparable : IComparable
+        {
+            return MinByOrDefault(enumerable, selector, ComparableComparer<TComparable>.Instance);
+        }
+
+        public static T MinByOrDefault<T, TComparable>(this IEnumerable<T> enumerable, Func<T, TComparable> selector, IComparer<TComparable> comparer)
+        {
+            return MinOrMaxByOrDefault(enumerable, selector, (x, y) => comparer.Compare(x, y) < 0);
+        }
+
         public static T MaxByOrDefault<T, TComparable>(this IEnumerable<T> enumerable, Func<T, TComparable> selector)
             where TComparable : IComparable
         {
@@ -15,6 +26,14 @@ namespace PITCSurveyApp.Extensions
         }
 
         public static T MaxByOrDefault<T, TComparable>(this IEnumerable<T> enumerable, Func<T, TComparable> selector, IComparer<TComparable> comparer)
+        {
+            return MinOrMaxByOrDefault(enumerable, selector, (x, y) => comparer.Compare(x, y) > 0);
+        }
+
+        private static T MinOrMaxByOrDefault<T, TComparable>(
+            this IEnumerable<T> enumerable,
+            Func<T, TComparable> selector, 
+            Func<TComparable, TComparable, bool> comparator)
         {
             if (enumerable == null)
             {
@@ -34,15 +53,15 @@ namespace PITCSurveyApp.Extensions
                 }
 
                 var value = enumerator.Current;
-                var max = selector(value);
+                var best = selector(value);
                 while (enumerator.MoveNext())
                 {
                     var current = enumerator.Current;
                     var comparand = selector(current);
-                    if (comparer.Compare(comparand, max) > 0)
+                    if (comparator(comparand, best))
                     {
                         value = current;
-                        max = comparand;
+                        best = comparand;
                     }
                 }
 

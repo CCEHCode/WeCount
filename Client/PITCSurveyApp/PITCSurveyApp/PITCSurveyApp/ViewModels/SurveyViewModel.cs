@@ -262,14 +262,14 @@ namespace PITCSurveyApp.ViewModels
             _response.Item.EndTime = DateTimeOffset.Now;
         }
 
-        private int? QuestionIndex(int? questionID)
+        private int? QuestionIndex(int? questionId)
         {
             var questions = App.LatestSurvey?.Questions;
             if (questions != null)
             {
                 for (var i = 0; i < questions.Count; ++i)
                 {
-                    if (questions[i].QuestionID == questionID)
+                    if (questions[i].QuestionID == questionId)
                     {
                         return i;
                     }
@@ -305,14 +305,14 @@ namespace PITCSurveyApp.ViewModels
 
             if (lastAnswer == null)
             {
-                _index = 0;
+                _index = FirstQuestionIndex();
                 return;
             }
 
             var lastQuestion = App.LatestSurvey?.Questions.FirstOrDefault(q => q.QuestionID == lastAnswer.QuestionID);
             if (lastQuestion == null)
             {
-                _index = 0;
+                _index = FirstQuestionIndex();
                 return;
             }
 
@@ -324,6 +324,11 @@ namespace PITCSurveyApp.ViewModels
             {
                 IsSurveyEnded = true;
             }
+        }
+
+        private int FirstQuestionIndex()
+        {
+            return QuestionIndex(App.LatestSurvey?.Questions?.MinByOrDefault(q => q.QuestionNum).QuestionID) ?? 0;
         }
     }
 }
