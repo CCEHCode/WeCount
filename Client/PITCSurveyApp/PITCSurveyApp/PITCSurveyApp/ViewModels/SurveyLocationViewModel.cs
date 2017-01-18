@@ -13,6 +13,8 @@ namespace PITCSurveyApp.ViewModels
 {
     class SurveyLocationViewModel : BaseViewModel
     {
+        private const int LocationTimeoutMilliseconds = 5000;
+
         private static string s_lastStreet;
         private static string s_lastCity;
         private static string s_lastState;
@@ -193,17 +195,23 @@ namespace PITCSurveyApp.ViewModels
                 var geolocator = CrossGeolocator.Current;
                 if (geolocator != null && geolocator.IsGeolocationEnabled && geolocator.IsGeolocationAvailable)
                 {
-                    var position = await geolocator.GetPositionAsync();
-                    _response.Item.GPSLocation.Lat = position.Latitude;
-                    _response.Item.GPSLocation.Lon = position.Longitude;
-                    _response.Item.GPSLocation.Accuracy = (float) position.Accuracy;
-                    var address = await Geocoder.ReverseGeocode(position.Latitude, position.Longitude);
-                    if (address != null)
+                    var timeoutTask = Task.Delay(LocationTimeoutMilliseconds);
+                    var positionTask = geolocator.GetPositionAsync();
+                    var positionOrTimeoutTask = await Task.WhenAny(positionTask, timeoutTask);
+                    if (positionOrTimeoutTask != timeoutTask)
                     {
-                        Street = address.AddressLine;
-                        City = address.Locality;
-                        State = address.AdminDistrict;
-                        ZipCode = address.PostalCode;
+                        var position = await positionTask;
+                        _response.Item.GPSLocation.Lat = position.Latitude;
+                        _response.Item.GPSLocation.Lon = position.Longitude;
+                        _response.Item.GPSLocation.Accuracy = (float)position.Accuracy;
+                        var address = await Geocoder.ReverseGeocode(position.Latitude, position.Longitude);
+                        if (address != null)
+                        {
+                            Street = address.AddressLine;
+                            City = address.Locality;
+                            State = address.AdminDistrict;
+                            ZipCode = address.PostalCode;
+                        }
                     }
                 }
             }
@@ -223,7 +231,7 @@ namespace PITCSurveyApp.ViewModels
             var gpsLocation = _response.Item.GPSLocation;
             return gpsLocation.Lat.HasValue
                 ? $"{gpsLocation.Lat:N4}, {gpsLocation.Lon:N4}"
-                : "Position not available";
+                : "Position not currently available";
         }
     }
 }
