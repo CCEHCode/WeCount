@@ -12,7 +12,8 @@
       <Color x:Key="DarkBackgroundColor">#C0C0C0</Color>
       <Color x:Key="MediumGrayTextColor">#4d4d4d</Color>
       <Color x:Key="LightTextColor">#999999</Color>
-
+      <Color x:Key="InvalidBackground">#F08080</Color>
+      <Color x:Key="ValidBackground">#2196F3</Color>
       <Style TargetType="NavigationPage">
         <Setter Property="BarBackgroundColor" Value="{StaticResource Primary}" />
         <Setter Property="BarTextColor" Value="White" />

@@ -111,13 +111,24 @@ namespace PITCSurveyApp.ViewModels
                 if (UserSettings.Volunteer.Email != value)
                 {
                     UserSettings.Volunteer.Email = value;
-                    OnPropertyChanged();
+					if (string.IsNullOrEmpty(value) || _validationHelper.IsValidEmail(value))
+					{
+						EmailBackground = (Color)App.Current.Resources["ValidBackground"];
+					}
+					else
+					{
+						EmailBackground = (Color)App.Current.Resources["InvalidBackground"];
+					}
+					OnPropertyChanged();
                     SaveProfileCommand.ChangeCanExecute();
                 }
             }
         }
 
-        public string MobilePhone
+		public Color EmailBackground { get; set; }
+
+
+		public string MobilePhone
         {
             get { return UserSettings.Volunteer?.MobilePhone; }
             set
@@ -125,13 +136,23 @@ namespace PITCSurveyApp.ViewModels
                 if (UserSettings.Volunteer.MobilePhone != value)
                 {
                     UserSettings.Volunteer.MobilePhone = value;
-                    OnPropertyChanged();
+					if (string.IsNullOrEmpty(value) || _validationHelper.IsValidPhone(value))
+					{
+						MobilePhoneBackground = (Color)App.Current.Resources["ValidBackground"];
+					}
+					else
+					{
+						MobilePhoneBackground = (Color)App.Current.Resources["InvalidBackground"];
+					}
+					OnPropertyChanged();
                     SaveProfileCommand.ChangeCanExecute();
                 }
             }
         }
 
-        public string HomePhone
+		public Color MobilePhoneBackground { get; set; }
+
+		public string HomePhone
         {
             get { return UserSettings.Volunteer?.HomePhone; }
             set

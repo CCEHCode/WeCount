@@ -40,9 +40,9 @@
           <Label Text="Last Name:" />
           <Entry Text="{Binding LastName, Mode=TwoWay}"/>
           <Label Text="Email:" />
-          <Entry Text="{Binding Email, Mode=TwoWay}"/>
+          <Entry Text="{Binding Email, Mode=TwoWay}" BackgroundColor="{Binding EmailBackground, Mode=TwoWay}"/>
           <Label Text="Mobile Phone:" />
-          <Entry Text="{Binding MobilePhone, Mode=TwoWay}"/>
+          <Entry Text="{Binding MobilePhone, Mode=TwoWay}" BackgroundColor="{Binding MobilePhoneBackground, Mode=OneWayToSource}"/>
           <Label Text="Home Phone (Optional):" />
           <Entry Text="{Binding HomePhone, Mode=TwoWay}"/>
           <Label Text="Street Address (Optional):" />
