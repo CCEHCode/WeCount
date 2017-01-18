@@ -65,8 +65,8 @@ namespace PITCSurveyApp.ViewModels
             !string.IsNullOrWhiteSpace(LastName) &&
             !string.IsNullOrWhiteSpace(Email) &&
             !string.IsNullOrWhiteSpace(MobilePhone) &&
-			_validationHelper.IsValidEmail(Email) &&
-			_validationHelper.IsValidPhone(MobilePhone) &&
+			(string.IsNullOrEmpty(Email) || _validationHelper.IsValidEmail(Email)) &&
+			(string.IsNullOrEmpty(MobilePhone) || _validationHelper.IsValidPhone(MobilePhone)) &&
             HasProfileChanged;
 
         public string SaveButtonText
