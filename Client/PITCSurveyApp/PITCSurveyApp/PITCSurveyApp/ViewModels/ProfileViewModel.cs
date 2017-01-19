@@ -32,7 +32,7 @@ namespace PITCSurveyApp.ViewModels
             MicrosoftLoginCommand = new Command(() => SignIn(MobileServiceAuthenticationProvider.MicrosoftAccount));
             GoogleLoginCommand = new Command(() => SignIn(MobileServiceAuthenticationProvider.Google));
             LogoutCommand = new Command(Logout);
-            SaveProfileCommand = new Command(SaveProfile, () => CanSaveProfile);
+            SaveProfileCommand = new Command(SaveProfile);
             UpdateCurrentInfo();
         }
 
@@ -61,12 +61,12 @@ namespace PITCSurveyApp.ViewModels
 
         public bool CanSaveProfile =>
             !IsBusy &&
-            !string.IsNullOrWhiteSpace(FirstName) &&
-            !string.IsNullOrWhiteSpace(LastName) &&
-            !string.IsNullOrWhiteSpace(Email) &&
-            !string.IsNullOrWhiteSpace(MobilePhone) &&
-			(string.IsNullOrEmpty(Email) || _validationHelper.IsValidEmail(Email)) &&
-			(string.IsNullOrEmpty(MobilePhone) || _validationHelper.IsValidPhone(MobilePhone)) &&
+            //!string.IsNullOrWhiteSpace(FirstName) &&
+            //!string.IsNullOrWhiteSpace(LastName) &&
+            //!string.IsNullOrWhiteSpace(Email) &&
+            //!string.IsNullOrWhiteSpace(MobilePhone) &&
+			//(string.IsNullOrEmpty(Email) || _validationHelper.IsValidEmail(Email)) &&
+			//(string.IsNullOrEmpty(MobilePhone) || _validationHelper.IsValidPhone(MobilePhone)) &&
             HasProfileChanged;
 
         public string SaveButtonText
@@ -252,7 +252,22 @@ namespace PITCSurveyApp.ViewModels
 
         private async void SaveProfile()
         {        
-            try
+            if (string.IsNullOrWhiteSpace(FirstName) ||
+				string.IsNullOrWhiteSpace(LastName) ||
+				string.IsNullOrWhiteSpace(Email) ||
+				string.IsNullOrWhiteSpace(MobilePhone) ||
+				(string.IsNullOrEmpty(Email) || !_validationHelper.IsValidEmail(Email)) ||
+				(string.IsNullOrEmpty(MobilePhone) || !_validationHelper.IsValidPhone(MobilePhone)))
+			{
+				bool cont = await App.DisplayAlertAsync("Profile Incomplete", "The profile information is not complete - do you want to save anyway, or go back to correct it?", "Continue", "Cancel");
+					
+				if (!cont)
+				{
+					return;
+				}
+			}
+
+			try
             {
                 SaveButtonText = "Saving...";
                 IsBusy = true;
