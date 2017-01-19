@@ -2,59 +2,68 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:PITCSurveyApp.ViewModels"
+             xmlns:behaviors="clr-namespace:PITCSurveyApp.Behaviors" 
              x:Class="PITCSurveyApp.Views.ProfilePage"
              Title="Settings">
-  <ContentPage.BindingContext>
-    <vm:ProfileViewModel/>
-  </ContentPage.BindingContext>
-  <ContentPage.Padding>
-    <OnPlatform x:TypeArguments="Thickness"
+    <ContentPage.BindingContext>
+        <vm:ProfileViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Padding>
+        <OnPlatform x:TypeArguments="Thickness"
                 iOS="12, 12"
                 Android="12, 12"
                 WinPhone="12, 12" />
-  </ContentPage.Padding>
-  <StackLayout>
-    <Button Text="Sign in with Microsoft Account"
+    </ContentPage.Padding>
+    <StackLayout>
+        <Button Text="Sign in with Microsoft Account"
             IsVisible="{Binding IsAnonymous}"
             TextColor="White"
             BackgroundColor="{StaticResource Primary}"
             Command="{Binding MicrosoftLoginCommand}" />
-    <Button Text="Sign in with Google Account"
+        <Button Text="Sign in with Google Account"
             IsVisible="{Binding IsAnonymous}"
             TextColor="White"
             BackgroundColor="{StaticResource Primary}"
             Command="{Binding GoogleLoginCommand}" />
-      <Button Text="Log out"
+        <Button Text="Log out"
               TextColor="White"
               BackgroundColor="{StaticResource Primary}"
               IsVisible="{Binding IsLoggedIn}"
               Command="{Binding LogoutCommand}" />
-    <StackLayout>
-      <Button Text="{Binding SaveButtonText}"
+        <StackLayout>
+            <Button Text="{Binding SaveButtonText}"
               BackgroundColor="{StaticResource DarkBackgroundColor}"
               Command="{Binding SaveProfileCommand}" />
-      <ScrollView>
-        <StackLayout>
-          <Label Text="First Name:" />
-          <Entry Text="{Binding FirstName, Mode=TwoWay}"/>
-          <Label Text="Last Name:" />
-          <Entry Text="{Binding LastName, Mode=TwoWay}"/>
-          <Label Text="Email:" />
-          <Entry Text="{Binding Email, Mode=TwoWay}" BackgroundColor="{Binding EmailBackground, Mode=TwoWay}"/>
-          <Label Text="Mobile Phone:" />
-          <Entry Text="{Binding MobilePhone, Mode=TwoWay}" BackgroundColor="{Binding MobilePhoneBackground, Mode=OneWayToSource}"/>
-          <Label Text="Home Phone (Optional):" />
-          <Entry Text="{Binding HomePhone, Mode=TwoWay}"/>
-          <Label Text="Street Address (Optional):" />
-          <Entry Text="{Binding Street, Mode=TwoWay}"/>
-          <Label Text="City (Optional):" />
-          <Entry Text="{Binding City, Mode=TwoWay}"/>            
-          <Label Text="State (Optional):" />
-          <Entry Text="{Binding State, Mode=TwoWay}" />
-          <Label Text="Zip Code (Optional):" />
-          <Entry Text="{Binding ZipCode, Mode=TwoWay}"/>
+            <ScrollView>
+                <StackLayout>
+                    <Label Text="First Name:" />
+                    <Entry Text="{Binding FirstName, Mode=TwoWay}"/>
+                    <Label Text="Last Name:" />
+                    <Entry Text="{Binding LastName, Mode=TwoWay}"/>
+                    <Label Text="Email:" />
+                    <Entry Text="{Binding Email, Mode=TwoWay}">
+                        <Entry.Behaviors>
+                            <behaviors:EmailValidationBehavior />
+                        </Entry.Behaviors>
+                    </Entry>
+                    <Label Text="Mobile Phone:" />
+                    <Entry Text="{Binding MobilePhone, Mode=TwoWay}">
+                        <Entry.Behaviors>
+                            <behaviors:PhoneNumberValidationBehavior />
+                        </Entry.Behaviors>
+                    </Entry>
+                    <Label Text="Home Phone (Optional):" />
+                    <Entry Text="{Binding HomePhone, Mode=TwoWay}"/>
+                    <Label Text="Street Address (Optional):" />
+                    <Entry Text="{Binding Street, Mode=TwoWay}"/>
+                    <Label Text="City (Optional):" />
+                    <Entry Text="{Binding City, Mode=TwoWay}"/>
+                    <Label Text="State (Optional):" />
+                    <Entry Text="{Binding State, Mode=TwoWay}" />
+                    <Label Text="Zip Code (Optional):" />
+                    <Entry Text="{Binding ZipCode, Mode=TwoWay}"/>
+                </StackLayout>
+            </ScrollView>
         </StackLayout>
-      </ScrollView>
     </StackLayout>
-  </StackLayout>
 </ContentPage>
