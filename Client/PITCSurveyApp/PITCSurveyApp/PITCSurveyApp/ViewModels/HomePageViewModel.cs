@@ -84,7 +84,7 @@ namespace PITCSurveyApp.ViewModels
             {
                 // TODO: add logic to only periodically check for survey updates
                 var azureSurvey = await SurveyCloudService.GetSurveyAsync(1); // TODO: Replace with actual SurveyID, from GetAvailableSurveysAsync()
-                if (azureSurvey != null && (App.LatestSurvey == null || App.LatestSurvey.Version < azureSurvey.Version))
+                if (App.LatestSurvey == null || App.LatestSurvey.Version < azureSurvey.Version)
                 {
                     App.LatestSurvey = azureSurvey;
                     var surveyJson = JObject.FromObject(azureSurvey);
