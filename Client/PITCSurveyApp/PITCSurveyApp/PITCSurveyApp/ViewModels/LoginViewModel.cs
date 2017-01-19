@@ -27,6 +27,12 @@ namespace PITCSurveyApp.ViewModels
 
         public Command MicrosoftLoginCommand { get; }
 
+#if __IOS__
+        public bool IsGoogleLoginAvailable => false;
+#else
+        public bool IsGoogleLoginAvailable => true;
+#endif
+
         private void SkipLogin()
         {
             DependencyService.Get<IMetricsManagerService>().TrackEvent("LoginPageSkipLogin");

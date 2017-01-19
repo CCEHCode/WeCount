@@ -48,6 +48,12 @@ namespace PITCSurveyApp.ViewModels
 
         public bool IsLoggedIn => UserSettings.IsLoggedIn;
 
+#if __IOS__
+        public bool IsGoogleLoginAvailable => false;
+#else
+        public bool IsGoogleLoginAvailable => IsAnonymous;
+#endif
+
         public bool HasProfileChanged =>
             FirstName != _currentFirstName ||
             LastName != _currentLastName ||

@@ -21,7 +21,7 @@
             BackgroundColor="{StaticResource Primary}"
             Command="{Binding MicrosoftLoginCommand}" />
         <Button Text="Sign in with Google Account"
-            IsVisible="{Binding IsAnonymous}"
+            IsVisible="{Binding IsGoogleLoginAvailable}"
             TextColor="White"
             BackgroundColor="{StaticResource Primary}"
             Command="{Binding GoogleLoginCommand}" />

@@ -45,6 +45,7 @@
           Text="Sign in with Google Account"
           Command="{Binding GoogleLoginCommand}"
           HorizontalOptions="FillAndExpand"
+          IsVisible="{Binding IsGoogleLoginAvailable}"
           IsEnabled="{Binding IsNotBusy}"
           TextColor="White"
           BackgroundColor="{StaticResource Primary}"/>
