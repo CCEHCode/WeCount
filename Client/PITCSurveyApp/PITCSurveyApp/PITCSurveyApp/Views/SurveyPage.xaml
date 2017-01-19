@@ -34,7 +34,7 @@
                 Command="{Binding PreviousQuestionCommand}"/>
         <Button Text="Next"
                 TextColor="White"
-                BackgroundColor="Green"
+                BackgroundColor="{Binding NextButtonBackColor}"
                 HorizontalOptions="FillAndExpand"
                 VerticalOptions="FillAndExpand"
                 IsVisible="{Binding IsSurveyActive}"                

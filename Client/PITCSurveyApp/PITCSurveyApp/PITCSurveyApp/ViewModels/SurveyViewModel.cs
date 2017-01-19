@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Helpers;
@@ -79,6 +81,13 @@ namespace PITCSurveyApp.ViewModels
 
         private bool CanGoBack => _index > 0;
 
+        //private Color backcolor = Color.Silver;
+
+        public Color NextButtonBackColor
+        {
+            get { return CanGoForward ? Color.Green : Color.Silver; }
+        }
+
         public string MaximumQuestionNumber
         {
             get
@@ -129,6 +138,7 @@ namespace PITCSurveyApp.ViewModels
         {
             NextQuestionCommand.ChangeCanExecute();
             PreviousQuestionCommand.ChangeCanExecute();
+            OnPropertyChanged("NextButtonBackColor");         
         }
 
         private async void NextQuestion()
