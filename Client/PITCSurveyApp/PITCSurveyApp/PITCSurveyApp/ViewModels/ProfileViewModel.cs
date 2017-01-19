@@ -32,7 +32,7 @@ namespace PITCSurveyApp.ViewModels
             MicrosoftLoginCommand = new Command(() => SignIn(MobileServiceAuthenticationProvider.MicrosoftAccount));
             GoogleLoginCommand = new Command(() => SignIn(MobileServiceAuthenticationProvider.Google));
             LogoutCommand = new Command(Logout);
-            SaveProfileCommand = new Command(SaveProfile);
+            SaveProfileCommand = new Command(SaveProfile, () => HasProfileChanged);
             UpdateCurrentInfo();
         }
 
@@ -64,16 +64,6 @@ namespace PITCSurveyApp.ViewModels
             City != _currentCity ||
             State != _currentState ||
             ZipCode != _currentZipCode;
-
-        public bool CanSaveProfile =>
-            !IsBusy &&
-            //!string.IsNullOrWhiteSpace(FirstName) &&
-            //!string.IsNullOrWhiteSpace(LastName) &&
-            //!string.IsNullOrWhiteSpace(Email) &&
-            //!string.IsNullOrWhiteSpace(MobilePhone) &&
-			//(string.IsNullOrEmpty(Email) || _validationHelper.IsValidEmail(Email)) &&
-			//(string.IsNullOrEmpty(MobilePhone) || _validationHelper.IsValidPhone(MobilePhone)) &&
-            HasProfileChanged;
 
         public string SaveButtonText
         {
