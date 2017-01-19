@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto" android:versionName="1.0.2" android:versionCode="3" package="com.cceh.pitcsurvey">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto" android:versionName="1.0.3" android:versionCode="4" package="com.cceh.pitcsurvey">
 	<uses-sdk android:minSdkVersion="19" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<application android:label="We Count" android:icon="@drawable/icon"></application>
