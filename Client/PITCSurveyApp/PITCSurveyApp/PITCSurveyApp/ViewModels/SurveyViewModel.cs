@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Helpers;
@@ -15,12 +13,8 @@ using Xamarin.Forms;
 
 namespace PITCSurveyApp.ViewModels
 {
-    /// <summary>
-    /// ViewModel class used to manage
-    /// </summary>
-    public class SurveyViewModel : BaseViewModel
+    class SurveyViewModel : BaseViewModel
     {
-		private readonly IFileHelper _fileHelper = new FileHelper();
 		private readonly UploadedItem<SurveyResponseModel> _response;
 
         private string _maxQuestion;
@@ -68,6 +62,9 @@ namespace PITCSurveyApp.ViewModels
 
         public bool IsSurveyActive => !_isSurveyEnded;
 
+        /// <summary>
+        /// The answers in the survey response that match the current question identifier.
+        /// </summary>
         public IList<SurveyQuestionAnswerChoiceResponseModel> CurrentAnswers
         {
             get
@@ -81,12 +78,7 @@ namespace PITCSurveyApp.ViewModels
 
         private bool CanGoBack => _index > 0;
 
-        //private Color backcolor = Color.Silver;
-
-        public Color NextButtonBackColor
-        {
-            get { return CanGoForward ? Color.Green : Color.Silver; }
-        }
+        public Color NextButtonBackColor => CanGoForward ? Color.Green : Color.Silver;
 
         public string MaximumQuestionNumber
         {
@@ -112,11 +104,17 @@ namespace PITCSurveyApp.ViewModels
             await _response.DeleteAsync();
         }
 
+        /// <summary>
+        /// Adds a selected answer to the survey response model.
+        /// </summary>
+        /// <param name="answer">The answer to add.<param>
         public void AddAnswer(SurveyQuestionAnswerChoiceResponseModel answer)
         {
+            // Check if a question response model has already been created for the question
             var existingQuestion = _response.Item.QuestionResponses.FirstOrDefault(r => r.QuestionID == answer.QuestionID);
             if (existingQuestion == null)
             {
+                // If not yet created, create a new question response model
                 existingQuestion = new SurveyQuestionResponseModel
                 {
                     QuestionID = answer.QuestionID,
@@ -125,7 +123,23 @@ namespace PITCSurveyApp.ViewModels
                 _response.Item.QuestionResponses.Add(existingQuestion);
             }
 
-            existingQuestion.AnswerChoiceResponses.Add(answer);
+            var existingAnswer = existingQuestion.AnswerChoiceResponses.FirstOrDefault(a => a.AnswerChoiceID == answer.AnswerChoiceID);
+            if (existingAnswer == null)
+            {
+                // Add the answer to the question response model
+                existingQuestion.AnswerChoiceResponses.Add(answer);
+            }
+            else
+            {
+                // If the answer already exists, we should report this (not expected behavior)
+                var properties = new Dictionary<string, string>
+                {
+                    { "QuestionID", answer.QuestionID.ToString() },
+                    { "AnswerChoiceID", answer.AnswerChoiceID.ToString() },
+                };
+
+                DependencyService.Get<IMetricsManagerService>().TrackEvent("DuplicateAnswer", properties, null);
+            }
         }
         
         public void RemoveAnswer(SurveyQuestionAnswerChoiceResponseModel answer)
@@ -138,7 +152,7 @@ namespace PITCSurveyApp.ViewModels
         {
             NextQuestionCommand.ChangeCanExecute();
             PreviousQuestionCommand.ChangeCanExecute();
-            OnPropertyChanged("NextButtonBackColor");         
+            OnPropertyChanged(nameof(NextButtonBackColor));         
         }
 
         private async void NextQuestion()
@@ -153,14 +167,14 @@ namespace PITCSurveyApp.ViewModels
                 });
             }
 
-            // Check if we should prompt for unspecified information
+            // Check if we should prompt in case the user did not fill out the additional information field
             var shouldPrompt = false;
             var questionAnswers = CurrentQuestion.AnswerChoices.ToDictionary(a => a.AnswerChoiceID, a => a);
             foreach (var answer in CurrentAnswers)
             {
                 if (string.IsNullOrEmpty(answer.AdditionalAnswerData))
                 {
-                    var questionAnswer = default(SurveyQuestionAnswerChoiceModel);
+                    SurveyQuestionAnswerChoiceModel questionAnswer;
                     if (questionAnswers.TryGetValue(answer.AnswerChoiceID, out questionAnswer) && questionAnswer.AdditionalAnswerDataFormat != AnswerFormat.None)
                     {
                         shouldPrompt = true;
@@ -169,6 +183,7 @@ namespace PITCSurveyApp.ViewModels
                 }
             }
 
+            // Prompt the user if any additional information entries are empty
             if (shouldPrompt)
             {
                 var shouldContinue = await App.DisplayAlertAsync(
@@ -190,11 +205,22 @@ namespace PITCSurveyApp.ViewModels
 
             DependencyService.Get<IMetricsManagerService>().TrackEvent("SurveyNextQuestion", properties, null);
 
+            // Save the response
             await _response.SaveAsync();
+
+            // Create a lookup table for all the currently selected answers
             var currentAnswerIds = new HashSet<int>(CurrentAnswers.Select(a => a.AnswerChoiceID));
+            
+            // Get a reference to any matching question answer model from the survey question
             var matchingAnswer = CurrentQuestion.AnswerChoices.FirstOrDefault(a => currentAnswerIds.Contains(a.AnswerChoiceID));
+            
+            // Set the next question to the next question identifier from the question answer model if available;
+            // otherwise, set the next question to the next highest question number
             var nextQuestionIndex = QuestionIndex(matchingAnswer?.NextQuestionID) ?? NextQuestion(CurrentQuestion.QuestionNum);
+
             _index = nextQuestionIndex ?? _index + 1;
+
+            // End the survey if the matching question answer disqualifies the survey, or if there are no more questions
             if ((matchingAnswer?.EndSurvey ?? false) || nextQuestionIndex == null)
             {
                 EndSurvey();
@@ -213,8 +239,11 @@ namespace PITCSurveyApp.ViewModels
 
             DependencyService.Get<IMetricsManagerService>().TrackEvent("SurveyPreviousQuestion", properties, null);
 
+            // Save the response
             await _response.SaveAsync();
-            var previousId = int.MinValue;
+
+            // If the survey is ended, set the question to the last answered question
+            int? previousId;
             if (_isSurveyEnded)
             {
                 IsSurveyEnded = false;
@@ -222,21 +251,12 @@ namespace PITCSurveyApp.ViewModels
             }
             else
             {
-                var currentQuestion = CurrentQuestion;
-                foreach (var response in _response.Item.QuestionResponses)
-                {
-                    if (response.QuestionID < currentQuestion.QuestionID && response.QuestionID > previousId)
-                    {
-                        previousId = response.QuestionID;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
+                // Otherwise, set the question to the question with the next lowest question number
+                previousId = PreviousQuestion(CurrentQuestion.QuestionNum);
             }
 
-            _index = QuestionIndex(previousId) ?? 0;
+            // If the question identifier cannot be found, set to the first question (should not happen)
+            _index = QuestionIndex(previousId) ?? FirstQuestionIndex();
             UpdateCommands();
             QuestionChanged?.Invoke(this, new EventArgs());
         }
@@ -272,6 +292,11 @@ namespace PITCSurveyApp.ViewModels
             _response.Item.EndTime = DateTimeOffset.Now;
         }
 
+        /// <summary>
+        /// Find the index for the given question identifier.
+        /// </summary>
+        /// <param name="questionId">The question identifier.</param>
+        /// <returns>The question index.</returns>
         private int? QuestionIndex(int? questionId)
         {
             var questions = App.LatestSurvey?.Questions;
@@ -289,6 +314,11 @@ namespace PITCSurveyApp.ViewModels
             return null;
         }
 
+        /// <summary>
+        /// Find the index of the question that comes next, ordered by question number.
+        /// </summary>
+        /// <param name="currentQuestionNumber">The current question number.</param>
+        /// <returns>The index of the next question.</returns>
         private int? NextQuestion(string currentQuestionNumber)
         {
             var allQuestions = App.LatestSurvey.Questions.OrderBy(q => q.QuestionNum, SurveyQuestionNumberComparer.Instance);
@@ -307,35 +337,95 @@ namespace PITCSurveyApp.ViewModels
             return null;
         }
 
+        /// <summary>
+        /// Find the identifier of the question that comes before the current
+        /// question, ordered by question number.
+        /// </summary>
+        /// <param name="currentQuestionNumber">The current question.</param>
+        /// <returns>The previous question identifier.</returns>
+        private int? PreviousQuestion(string currentQuestionNumber)
+        {
+            // Get the sorted list of question numbers
+            var allQuestions = App.LatestSurvey.Questions.OrderByDescending(q => q.QuestionNum, SurveyQuestionNumberComparer.Instance);
+
+            // Get a lookup table for all answered question IDs
+            var answeredQuestionIds = new HashSet<int>(_response.Item.QuestionResponses.Select(q => q.QuestionID));
+
+            using (var allQuestionsEnumerator = allQuestions.GetEnumerator())
+            {
+                // Start enumerating through the question numbers
+                while (allQuestionsEnumerator.MoveNext())
+                {
+                    // Once we find the current question number, move to the next question
+                    if (allQuestionsEnumerator.Current.QuestionNum == currentQuestionNumber &&
+                        allQuestionsEnumerator.MoveNext())
+                    {
+                        // Keep moving to the next question until we find an answered question
+                        var moveNext = true;
+                        while (!answeredQuestionIds.Contains(allQuestionsEnumerator.Current.QuestionID) && moveNext)
+                        {
+                            moveNext = allQuestionsEnumerator.MoveNext();
+                        }
+
+                        // If we didn't reach the end of the enumerator, return the current question ID.
+                        if (moveNext)
+                        {
+                            return allQuestionsEnumerator.Current.QuestionID;
+                        }
+
+                        break;
+                    }
+                }
+            }
+
+            return null;
+        }
+
         private void Init()
         {
+            // Find the last question response
             var lastAnswer = _response.Item.QuestionResponses
                 .Where(q => q.AnswerChoiceResponses.Count > 0)
                 .MaxByOrDefault(a => a.QuestionID);
 
+            // If no questions were answered, start the survey from the first question
             if (lastAnswer == null)
             {
                 _index = FirstQuestionIndex();
                 return;
             }
 
+            // Find the matching survey question that goes with the last response
             var lastQuestion = App.LatestSurvey?.Questions.FirstOrDefault(q => q.QuestionID == lastAnswer.QuestionID);
+
+            // If the survey question cannot be found, start the survey from the first question
             if (lastQuestion == null)
             {
                 _index = FirstQuestionIndex();
                 return;
             }
 
+            // Create a lookup of answer choice IDs from the last response
             var lastAnswerIds = new HashSet<int>(lastAnswer.AnswerChoiceResponses.Select(a => a.AnswerChoiceID));
+
+            // Find the first question answer choice that matches a selected answer ID.
             var matchingAnswer = lastQuestion.AnswerChoices.FirstOrDefault(a => lastAnswerIds.Contains(a.AnswerChoiceID));
+
+            // Start the survey from the next question based on the users answer choice, or the next question sequentially.
             var nextQuestionIndex = QuestionIndex(matchingAnswer?.NextQuestionID) ?? NextQuestion(lastQuestion.QuestionNum);
             _index = nextQuestionIndex ?? 0;
+
+            // Check if the survey has been completed based on the survey's last answer choice, or if there are no more questions
             if ((matchingAnswer?.EndSurvey ?? false) || nextQuestionIndex == null)
             {
                 IsSurveyEnded = true;
             }
         }
 
+        /// <summary>
+        /// Get the index of the question with the lowest question number.
+        /// </summary>
+        /// <returns>The question index.</returns>
         private int FirstQuestionIndex()
         {
             return QuestionIndex(App.LatestSurvey?.Questions?.MinByOrDefault(q => q.QuestionNum).QuestionID) ?? 0;

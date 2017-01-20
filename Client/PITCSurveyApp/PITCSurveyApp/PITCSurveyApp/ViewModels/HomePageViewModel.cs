@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Windows.Input;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using PITCSurveyApp.Extensions;
 using PITCSurveyApp.Helpers;
 using PITCSurveyApp.Services;
 using PITCSurveyApp.Views;
 using PITCSurveyLib.Models;
 using Xamarin.Forms;
-using PITCSurveyLib;
 
 namespace PITCSurveyApp.ViewModels
 {
@@ -25,9 +22,6 @@ namespace PITCSurveyApp.ViewModels
             LoadSurveyCommand = new Command(LoadSurvey);
             IsBusy = true;
             Init();
-
-            // TODO: Need to populate this from the authentication service
-            UserFullname = "Volunteer";
         }
 
         public ICommand NewSurveyCommand { get; }
@@ -46,17 +40,9 @@ namespace PITCSurveyApp.ViewModels
             set { SetProperty(ref _surveyQuestionCount, value); }
         }
 
-        public string UserFullname { get; set; }
+        public string UserGreeting => "Welcome Volunteer";
 
-        public string UserGreeting
-        {
-            get { return "Welcome " + UserFullname; }
-        }
-
-        public ImageSource BannerImage
-        {
-            get { return ImageSource.FromFile(CrossHelper.GetOSFullImagePath("ccehlogo.jpg")); }
-        }
+        public ImageSource BannerImage => ImageSource.FromFile(CrossHelper.GetOSFullImagePath("ccehlogo.jpg"));
 
         private void NewSurvey(object obj)
         {
@@ -72,24 +58,23 @@ namespace PITCSurveyApp.ViewModels
 
         private async void Init()
         {
+            // Check if the survey has already been downloaded
             var fileHelper = new FileHelper();
             if (await fileHelper.ExistsAsync(SurveyFileName))
             {
-                var surveyText = await fileHelper.ReadTextAsync(SurveyFileName);
-                var surveyJson = JObject.Parse(surveyText);
-                App.LatestSurvey = surveyJson.ToObject<SurveyModel>();
+                // Load the survey if it exists
+                App.LatestSurvey = await fileHelper.LoadAsync<SurveyModel>(SurveyFileName);
             }
 
             try
             {
-                // TODO: add logic to only periodically check for survey updates
+                // Check if an updated survey is available from the service
                 var azureSurvey = await SurveyCloudService.GetSurveyAsync(1); // TODO: Replace with actual SurveyID, from GetAvailableSurveysAsync()
                 if (azureSurvey != null && (App.LatestSurvey == null || App.LatestSurvey.Version < azureSurvey.Version))
                 {
                     App.LatestSurvey = azureSurvey;
-                    var surveyJson = JObject.FromObject(azureSurvey);
-                    var surveyText = surveyJson.ToString(Formatting.None);
-                    await fileHelper.WriteTextAsync(SurveyFileName, surveyText);
+                    // Save the survey to the local filesystem
+                    await fileHelper.SaveAsync(SurveyFileName, azureSurvey);
                 }
             }
             catch (Exception ex)

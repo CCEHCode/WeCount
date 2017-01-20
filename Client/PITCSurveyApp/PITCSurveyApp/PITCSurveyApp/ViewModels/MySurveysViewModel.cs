@@ -20,6 +20,13 @@ namespace PITCSurveyApp.ViewModels
         private ObservableCollection<MySurveysItemViewModel> _surveys;
         private MySurveysItemViewModel _selectedItem;
 
+        /// <summary>
+        /// Instantiates the view model with a flag that signals if the
+        /// page is specifically used for loading surveys.
+        /// </summary>
+        /// <param name="isLoadOnly">
+        /// Instantiate with <code>true</code> if the page is intended to load the selected survey immediately.
+        /// </param>
         public MySurveysViewModel(bool isLoadOnly)
         {
             _isLoadOnly = isLoadOnly;
@@ -38,6 +45,7 @@ namespace PITCSurveyApp.ViewModels
             get { return _surveys; }
             private set
             {
+                // Unsubscribe from the CollectionChanged event on the previous collection
                 if (_surveys != null)
                 {
                     _surveys.CollectionChanged -= OnCollectionChanged;
@@ -46,6 +54,7 @@ namespace PITCSurveyApp.ViewModels
                 SetProperty(ref _surveys, value);
                 UploadAllCommand.ChangeCanExecute();
 
+                // Subscribe to the CollectionChanged event on the current collection
                 if (_surveys != null)
                 {
                     _surveys.CollectionChanged += OnCollectionChanged;
@@ -72,6 +81,7 @@ namespace PITCSurveyApp.ViewModels
             Surveys?.Clear();
             try
             {
+                // Get all the files that match *.survey.json
                 var fileHelper = new FileHelper();
                 var files = await fileHelper.GetFilesAsync();
                 var surveyFiles = files.Where(f => f.EndsWith(".survey.json"));
@@ -93,6 +103,7 @@ namespace PITCSurveyApp.ViewModels
                     }
                 }
 
+                // Sort the surveys from most recently saved to least recently saved 
                 managers.Sort((x, y) => -CompareDateTime(x.LastModified, y.LastModified));
                 Surveys = new ObservableCollection<MySurveysItemViewModel>(managers);
             }
@@ -128,7 +139,7 @@ namespace PITCSurveyApp.ViewModels
 
             try
             {
-                await selectedItem.UploadAsync();
+                await selectedItem.UploadAndDeleteAsync();
             }
             catch
             {

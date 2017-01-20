@@ -1,17 +1,12 @@
 ﻿using System.Windows.Input;
 using PITCSurveyApp.Services;
-using Xamarin.Forms;
 using PITCSurveyApp.Views;
+using Xamarin.Forms;
 
 namespace PITCSurveyApp.ViewModels
 {
     class MenuPageViewModel
     {
-        public ICommand GoHomeCommand { get; set; }
-        public ICommand GoMySurveysCommand { get; set; }
-        public ICommand GoProfileCommand { get; set; }
-		public ICommand GoContactInfoCommand { get; set; }
-
 		public MenuPageViewModel()
         {
             GoHomeCommand = new Command(GoHome);
@@ -19,6 +14,14 @@ namespace PITCSurveyApp.ViewModels
             GoProfileCommand = new Command(GoProfile);
 			GoContactInfoCommand = new Command(GoContactInfo);
         }
+
+        public ICommand GoHomeCommand { get; }
+
+        public ICommand GoMySurveysCommand { get; }
+
+        public ICommand GoProfileCommand { get; }
+
+        public ICommand GoContactInfoCommand { get; }
 
         void GoHome(object obj)
         {

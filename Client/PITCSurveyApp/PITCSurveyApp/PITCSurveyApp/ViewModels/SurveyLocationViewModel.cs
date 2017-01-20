@@ -165,8 +165,14 @@ namespace PITCSurveyApp.ViewModels
         private async void StartSurvey()
         {
             UpdateLastLocation();
+
+            // Save the current page instance reference for removal
             var currentPage = App.NavigationPage.CurrentPage;
+
             await App.NavigationPage.PushAsync(new SurveyPage(_response));
+
+            // Since the user can always edit the location from the survey page toolbar,
+            // we don't need to keep this location page in the navigation stack
             App.NavigationPage.Navigation.RemovePage(currentPage);
         }
 
@@ -192,18 +198,25 @@ namespace PITCSurveyApp.ViewModels
         {
             try
             {
+                // Check if the geolocator is available
                 var geolocator = CrossGeolocator.Current;
                 if (geolocator != null && geolocator.IsGeolocationEnabled && geolocator.IsGeolocationAvailable)
                 {
+                    // Start a timer that queues the position request timeout
                     var timeoutTask = Task.Delay(LocationTimeoutMilliseconds);
+                    // Start a task to get the current position
                     var positionTask = geolocator.GetPositionAsync();
+                    // Wait for the position or timeout task to complete
                     var positionOrTimeoutTask = await Task.WhenAny(positionTask, timeoutTask);
+                    // If it was the position task that completed first...
                     if (positionOrTimeoutTask != timeoutTask)
                     {
+                        // Update the survey GPS location
                         var position = await positionTask;
                         _response.Item.GPSLocation.Lat = position.Latitude;
                         _response.Item.GPSLocation.Lon = position.Longitude;
                         _response.Item.GPSLocation.Accuracy = (float)position.Accuracy;
+                        // Try to reverse geocode the position to a nearby address
                         var address = await Geocoder.ReverseGeocodeAsync(position.Latitude, position.Longitude);
                         if (address != null)
                         {

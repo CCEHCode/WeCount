@@ -6,7 +6,7 @@ using Xamarin.Forms;
 
 namespace PITCSurveyApp.ViewModels
 {
-    public class LoginViewModel : BaseViewModel
+    class LoginViewModel : BaseViewModel
     {
         public LoginViewModel()
         {
@@ -47,7 +47,7 @@ namespace PITCSurveyApp.ViewModels
 
                 var properties = new Dictionary<string, string>
                 {
-                    {"LoginProvider", provider.ToString()}
+                    { "LoginProvider", provider.ToString() }
                 };
 
                 DependencyService.Get<IMetricsManagerService>().TrackEvent("LoginPageLogin", properties, null);

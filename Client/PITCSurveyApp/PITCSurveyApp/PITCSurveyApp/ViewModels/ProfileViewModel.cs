@@ -249,6 +249,7 @@ namespace PITCSurveyApp.ViewModels
 
         private async void SaveProfile()
         {        
+            // Check if any of the required fields are empty or invalid
             if (string.IsNullOrWhiteSpace(FirstName) ||
 				string.IsNullOrWhiteSpace(LastName) ||
 				string.IsNullOrWhiteSpace(Email) ||
@@ -256,9 +257,9 @@ namespace PITCSurveyApp.ViewModels
 				(string.IsNullOrEmpty(Email) || !_validationHelper.IsValidEmail(Email)) ||
 				(string.IsNullOrEmpty(MobilePhone) || !_validationHelper.IsValidPhone(MobilePhone)))
 			{
-				bool cont = await App.DisplayAlertAsync("Profile Incomplete", "The profile information is not complete - do you want to save anyway, or go back to correct it?", "Continue", "Cancel");
+				var @continue = await App.DisplayAlertAsync("Profile Incomplete", "The profile information is not complete - do you want to save anyway, or go back to correct it?", "Continue", "Cancel");
 					
-				if (!cont)
+				if (!@continue)
 				{
 					return;
 				}
