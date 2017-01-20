@@ -232,6 +232,7 @@ namespace PITCSurveyApp.ViewModels
             await App.LoginAsync(provider);
             OnPropertyChanged(nameof(IsAnonymous));
             OnPropertyChanged(nameof(IsLoggedIn));
+            OnPropertyChanged(nameof(IsGoogleLoginAvailable));
             ChangeAllProperties();
             UpdateCurrentInfo();
         }
