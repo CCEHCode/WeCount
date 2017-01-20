@@ -62,7 +62,7 @@ namespace PITCSurveyApp.Services
         {
             var parameters = new Dictionary<string, string>
             {
-                {"DeviceId", UserSettings.VolunteerId},
+                {"deviceId", UserSettings.VolunteerId},
             };
 
             using (new LatencyMetric("SubmitSurveyResponse"))
@@ -84,7 +84,7 @@ namespace PITCSurveyApp.Services
             {
 				var parameters = new Dictionary<string, string>
 			    {
-				    {"DeviceId", UserSettings.VolunteerId},
+				    {"deviceId", UserSettings.VolunteerId},
 			    };
 
                 using (new LatencyMetric("GetVolunteer"))
@@ -110,7 +110,7 @@ namespace PITCSurveyApp.Services
         {
 			var parameters = new Dictionary<string, string>
 			{
-				{"DeviceId", UserSettings.VolunteerId},
+				{"deviceId", UserSettings.VolunteerId},
 			};
 
             using (new LatencyMetric("SaveVolunteer"))
@@ -132,8 +132,8 @@ namespace PITCSurveyApp.Services
 		{
 			var parameters = new Dictionary<string, string>
 			{
-				{ "SurveyId", surveyId.ToString() },
-				{ "DeviceId", UserSettings.VolunteerId},
+				{ "surveyId", surveyId.ToString() },
+				{ "deviceId", UserSettings.VolunteerId},
 			};
 
 			using (new LatencyMetric("GetContactInfo"))
