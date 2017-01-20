@@ -4,6 +4,7 @@ using PITCSurveySvc.Models;
 using Swashbuckle.Swagger.Annotations;
 using System;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 
@@ -17,14 +18,14 @@ namespace PITCSurveySvc.Controllers
 		[SwaggerResponse(HttpStatusCode.OK, "Volunteer found", typeof(VolunteerModel))]
 		[ResponseType(typeof(VolunteerModel))]
 		[AllowAnonymous]
-		public IHttpActionResult GetVolunteer(Guid DeviceId)
+		public async Task<IHttpActionResult> GetVolunteer(Guid deviceId)
         {
-            Volunteer Volunteer = GetAuthenticatedVolunteer(DeviceId);
+            Volunteer volunteer = await GetAuthenticatedVolunteerAsync(deviceId);
 
-            if (Volunteer == null)
+            if (volunteer == null)
                 return NotFound();
 
-            return Ok(ModelConverter.ConvertToModel(Volunteer));
+            return Ok(ModelConverter.ConvertToModel(volunteer));
         }
 
 		// PUT: api/Volunteers
@@ -32,9 +33,9 @@ namespace PITCSurveySvc.Controllers
 		[SwaggerResponse(HttpStatusCode.NoContent, "Volunteer updated")]
 		[ResponseType(typeof(void))]
 		[AllowAnonymous]
-		public IHttpActionResult PutVolunteer(VolunteerModel Volunteer, Guid DeviceId)
+		public async Task<IHttpActionResult> PutVolunteer(VolunteerModel volunteer, Guid deviceId)
         {
-			Volunteer sv = GetAuthenticatedVolunteer(DeviceId);
+			Volunteer sv = await GetAuthenticatedVolunteerAsync(deviceId);
 
 			if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -42,18 +43,18 @@ namespace PITCSurveySvc.Controllers
 			if (sv == null)
 				return BadRequest("The specified InterviewerID is not recognized. User not logged in?");
 
-			sv.DeviceId = DeviceId;
+			sv.DeviceId = deviceId;
 
-			sv.FirstName = Volunteer.FirstName;
-			sv.LastName = Volunteer.LastName;
-			sv.Email = Volunteer.Email;
-			sv.HomePhone = Volunteer.HomePhone;
-			sv.MobilePhone = Volunteer.MobilePhone;
+			sv.FirstName = volunteer.FirstName;
+			sv.LastName = volunteer.LastName;
+			sv.Email = volunteer.Email;
+			sv.HomePhone = volunteer.HomePhone;
+			sv.MobilePhone = volunteer.MobilePhone;
 
-			sv.Address.Street = Volunteer.Address?.Street;
-			sv.Address.City = Volunteer.Address?.City;
-			sv.Address.State = Volunteer.Address?.State;
-			sv.Address.ZipCode = Volunteer.Address?.ZipCode;
+			sv.Address.Street = volunteer.Address?.Street;
+			sv.Address.City = volunteer.Address?.City;
+			sv.Address.State = volunteer.Address?.State;
+			sv.Address.ZipCode = volunteer.Address?.ZipCode;
 
             db.SaveChanges();
 

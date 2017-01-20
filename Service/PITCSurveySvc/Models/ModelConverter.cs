@@ -23,19 +23,19 @@ namespace PITCSurveySvc.Models
 
 		#region "Entity-to-Model Conversion (Static)"
 
-		public static SurveyModel ConvertToModel(Survey Survey)
+		public static SurveyModel ConvertToModel(Survey survey)
 		{
-			SurveyModel Model = new SurveyModel()
+			SurveyModel model = new SurveyModel()
 			{
-				SurveyID = Survey.ID,
-				Name = Survey.Name,
-				Description = Survey.Description,
-				IntroText = Survey.IntroText,
-				Version = Survey.Version,
-				LastUpdated = Survey.LastUpdated
+				SurveyID = survey.ID,
+				Name = survey.Name,
+				Description = survey.Description,
+				IntroText = survey.IntroText,
+				Version = survey.Version,
+				LastUpdated = survey.LastUpdated
 			};
 
-			foreach (SurveyQuestion sq in Survey.SurveyQuestions)
+			foreach (SurveyQuestion sq in survey.SurveyQuestions)
 			{
 				SurveyQuestionModel qm = new SurveyQuestionModel()
 				{
@@ -62,15 +62,15 @@ namespace PITCSurveySvc.Models
 					qm.AnswerChoices.Add(acm);
 				}
 
-				Model.Questions.Add(qm);
+				model.Questions.Add(qm);
 			}
 			
-			return Model;
+			return model;
 		}
 
 		public static VolunteerModel ConvertToModel(Volunteer Volunteer)
 		{
-			VolunteerModel Model = new VolunteerModel()
+			VolunteerModel model = new VolunteerModel()
 			{
 				FirstName = Volunteer.FirstName,
 				LastName = Volunteer.LastName,
@@ -79,12 +79,12 @@ namespace PITCSurveySvc.Models
 				MobilePhone = Volunteer.MobilePhone
 			};
 
-			Model.Address.Street = Volunteer.Address.Street;
-			Model.Address.City = Volunteer.Address.City;
-			Model.Address.State = Volunteer.Address.State;
-			Model.Address.ZipCode = Volunteer.Address.ZipCode;
+			model.Address.Street = Volunteer.Address.Street;
+			model.Address.City = Volunteer.Address.City;
+			model.Address.State = Volunteer.Address.State;
+			model.Address.ZipCode = Volunteer.Address.ZipCode;
 
-			return Model;
+			return model;
 		}
 
 		#endregion
@@ -92,35 +92,36 @@ namespace PITCSurveySvc.Models
 		#region "Model-to-Entity Conversion"
 
 		// These methods are not static, as they need the DbContext to pull in data for mapping.
-		public Survey ConvertToEntity(SurveyModel Model)
-		{
-			Survey Survey = _db.Surveys.Where(s => s.Description == Model.Description).SingleOrDefault();
 
-			if (Survey == null)
+		public Survey ConvertToEntity(SurveyModel model)
+		{
+			Survey survey = _db.Surveys.Where(s => s.Description == model.Description).SingleOrDefault();
+
+			if (survey == null)
 			{
-				Survey = new Survey()
+				survey = new Survey()
 				{
 					SurveyQuestions = new List<SurveyQuestion>()
 				};
 
-				_db.Surveys.Add(Survey);
+				_db.Surveys.Add(survey);
 			}
 
 			// For now, ignore ID - assume is new. We can delete existing if re-importing.
-			Survey.Name = Model.Name;
-			Survey.Description = Model.Description;
-			Survey.IntroText = Model.IntroText;
+			survey.Name = model.Name;
+			survey.Description = model.Description;
+			survey.IntroText = model.IntroText;
 
-			Survey.LastUpdated = DateTime.UtcNow;
-			Survey.Version += 1;
+			survey.LastUpdated = DateTime.UtcNow;
+			survey.Version += 1;
 
 			// Map the provided IDs to the existing or db-generated questions, to preserve navigation mapping
-			Dictionary<int, Question> QuestionsByModelID = new Dictionary<int, Question>();
-			Dictionary<int, AnswerChoice> AnswerChoicesByModelID = new Dictionary<int, AnswerChoice>();
+			Dictionary<int, Question> questionsByModelID = new Dictionary<int, Question>();
+			Dictionary<int, AnswerChoice> answerChoicesByModelID = new Dictionary<int, AnswerChoice>();
 
 			// Process all questions and answer choices first, so we have them in the db and indexed by model ID.
 
-			foreach (SurveyQuestionModel qm in Model.Questions)
+			foreach (SurveyQuestionModel qm in model.Questions)
 			{
 				// See if question already exists. Remember, questions are reusable, and can be shared across surveys.
 
@@ -144,7 +145,7 @@ namespace PITCSurveySvc.Models
 				q.AllowMultipleAnswers = qm.AllowMultipleAnswers;      // Move to SurveyQuestion?
 				q.WellKnownQuestion = qm.WellKnownQuestion;
 
-				QuestionsByModelID.Add(qm.QuestionID, q);
+				questionsByModelID.Add(qm.QuestionID, q);
 
 				foreach (SurveyQuestionAnswerChoiceModel acm in qm.AnswerChoices)
 				{
@@ -168,9 +169,9 @@ namespace PITCSurveySvc.Models
 					a.AnswerText = acm.AnswerChoiceText;
 					a.AdditionalAnswerDataFormat = acm.AdditionalAnswerDataFormat;
 
-					if (!AnswerChoicesByModelID.ContainsKey(acm.AnswerChoiceID))
+					if (!answerChoicesByModelID.ContainsKey(acm.AnswerChoiceID))
 					{
-						AnswerChoicesByModelID.Add(acm.AnswerChoiceID, a);
+						answerChoicesByModelID.Add(acm.AnswerChoiceID, a);
 					}
 				}
 
@@ -178,12 +179,12 @@ namespace PITCSurveySvc.Models
 
 			// Now we can process the model into the survey-specific entities.
 			// TODO: This block can now be moved into previous
-			foreach (SurveyQuestionModel qm in Model.Questions)
+			foreach (SurveyQuestionModel qm in model.Questions)
 			{
 
-				Question q = QuestionsByModelID[qm.QuestionID];
+				Question q = questionsByModelID[qm.QuestionID];
 
-				SurveyQuestion sq = Survey.SurveyQuestions.Where(sq2 => sq2.Question == q).SingleOrDefault();
+				SurveyQuestion sq = survey.SurveyQuestions.Where(sq2 => sq2.Question == q).SingleOrDefault();
 
 				if (sq == null)
 				{
@@ -193,7 +194,7 @@ namespace PITCSurveySvc.Models
 						AnswerChoices = new List<SurveyAnswerChoice>()
 					};
 
-					Survey.SurveyQuestions.Add(sq);
+					survey.SurveyQuestions.Add(sq);
 
 					_db.SurveyQuestions.Add(sq);
 				}
@@ -203,24 +204,24 @@ namespace PITCSurveySvc.Models
 
 			// Finally, with the SurveyQuestions all added and mapped, we can process AnswerChoices with forward-referenced NextQuestionID nav property
 
-			foreach (SurveyQuestionModel qm in Model.Questions)
+			foreach (SurveyQuestionModel qm in model.Questions)
 			{
 
-				Question q = QuestionsByModelID[qm.QuestionID];
+				Question q = questionsByModelID[qm.QuestionID];
 
-				SurveyQuestion sq = Survey.SurveyQuestions.Where(sq2 => sq2.Question == q).SingleOrDefault();
+				SurveyQuestion sq = survey.SurveyQuestions.Where(sq2 => sq2.Question == q).SingleOrDefault();
 
 				foreach (SurveyQuestionAnswerChoiceModel acm in qm.AnswerChoices)
 				{
 					// See if survey answer choice already exists.
 
-					SurveyAnswerChoice sac = sq.AnswerChoices.Where(c => c.AnswerChoice == AnswerChoicesByModelID[acm.AnswerChoiceID]).SingleOrDefault();
+					SurveyAnswerChoice sac = sq.AnswerChoices.Where(c => c.AnswerChoice == answerChoicesByModelID[acm.AnswerChoiceID]).SingleOrDefault();
 
 					if (sac == null)
 					{
 						sac = new SurveyAnswerChoice
 						{
-							AnswerChoice = AnswerChoicesByModelID[acm.AnswerChoiceID],
+							AnswerChoice = answerChoicesByModelID[acm.AnswerChoiceID],
 						};
 
 						sq.AnswerChoices.Add(sac);
@@ -234,7 +235,7 @@ namespace PITCSurveySvc.Models
 					{
 						try
 						{
-							sac.NextSurveyQuestion = Survey.SurveyQuestions.Where(ssq => ssq.Question == QuestionsByModelID[acm.NextQuestionID.Value]).Single();
+							sac.NextSurveyQuestion = survey.SurveyQuestions.Where(ssq => ssq.Question == questionsByModelID[acm.NextQuestionID.Value]).Single();
 						}
 						catch (Exception ex)
 						{
@@ -248,42 +249,74 @@ namespace PITCSurveySvc.Models
 				}
 			}
 
-			return Survey;
+			return survey;
 		}
 
-		public SurveyResponse ConvertToEntity(SurveyResponseModel Model)
+		public SurveyResponse ConvertToEntity(SurveyResponseModel model)
 		{
 			// 4326 is most common coordinate system used by GPS/Maps
-			const int CoordinateSystemID = 4326;
+			const int coordinateSystemID = 4326;
 
-			SurveyResponse Response = new SurveyResponse()
+			// TODO: Validate that question and answer IDs are valid for specified survey (use ArgumentException).
+			// TODO: Validate that AdditionalAnswerData matches the expected format, where applicable (use FormatException).
+
+			var survey = _db.Surveys.Include("SurveyQuestions").Include("SurveyQuestions.AnswerChoices").Where(s => s.ID == model.SurveyID).SingleOrDefault();
+
+			if (survey == null)
+				throw new ArgumentException("Invalid SurveyID.");
+
+			SurveyResponse response = new SurveyResponse()
 			{
-				Survey_ID = Model.SurveyID,
-				Survey_Version = Model.Survey_Version,
-				GPSLocation = (Model.GPSLocation?.Lat != null && Model.GPSLocation?.Lon != null) ? System.Data.Entity.Spatial.DbGeography.PointFromText($"Point({Model.GPSLocation.Lon} {Model.GPSLocation.Lat})", CoordinateSystemID) : null,
-				LocationNotes = Model.LocationNotes,
-				NearestAddress = Model.NearestAddress ?? new PITCSurveyLib.Address(),
-				ResponseIdentifier = Model.ResponseIdentifier,
-				InterviewStarted = Model.StartTime,
-				InterviewCompleted = Model.EndTime
+				Survey_ID = model.SurveyID,
+				Survey_Version = model.Survey_Version,
+				GPSLocation = (model.GPSLocation?.Lat != null && model.GPSLocation?.Lon != null) ? System.Data.Entity.Spatial.DbGeography.PointFromText($"Point({model.GPSLocation.Lon} {model.GPSLocation.Lat})", coordinateSystemID) : null,
+				LocationNotes = model.LocationNotes,
+				NearestAddress = model.NearestAddress ?? new PITCSurveyLib.Address(),
+				ResponseIdentifier = model.ResponseIdentifier,
+				InterviewStarted = model.StartTime,
+				InterviewCompleted = model.EndTime
 			};
 
-			foreach (SurveyQuestionResponseModel qrm in Model.QuestionResponses)
+			foreach (SurveyQuestionResponseModel qrm in model.QuestionResponses)
 			{
+				var question = survey.SurveyQuestions.Where(q => q.Question_ID == qrm.QuestionID).SingleOrDefault();
+
+				if (question == null)
+					throw new ArgumentException("Invalid QuestionID for this survey.");
+
 				foreach (SurveyQuestionAnswerChoiceResponseModel qacrm in qrm.AnswerChoiceResponses)
 				{
-					SurveyResponseAnswer Answer = new SurveyResponseAnswer()
+					var choice = question.AnswerChoices.Where(c => c.AnswerChoice_ID == qacrm.AnswerChoiceID).SingleOrDefault();
+
+					if (choice == null)
+						throw new ArgumentException("Invalid AnswerChoiceID for this survey question.");
+
+					switch (choice.AnswerChoice.AdditionalAnswerDataFormat)
+					{
+						case PITCSurveyLib.AnswerFormat.Int:
+							int intResult;
+							if (!int.TryParse(qacrm.AdditionalAnswerData, out intResult))
+								throw new FormatException("AdditionalAnswerData not parsable as 'int'.");
+							break;
+						case PITCSurveyLib.AnswerFormat.Date:
+							DateTime dateResult;
+							if (!DateTime.TryParse(qacrm.AdditionalAnswerData, out dateResult))
+								throw new FormatException("AdditionalAnswerData not parsable as 'DateTime'.");
+							break;
+					}
+
+					SurveyResponseAnswer answer = new SurveyResponseAnswer()
 					{
 						Question_ID = qrm.QuestionID,
 						AnswerChoice_ID = qacrm.AnswerChoiceID,
 						AdditionalAnswerData = qacrm.AdditionalAnswerData
 					};
 
-					Response.Answers.Add(Answer);
+					response.Answers.Add(answer);
 				}
 			}
 
-			return Response;
+			return response;
 		}
 
 		#endregion

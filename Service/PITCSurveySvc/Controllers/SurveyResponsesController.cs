@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 
@@ -26,46 +27,46 @@ namespace PITCSurveySvc.Controllers
 		/// Submit a completed Survey Response.
 		/// </summary>
 		/// <param name="SurveyResponse"></param>
-		/// <param name="DeviceId"></param>
+		/// <param name="deviceId"></param>
 		/// <returns></returns>
 		[ResponseType(typeof(void))]
 		[SwaggerOperation("PostSurveyResponse")]
 		[SwaggerResponse(HttpStatusCode.BadRequest, "The survey data wasn't acceptable (improper formatting, etc.).")]
 		[SwaggerResponse(HttpStatusCode.NoContent, "SurveyResponse uploaded successfully.")]
 		[AllowAnonymous]
-		public IHttpActionResult PostSurveyResponse(SurveyResponseModel SurveyResponse, Guid? DeviceId)
+		public async Task<IHttpActionResult> PostSurveyResponse(SurveyResponseModel surveyResponse, Guid? deviceId)
 		{
-			Volunteer sv = GetAuthenticatedVolunteer(DeviceId);
+			Volunteer sv = await GetAuthenticatedVolunteerAsync(deviceId);
 
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 
-			if (!DeviceId.HasValue)
+			if (!deviceId.HasValue)
 				return BadRequest("The DeviceId was not specified.");
-			else if (DeviceId.Value == Guid.Empty)
+			else if (deviceId.Value == Guid.Empty)
 				return BadRequest("The DeviceId was not valid.");
 
 			if (sv == null)
 				return BadRequest("The specified InterviewerID is not recognized. User not logged in?");
 
-			SurveyResponse sr = db.SurveyResponses.Where(r => r.ResponseIdentifier == SurveyResponse.ResponseIdentifier).SingleOrDefault();
+			SurveyResponse sr = db.SurveyResponses.Where(r => r.ResponseIdentifier == surveyResponse.ResponseIdentifier).SingleOrDefault();
 			if (sr != null)
 				// Delete current response to replace with new one
 				db.SurveyResponses.Remove(sr);
 
 			try
 			{
-				ModelConverter Converter = new ModelConverter(db);
+				ModelConverter converter = new ModelConverter(db);
 
-				SurveyResponse Response = Converter.ConvertToEntity(SurveyResponse);
+				SurveyResponse response = converter.ConvertToEntity(surveyResponse);
 
-				Response.Volunteer = sv;
+				response.Volunteer = sv;
 
-				Response.DeviceId = DeviceId.Value;
+				response.DeviceId = deviceId.Value;
 
-				Response.DateUploaded = DateTime.UtcNow;
+				response.DateUploaded = DateTime.UtcNow;
 
-				db.SurveyResponses.Add(Response);
+				db.SurveyResponses.Add(response);
 
 				db.SaveChanges();
 
@@ -85,12 +86,22 @@ namespace PITCSurveySvc.Controllers
 					}
 				}
 				Trace.TraceError("Error processing SurveyResponse: " + evex.ToString());
-				throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, sb.ToString())); // InternalServerError(new ApplicationException(sb.ToString(), evex));
+				throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, sb.ToString()));
+			}
+			catch (ArgumentException ae)
+			{
+				Trace.TraceError("Error processing SurveyResponse: " + ae.Message);
+				throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ae.Message));
+			}
+			catch (FormatException fe)
+			{
+				Trace.TraceError("Error processing SurveyResponse: " + fe.Message);
+				throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, fe.Message));
 			}
 			catch (Exception ex)
 			{
 				Trace.TraceError("Error processing SurveyResponse: " + ex.ToString());
-				throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.ToString()));	// return Content(HttpStatusCode.InternalServerError, ex.ToString()); // InternalServerError(ex);
+				throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.ToString()));
 			}
 		}
 	}

@@ -13,13 +13,6 @@ namespace PITCSurveySvc
 			// Web API configuration and services
 
 
-			// Web API configuration and services
-			// Configure Web API to use only bearer token authentication.
-			//config.SuppressDefaultHostAuthentication();
-			//config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
-
-			//AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.NameIdentifier;
-
 			// Web API routes
 			config.MapHttpAttributeRoutes();
 

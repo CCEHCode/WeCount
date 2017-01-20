@@ -8,6 +8,7 @@ using System.Data;
 using System.Data.Entity.Validation;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 
@@ -23,60 +24,60 @@ namespace PITCSurveySvc.Controllers
 		/// <summary>
 		/// Get a list of available Surveys and metadata.
 		/// </summary>
-		/// <param name="ActiveOnly"></param>
+		/// <param name="activeOnly"></param>
 		/// <returns></returns>
 		[SwaggerOperation("GetAllSurveys")]
 		[ResponseType(typeof(IEnumerable<SurveySummaryModel>))]
 		[SwaggerResponse(HttpStatusCode.OK, "All mai Survey are belong 2 u <3", typeof(IEnumerable<SurveySummaryModel>))]
 		[AllowAnonymous]
-		public IHttpActionResult GetSurveys(bool ActiveOnly = true)
+		public async Task<IHttpActionResult> GetSurveys(bool activeOnly = true)
 		{
 			// We don't use this here, but it ensures the volunteer record is created if it doesn't exist yet.
-			Volunteer sv = GetAuthenticatedVolunteer();
+			Volunteer sv = await GetAuthenticatedVolunteerAsync();
 
-			var Surveys = db.Surveys.Where(s => !ActiveOnly || s.Active);
+			var surveys = db.Surveys.Where(s => !activeOnly || s.Active);
 
-			var Models = new List<SurveySummaryModel>();
+			var models = new List<SurveySummaryModel>();
 
-			foreach (Survey Survey in Surveys)
+			foreach (Survey survey in surveys)
 			{
-				Models.Add(new SurveySummaryModel()
+				models.Add(new SurveySummaryModel()
 				{
-					ID = Survey.ID,
-					Description = Survey.Description,
-					Version = Survey.Version,
-					LastUpdated = Survey.LastUpdated
+					ID = survey.ID,
+					Description = survey.Description,
+					Version = survey.Version,
+					LastUpdated = survey.LastUpdated
 				});
 			}
 
-			return Ok(Models);
+			return Ok(models);
 		}
 
 		// GET: api/Surveys/5
 		/// <summary>
 		/// Get the full body of the specified Survey.
 		/// </summary>
-		/// <param name="ID"></param>
+		/// <param name="id"></param>
 		/// <returns></returns>
 		[SwaggerOperation("GetSurveyByID")]
 		[ResponseType(typeof(SurveyModel))]
 		[SwaggerResponse(HttpStatusCode.NotFound, "A Survey with the specified ID was not found.")]
 		[SwaggerResponse(HttpStatusCode.OK, "U can haz Survey", typeof(SurveyModel))]
 		[AllowAnonymous]
-		public IHttpActionResult GetSurvey(int ID)
+		public async Task<IHttpActionResult> GetSurvey(int id)
 		{
 			// We don't use this here, but it ensures the volunteer record is created if it doesn't exist yet.
-			Volunteer sv = GetAuthenticatedVolunteer();
+			Volunteer sv = await GetAuthenticatedVolunteerAsync();
 			
-			Survey Survey = db.Surveys.Include("SurveyQuestions").Include("SurveyQuestions.Question").Include("SurveyQuestions.AnswerChoices").Where(s => s.ID == ID).SingleOrDefault();
-			if (Survey == null)
+			Survey survey = db.Surveys.Include("SurveyQuestions").Include("SurveyQuestions.Question").Include("SurveyQuestions.AnswerChoices").Where(s => s.ID == id).SingleOrDefault();
+			if (survey == null)
 				return NotFound();
 
 			try
 			{
-				SurveyModel Model = ModelConverter.ConvertToModel(Survey);
+				SurveyModel model = ModelConverter.ConvertToModel(survey);
 
-				return Ok(Model);
+				return Ok(model);
 			}
 			catch (Exception ex)
 			{
@@ -88,15 +89,15 @@ namespace PITCSurveySvc.Controllers
 		/// <summary>
 		/// Import a new / updated Survey.
 		/// </summary>
-		/// <param name="Survey"></param>
+		/// <param name="survey"></param>
 		/// <returns></returns>
 		[SwaggerOperation("PostSurvey")]
 		[SwaggerResponse(HttpStatusCode.BadRequest)]
 		[SwaggerResponse(HttpStatusCode.NoContent)]
-		public IHttpActionResult PostSurvey(SurveyModel Survey)
+		public async Task<IHttpActionResult> PostSurvey(SurveyModel survey)
 		{
 			// We don't use this here, but it ensures the volunteer record is created if it doesn't exist yet.
-			Volunteer sv = GetAuthenticatedVolunteer();
+			Volunteer sv = await GetAuthenticatedVolunteerAsync();
 
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
@@ -104,9 +105,9 @@ namespace PITCSurveySvc.Controllers
 			try
 			{
 
-				ModelConverter Converter = new ModelConverter(db);
+				ModelConverter converter = new ModelConverter(db);
 
-				Survey ImportSurvey = Converter.ConvertToEntity(Survey);
+				Survey importSurvey = converter.ConvertToEntity(survey);
 
 				// Handle this like we do for child objects in converter, allows update not just insert.
 				//db.Surveys.Add(Survey);
@@ -117,7 +118,7 @@ namespace PITCSurveySvc.Controllers
 			}
 			catch (DbEntityValidationException eve)
 			{
-				List<String> Errors = new List<string>();
+				List<String> errors = new List<string>();
 
 				//StringBuilder sb = new StringBuilder();
 
@@ -127,14 +128,14 @@ namespace PITCSurveySvc.Controllers
 
 					foreach (DbValidationError ve in vr.ValidationErrors)
 					{
-						string Error = $"{vr.Entry.Entity.GetType().Name}.{ve.PropertyName}: {ve.ErrorMessage}";
+						string error = $"{vr.Entry.Entity.GetType().Name}.{ve.PropertyName}: {ve.ErrorMessage}";
 						//sb.AppendLine($"    {ve.PropertyName}: {ve.ErrorMessage}");
-						if (!Errors.Contains(Error))
-							Errors.Add(Error);
+						if (!errors.Contains(error))
+							errors.Add(error);
 					}
 				}
 
-				return InternalServerError(new InvalidOperationException(eve.Message + "\r\n" + String.Join("\r\n", Errors.ToArray()), eve));
+				return InternalServerError(new InvalidOperationException(eve.Message + "\r\n" + String.Join("\r\n", errors.ToArray()), eve));
 			}
 			catch (Exception ex)
 			{
