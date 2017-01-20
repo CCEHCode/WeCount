@@ -30,8 +30,14 @@ namespace PITCSurveyApp.Views
         {
             base.OnDisappearing();
 
-            // Save the survey each time the location page disappears
-            await _viewModel.SaveAsync();
+            // Save the survey each time the location page disappears,
+            // but only if the location page was created from the toolbar.
+            // This prevents the creation of an empty survey every time
+            // a new survey is started and immediately canceled.
+            if (_viewModel.IsUpdateLocation)
+            {
+                await _viewModel.SaveAsync();
+            }
         }
     }
 }
