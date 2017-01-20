@@ -11,7 +11,7 @@ using Xamarin.Forms;
 namespace PITCSurveyApp.Extensions
 {
     /// <summary>
-    /// Extension methods for the survey responses.date 
+    /// Extension methods for <see cref="SurveyResponseModel"/>.
     /// </summary>
     static class SurveyResponseModelExtensions
     {
@@ -21,7 +21,9 @@ namespace PITCSurveyApp.Extensions
         /// <param name="response">The survey response.</param>
         /// <param name="survey">The survey.</param>
         /// <param name="question">The well-known question type.</param>
-        /// <returns></returns>
+        /// <returns>
+        /// The specified valid of the well-known answer, or <code>null</code> if not found.
+        /// </returns>
         public static string GetWellKnownAnswer(this SurveyResponseModel response, SurveyModel survey, WellKnownQuestion question)
         {
             var nameQuestion = survey.Questions
@@ -97,7 +99,7 @@ namespace PITCSurveyApp.Extensions
         }
 
         /// <summary>
-        /// Gets the filename of the survey response, based on the survey response GUID.
+        /// Gets the filename of the survey response, based on the survey response <see cref="Guid"/>.
         /// </summary>
         /// <param name="response">The survey response.</param>
         /// <returns>The filename.</returns>

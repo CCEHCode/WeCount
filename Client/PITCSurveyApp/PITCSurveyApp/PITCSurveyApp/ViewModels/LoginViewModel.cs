@@ -71,7 +71,7 @@ namespace PITCSurveyApp.ViewModels
 
         private async void RefreshUser()
         {
-            UserSettings.Initializing = true;
+            UserSettings.IsRefreshingAuthToken = true;
 
             try
             {
@@ -79,7 +79,7 @@ namespace PITCSurveyApp.ViewModels
             }
             finally
             {
-                UserSettings.Initializing = false;
+                UserSettings.IsRefreshingAuthToken = false;
             }
 
             if (UserSettings.IsLoggedIn)

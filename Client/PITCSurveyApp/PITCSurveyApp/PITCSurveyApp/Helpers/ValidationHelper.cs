@@ -4,6 +4,9 @@ using Xamarin.Forms;
 
 namespace PITCSurveyApp.Helpers
 {
+    /// <summary>
+    /// A wrapper class for the <see cref="IValidationHelper"/> retrieved from the <see cref="DependencyService"/>.  
+    /// </summary>
     class ValidationHelper: IValidationHelper
     {
 		private readonly IValidationHelper _validationHelper = DependencyService.Get<IValidationHelper>();

@@ -31,6 +31,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\UploadedItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\IAuthenticate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\IMetricsManagerService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\MetricsManagerService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\SurveyCloudService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\BaseViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ContactInfoViewModel.cs" />

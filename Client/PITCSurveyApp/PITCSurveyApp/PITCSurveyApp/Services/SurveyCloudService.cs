@@ -10,18 +10,27 @@ using Xamarin.Forms;
 
 namespace PITCSurveyApp.Services
 {
+    /// <summary>
+    /// Collection of helper methods for accessing the survey cloud service.
+    /// </summary>
     public static class SurveyCloudService
     {
         private const string AzureMobileAppUrl = "https://appname.azurewebsites.net";
 
-        public static MobileServiceClient ApiClient;
+        /// <summary>
+        /// The API client.
+        /// </summary>
+        public static readonly MobileServiceClient ApiClient = new MobileServiceClient(AzureMobileAppUrl);
 
-        static SurveyCloudService()
-        {
-            ApiClient = new MobileServiceClient(AzureMobileAppUrl);
-        }
-
-        public static async Task<SurveyModel> GetSurveyAsync(int id = 1)
+        /// <summary>
+        /// Gets the survey with the given identifier.
+        /// </summary>
+        /// <param name="id">The survey identifier.</param>
+        /// <returns>
+        /// A task to await the survey surveyResponse, returning the survey surveyResponse
+        /// or <code>null</code> if any exception occurs.
+        /// </returns>
+        public static async Task<SurveyModel> GetSurveyAsync(int id)
         {
             var parameters = new Dictionary<string, string>
             {
@@ -42,7 +51,14 @@ namespace PITCSurveyApp.Services
             }
         }
 
-        public static Task SubmitSurveyResponseAsync(SurveyResponseModel response)
+        /// <summary>
+        /// Submits a survey response to the service.
+        /// </summary>
+        /// <param name="surveyResponse">The survey response</param>
+        /// <returns>
+        /// A task to await the submission. 
+        /// </returns>
+        public static Task SubmitSurveyResponseAsync(SurveyResponseModel surveyResponse)
         {
             var parameters = new Dictionary<string, string>
             {
@@ -51,10 +67,17 @@ namespace PITCSurveyApp.Services
 
             using (new LatencyMetric("SubmitSurveyResponse"))
             {
-                return ApiClient.InvokeApiAsync("SurveyResponses", JObject.FromObject(response), HttpMethod.Post, parameters);
+                return ApiClient.InvokeApiAsync("SurveyResponses", JObject.FromObject(surveyResponse), HttpMethod.Post, parameters);
             }
         }
 
+        /// <summary>
+        /// Gets the current volunteer profile.
+        /// </summary>
+        /// <returns>
+        /// A task to await the volunteer profile, or a new instance of 
+        /// <see cref="VolunteerModel"/> if an existing record cannot be found.
+        /// </returns>
         public static async Task<VolunteerModel> GetVolunteerAsync()
         {
             try
@@ -76,6 +99,13 @@ namespace PITCSurveyApp.Services
             }
         }
 
+        /// <summary>
+        /// Saves the volunteer profile.
+        /// </summary>
+        /// <param name="volunteer">The volunteer profile.</param>
+        /// <returns>
+        /// A task to await the save operation.
+        /// </returns>
         public static Task SaveVolunteerAsync(VolunteerModel volunteer)
         {
 			var parameters = new Dictionary<string, string>
@@ -89,11 +119,20 @@ namespace PITCSurveyApp.Services
             }
         }
 
-		public static async Task<ContactInfoModel> GetContactInfoAsync(int? SurveyId = null)
+        /// <summary>
+        /// Gets the data for the contact information page.
+        /// </summary>
+        /// <param name="surveyId">
+        /// The survey identifier linked to the contact information.
+        /// </param>
+        /// <returns>
+        /// A task to await the contact information.
+        /// </returns>
+		public static async Task<ContactInfoModel> GetContactInfoAsync(int surveyId)
 		{
 			var parameters = new Dictionary<string, string>
 			{
-				{ "SurveyId", SurveyId.ToString() },
+				{ "SurveyId", surveyId.ToString() },
 				{ "DeviceId", UserSettings.VolunteerId},
 			};
 

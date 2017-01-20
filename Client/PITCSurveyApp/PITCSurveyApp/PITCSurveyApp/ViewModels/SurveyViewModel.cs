@@ -173,7 +173,7 @@ namespace PITCSurveyApp.ViewModels
             {
                 var shouldContinue = await App.DisplayAlertAsync(
                     "Incomplete Answer",
-                    "At least one answer requires more infomration, are you sure you want to continue?", 
+                    "At least one answer requires more information, are you sure you want to continue?", 
                     "Yes",
                     "No");
 

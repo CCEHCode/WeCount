@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 
 namespace PITCSurveyApp.Helpers
 {
+    /// <summary>
+    /// Helpers for cross-platform operations.
+    /// </summary>
     public static class CrossHelper
     {
         /// <summary>

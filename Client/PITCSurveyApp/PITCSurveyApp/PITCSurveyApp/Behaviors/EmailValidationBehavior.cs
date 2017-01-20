@@ -1,15 +1,19 @@
 ﻿using PITCSurveyApp.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Xamarin.Forms;
 
 namespace PITCSurveyApp.Behaviors
 {
+    /// <summary>
+    /// Email validation behavior for profile text entry.
+    /// </summary>
     class EmailValidationBehavior : Behavior<Entry>
     {
-		static IValidationHelper _validationHelper = new ValidationHelper();
+		private static readonly IValidationHelper s_validationHelper = new ValidationHelper();
 
+        /// <summary>
+        /// Subscribe to text changed events on text entry component.
+        /// </summary>
+        /// <param name="bindable">The text entry component.</param>
 		protected override void OnAttachedTo(Entry bindable)
 		{
 			bindable.TextChanged += HandleTextChanged;
@@ -17,6 +21,10 @@ namespace PITCSurveyApp.Behaviors
 			base.OnAttachedTo(bindable);
 		}
 
+        /// <summary>
+        /// Unsubscribe from text changed events on text entry component.
+        /// </summary>
+        /// <param name="bindable">The text entry component.</param>
 		protected override void OnDetachingFrom(Entry bindable)
 		{
 			bindable.TextChanged -= HandleTextChanged;
@@ -26,9 +34,9 @@ namespace PITCSurveyApp.Behaviors
 
 		private void HandleTextChanged(object sender, TextChangedEventArgs e)
 		{
-			bool IsValid = _validationHelper.IsValidEmail(e.NewTextValue);
+			var isValid = s_validationHelper.IsValidEmail(e.NewTextValue);
 
-			((Entry)sender).TextColor = IsValid ? Color.Default : Color.Red;
+			((Entry)sender).TextColor = isValid ? Color.Default : Color.Red;
 		}
 	}
 }

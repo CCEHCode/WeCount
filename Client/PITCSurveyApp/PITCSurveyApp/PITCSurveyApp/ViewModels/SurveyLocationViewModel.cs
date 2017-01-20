@@ -204,7 +204,7 @@ namespace PITCSurveyApp.ViewModels
                         _response.Item.GPSLocation.Lat = position.Latitude;
                         _response.Item.GPSLocation.Lon = position.Longitude;
                         _response.Item.GPSLocation.Accuracy = (float)position.Accuracy;
-                        var address = await Geocoder.ReverseGeocode(position.Latitude, position.Longitude);
+                        var address = await Geocoder.ReverseGeocodeAsync(position.Latitude, position.Longitude);
                         if (address != null)
                         {
                             Street = address.AddressLine;

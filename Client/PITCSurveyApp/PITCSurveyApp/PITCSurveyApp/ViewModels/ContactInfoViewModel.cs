@@ -33,7 +33,7 @@ namespace PITCSurveyApp.ViewModels
 		{
 			try
 			{
-				var model = await SurveyCloudService.GetContactInfoAsync(null);    // TODO: Put SurveyId here
+				var model = await SurveyCloudService.GetContactInfoAsync(1);
                 Note = model.Notes;
                 ContactInfo = string.Join("\n", model.Contacts.Select(c => $"{c.Name}: {c.Phone}").ToArray());
 			}

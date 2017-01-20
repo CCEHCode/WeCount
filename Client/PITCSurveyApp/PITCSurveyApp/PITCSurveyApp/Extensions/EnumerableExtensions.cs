@@ -8,23 +8,57 @@ namespace PITCSurveyApp.Extensions
     /// </summary>
     static class EnumerableExtensions
     {
+        /// <summary>
+        /// Gets the minimum item from the collection based on the selected comparable property.
+        /// </summary>
+        /// <typeparam name="T">Element type of collection.</typeparam>
+        /// <typeparam name="TComparable">Type of comparable property.</typeparam>
+        /// <param name="enumerable">The collection.</param>
+        /// <param name="selector">The comparable property selector.</param>
+        /// <returns>The minimum item in the collection or a default value if the collection is empty.</returns>
         public static T MinByOrDefault<T, TComparable>(this IEnumerable<T> enumerable, Func<T, TComparable> selector)
             where TComparable : IComparable
         {
             return MinByOrDefault(enumerable, selector, ComparableComparer<TComparable>.Instance);
         }
 
+        /// <summary>
+        /// Gets the minimum item from the collection based on the selected comparable property.
+        /// </summary>
+        /// <typeparam name="T">Element type of collection.</typeparam>
+        /// <typeparam name="TComparable">Type of comparable property.</typeparam>
+        /// <param name="enumerable">The collection.</param>
+        /// <param name="selector">The comparable property selector.</param>
+        /// <param name="comparer">The comparer for the selected comparable property.</param>
+        /// <returns>The minimum item in the collection or a default value if the collection is empty.</returns>
         public static T MinByOrDefault<T, TComparable>(this IEnumerable<T> enumerable, Func<T, TComparable> selector, IComparer<TComparable> comparer)
         {
             return MinOrMaxByOrDefault(enumerable, selector, (x, y) => comparer.Compare(x, y) < 0);
         }
 
+        /// <summary>
+        /// Gets the maximum item from the collection based on the selected comparable property.
+        /// </summary>
+        /// <typeparam name="T">Element type of collection.</typeparam>
+        /// <typeparam name="TComparable">Type of comparable property.</typeparam>
+        /// <param name="enumerable">The collection.</param>
+        /// <param name="selector">The comparable property selector.</param>
+        /// <returns>The maximum item in the collection or a default value if the collection is empty.</returns>
         public static T MaxByOrDefault<T, TComparable>(this IEnumerable<T> enumerable, Func<T, TComparable> selector)
             where TComparable : IComparable
         {
             return MaxByOrDefault(enumerable, selector, ComparableComparer<TComparable>.Instance);
         }
 
+        /// <summary>
+        /// Gets the maximum item from the collection based on the selected comparable property.
+        /// </summary>
+        /// <typeparam name="T">Element type of collection.</typeparam>
+        /// <typeparam name="TComparable">Type of comparable property.</typeparam>
+        /// <param name="enumerable">The collection.</param>
+        /// <param name="selector">The comparable property selector.</param>
+        /// <param name="comparer">The comparer for the selected comparable property.</param>
+        /// <returns>The maximum item in the collection or a default value if the collection is empty.</returns>
         public static T MaxByOrDefault<T, TComparable>(this IEnumerable<T> enumerable, Func<T, TComparable> selector, IComparer<TComparable> comparer)
         {
             return MinOrMaxByOrDefault(enumerable, selector, (x, y) => comparer.Compare(x, y) > 0);

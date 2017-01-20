@@ -6,19 +6,19 @@ using System.Runtime.CompilerServices;
 namespace PITCSurveyApp.Helpers
 {
     /// <summary>
-    /// Observable object with INotifyPropertyChanged implemented
+    /// Observable object with <see cref="INotifyPropertyChanged"/> implemented.
     /// </summary>
     public class ObservableObject : INotifyPropertyChanged
     {
         /// <summary>
         /// Sets the property.
         /// </summary>
-        /// <returns><c>true</c>, if property was set, <c>false</c> otherwise.</returns>
+        /// <typeparam name="T">The first type parameter.</typeparam>
         /// <param name="backingStore">Backing store.</param>
         /// <param name="value">Value.</param>
         /// <param name="propertyName">Property name.</param>
         /// <param name="onChanged">On changed.</param>
-        /// <typeparam name="T">The 1st type parameter.</typeparam>
+        /// <returns><c>true</c>, if property was set, <c>false</c> otherwise.</returns>
         protected bool SetProperty<T>(
             ref T backingStore, T value,
             [CallerMemberName]string propertyName = "",

@@ -3,14 +3,30 @@ using System.Text.RegularExpressions;
 
 namespace PITCSurveyApp.Helpers
 {
+    /// <summary>
+    /// Implementation of <see cref="IComparer{T}"/> for survey question numbers. 
+    /// </summary>
     class SurveyQuestionNumberComparer : IComparer<string>
     {
         private static readonly Regex s_regex = new Regex(@"(\d+)([a-z]*)(\d*)");
 
         private SurveyQuestionNumberComparer() { }
 
+        /// <summary>
+        /// The singleton instance of the comparer.
+        /// </summary>
         public static readonly SurveyQuestionNumberComparer Instance = new SurveyQuestionNumberComparer();
 
+        /// <summary>
+        /// Compares two survey question numbers.
+        /// </summary>
+        /// <param name="x">The first survey question number.</param>
+        /// <param name="y">The second survey question number.</param>
+        /// <returns>
+        /// <code>1</code> if the first value is greater than the second, 
+        /// <code>-1</code> if the second value is greater than the first,
+        /// otherwise <code>0</code>.
+        /// </returns>
         public int Compare(string x, string y)
         {
             var xMatch = s_regex.Match(x);

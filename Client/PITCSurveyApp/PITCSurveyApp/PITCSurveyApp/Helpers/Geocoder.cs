@@ -8,11 +8,23 @@ using Xamarin.Forms;
 
 namespace PITCSurveyApp.Helpers
 {
+    /// <summary>
+    /// Wrapper class for reverse geocoding a GPS position using Bing.
+    /// </summary>
     static class Geocoder
     {
         private const string BingMapsKey = "bingMapsKey";
 
-        public static async Task<AddressResult> ReverseGeocode(double latitude, double longitude)
+        /// <summary>
+        /// Gets the address for a given GPS position.
+        /// </summary>
+        /// <param name="latitude">The latitude.</param>
+        /// <param name="longitude">The longitude.</param>
+        /// <returns>
+        /// A task to await the reverse geocode request, returning the resulting
+        /// address or <code>null</code> if the request failed. 
+        /// </returns>
+        public static async Task<AddressResult> ReverseGeocodeAsync(double latitude, double longitude)
         {
             var queryString = $"http://dev.virtualearth.net/REST/v1/Locations/{latitude},{longitude}?key={BingMapsKey}";
             var webRequest = WebRequest.Create(queryString);
