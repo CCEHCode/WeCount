@@ -8,7 +8,7 @@ namespace PITCSurveyApp.ViewModels
     /// </summary>
     public class BaseViewModel : ObservableObject
     {
-        private bool _isBusy = false;
+        private bool _isBusy;
 
         /// <summary>
         /// If <code>true</code>, indicates the view is busy.

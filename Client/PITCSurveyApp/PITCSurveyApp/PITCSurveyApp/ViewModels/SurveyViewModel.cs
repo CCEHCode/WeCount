@@ -31,7 +31,7 @@ namespace PITCSurveyApp.ViewModels
             _response = response;
             NextQuestionCommand = new Command(NextQuestion, () => CanGoForward);
             PreviousQuestionCommand = new Command(PreviousQuestion, () => CanGoBack);
-            NewSurveyCommand = new Command(NewSurvey);
+            NewSurveyCommand = new Command(NewSurvey, () => IsNotBusy);
             EditLocationCommand = new Command(EditLocation);
             Init();
         }
@@ -100,8 +100,19 @@ namespace PITCSurveyApp.ViewModels
 
         public async Task UploadAndDeleteAsync()
         {
-            await _response.UploadAsync();
-            await _response.DeleteAsync();
+            IsBusy = true;
+            NewSurveyCommand.ChangeCanExecute();
+
+            try
+            {
+                await _response.UploadAsync();
+                await _response.DeleteAsync();
+            }
+            finally
+            {
+                IsBusy = false;
+                NewSurveyCommand.ChangeCanExecute();
+            }
         }
 
         /// <summary>
