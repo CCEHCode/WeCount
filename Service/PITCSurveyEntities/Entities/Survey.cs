@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace PITCSurveyEntities.Entities
 {
@@ -24,6 +22,8 @@ namespace PITCSurveyEntities.Entities
 		public int Version { get; set; }
 
 		public DateTimeOffset LastUpdated { get; set; }
+
+		public virtual ContactInfo ContactInfo { get; set; }
 
 		public virtual IList<SurveyQuestion> SurveyQuestions { get; set; }
 	}

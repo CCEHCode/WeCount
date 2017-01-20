@@ -1,13 +1,11 @@
-﻿using System;
+﻿using PITCSurveyLib;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
-using PITCSurveyLib;
 
 namespace PITCSurveyEntities.Entities
 {
-    public class Volunteer
+	public class Volunteer
     {
 		[Key]
 		public int ID { get; set; }

@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Data.Entity;
 using System.Data.Common;
+using System.Data.Entity;
 
 namespace PITCSurveyEntities.Entities
 {
-    public class PITCSurveyContext: DbContext
+	public class PITCSurveyContext: DbContext
     {
 
 		public PITCSurveyContext()
@@ -37,6 +34,9 @@ namespace PITCSurveyEntities.Entities
 		public DbSet<SurveyResponse> SurveyResponses { get; set; }
 		public DbSet<SurveyResponseAnswer> SurveyResponseAnswers { get; set; }
 		
+		public DbSet<ContactInfo> ContactInfos { get; set; }
+		public DbSet<Contact> Contacts { get; set; }
+
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
 			Database.SetInitializer(new MigrateDatabaseToLatestVersion<PITCSurveyContext, Migrations.Configuration>());

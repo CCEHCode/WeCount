@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.Spatial;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PITCSurveyEntities.Entities
 {

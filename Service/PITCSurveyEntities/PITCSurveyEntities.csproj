@@ -58,6 +58,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\AnswerChoice.cs" />
+    <Compile Include="Entities\Contact.cs" />
+    <Compile Include="Entities\ContactInfo.cs" />
     <Compile Include="Entities\PITCSurveyContext.cs" />
     <Compile Include="Entities\Question.cs" />
     <Compile Include="Entities\Survey.cs" />
@@ -113,6 +115,10 @@
     <Compile Include="Migrations\201701121754407_AddDeviceIdToVolunteer.cs" />
     <Compile Include="Migrations\201701121754407_AddDeviceIdToVolunteer.Designer.cs">
       <DependentUpon>201701121754407_AddDeviceIdToVolunteer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201701171759483_AddContactInfo.cs" />
+    <Compile Include="Migrations\201701171759483_AddContactInfo.Designer.cs">
+      <DependentUpon>201701171759483_AddContactInfo.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -183,6 +189,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201701121754407_AddDeviceIdToVolunteer.resx">
       <DependentUpon>201701121754407_AddDeviceIdToVolunteer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701171759483_AddContactInfo.resx">
+      <DependentUpon>201701171759483_AddContactInfo.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
