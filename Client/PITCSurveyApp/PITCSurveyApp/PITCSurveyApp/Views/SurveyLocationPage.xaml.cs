@@ -22,7 +22,6 @@ namespace PITCSurveyApp.Views
 	    private SurveyLocationPage(SurveyLocationViewModel viewModel)
 	    {
             InitializeComponent();
-
 	        _viewModel = viewModel;
 	        BindingContext = _viewModel;
 	    }
@@ -31,6 +30,7 @@ namespace PITCSurveyApp.Views
         {
             base.OnDisappearing();
 
+            // Save the survey each time the location page disappears
             await _viewModel.SaveAsync();
         }
     }

@@ -22,6 +22,8 @@ namespace PITCSurveyApp.Views
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+
+            // Refresh the list of survey responses each time the view appears.
             await _viewModel.RefreshAsync();
         }
     }
