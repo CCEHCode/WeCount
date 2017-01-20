@@ -91,12 +91,11 @@
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Helpers\FileHelper.cs" />
-    <Compile Include="Helpers\Settings.cs" />
-    <Compile Include="Helpers\ValidationHelper.cs" />
+    <Compile Include="Helpers\IOSFileHelper.cs" />
+    <Compile Include="Helpers\IOSValidationHelper.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="Services\MetricsManagerService.cs" />
+    <Compile Include="Services\IOSMetricsManagerService.cs" />
     <ITunesArtwork Include="iTunesArtwork%402x" />
     <None Include="app.config" />
     <None Include="Entitlements.plist" />

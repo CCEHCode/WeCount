@@ -4,11 +4,11 @@ using System;
 using System.Net.Mail;
 using Xamarin.Forms;
 
-[assembly: Dependency(typeof(PITCSurveyApp.Droid.Helpers.ValidationHelper))]
+[assembly: Dependency(typeof(PITCSurveyApp.Droid.Helpers.AndroidValidationHelper))]
 
 namespace PITCSurveyApp.Droid.Helpers
 {
-	class ValidationHelper : IValidationHelper
+	class AndroidValidationHelper : IValidationHelper
 	{
 		public bool IsValidEmail(string emailAddress)
 		{

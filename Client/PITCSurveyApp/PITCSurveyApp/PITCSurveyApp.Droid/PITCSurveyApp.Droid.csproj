@@ -201,14 +201,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\FileHelper.cs" />
-    <Compile Include="Helpers\Settings.cs" />
-    <Compile Include="Helpers\ValidationHelper.cs" />
+    <Compile Include="Helpers\AndroidFileHelper.cs" />
+    <Compile Include="Helpers\AndroidValidationHelper.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="MainApplication.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\MetricsManagerService.cs" />
+    <Compile Include="Services\AndroidMetricsManagerService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

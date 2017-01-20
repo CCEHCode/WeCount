@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using HockeyApp;
 using PITCSurveyApp.Services;
 
-[assembly: Xamarin.Forms.Dependency(typeof(PITCSurveyApp.Droid.MetricsManagerService))]
+[assembly: Xamarin.Forms.Dependency(typeof(PITCSurveyApp.Droid.AndroidMetricsManagerService))]
 
 namespace PITCSurveyApp.Droid
 {
-    class MetricsManagerService : IMetricsManagerService
+    class AndroidMetricsManagerService : IMetricsManagerService
     {
         public void TrackEvent(string eventName)
         {

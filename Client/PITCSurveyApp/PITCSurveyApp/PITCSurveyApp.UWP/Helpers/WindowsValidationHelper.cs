@@ -4,11 +4,11 @@ using PhoneNumbers;
 using PITCSurveyApp.Helpers;
 using Xamarin.Forms;
 
-[assembly: Dependency(typeof(PITCSurveyApp.UWP.Helpers.ValidationHelper))]
+[assembly: Dependency(typeof(PITCSurveyApp.UWP.Helpers.WindowsValidationHelper))]
 
 namespace PITCSurveyApp.UWP.Helpers
 {
-	class ValidationHelper : IValidationHelper
+	class WindowsValidationHelper : IValidationHelper
 	{
 		private static readonly Regex s_emailRegex = new Regex(@"^(?!\.)(""([^""\r\\]|\\[""\r\\])*""|([-a-z0-9!#$%&'*+/=?^_`{|}~]|(?<!\.)\.)*)(?<!\.)@[a-z0-9][\w\.-]*[a-z0-9]\.[a-z][a-z\.]*[a-z]$", RegexOptions.IgnoreCase);
 

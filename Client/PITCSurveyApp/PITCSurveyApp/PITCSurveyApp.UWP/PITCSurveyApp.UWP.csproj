@@ -101,13 +101,13 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\FileHelper.cs" />
-    <Compile Include="Helpers\ValidationHelper.cs" />
+    <Compile Include="Helpers\WindowsFileHelper.cs" />
+    <Compile Include="Helpers\WindowsValidationHelper.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\MetricsManagerService.cs" />
+    <Compile Include="Services\WindowsMetricsManagerService.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

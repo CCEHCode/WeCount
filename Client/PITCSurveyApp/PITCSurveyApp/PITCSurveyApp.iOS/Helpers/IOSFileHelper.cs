@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 using PITCSurveyApp.Helpers;
 using Xamarin.Forms;
 
-[assembly: Dependency(typeof(PITCSurveyApp.Droid.Helpers.FileHelper))]
+[assembly: Dependency(typeof(PITCSurveyApp.iOS.Helpers.IOSFileHelper))]
 
-namespace PITCSurveyApp.Droid.Helpers
+namespace PITCSurveyApp.iOS.Helpers
 {
-    class FileHelper : IFileHelper
+    class IOSFileHelper : IFileHelper
     {
         public Task<bool> ExistsAsync(string filename)
         {

@@ -7,10 +7,10 @@ using Windows.Storage;
 using PITCSurveyApp.Helpers;
 using Xamarin.Forms;
 
-[assembly: Dependency(typeof(PITCSurveyApp.UWP.Helpers.FileHelper))]
+[assembly: Dependency(typeof(PITCSurveyApp.UWP.Helpers.WindowsFileHelper))]
 namespace PITCSurveyApp.UWP.Helpers
 {
-    class FileHelper : IFileHelper
+    class WindowsFileHelper : IFileHelper
     {
         public async Task<bool> ExistsAsync(string filename)
         {

@@ -4,11 +4,11 @@ using System;
 using System.Net.Mail;
 using Xamarin.Forms;
 
-[assembly: Dependency(typeof(PITCSurveyApp.iOS.Helpers.ValidationHelper))]
+[assembly: Dependency(typeof(PITCSurveyApp.iOS.Helpers.IOSValidationHelper))]
 
 namespace PITCSurveyApp.iOS.Helpers
 {
-	class ValidationHelper : IValidationHelper
+	class IOSValidationHelper : IValidationHelper
 	{
 		public bool IsValidEmail(string emailAddress)
 		{
