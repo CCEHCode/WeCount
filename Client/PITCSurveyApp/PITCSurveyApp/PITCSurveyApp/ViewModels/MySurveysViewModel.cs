@@ -12,7 +12,7 @@ namespace PITCSurveyApp.ViewModels
 {
     class MySurveysViewModel : BaseViewModel
     {
-        public const int UploadDeleteDelayMilliseconds = 3000;
+        public const int UploadDeleteDelayMilliseconds = 2000;
 
         private static readonly TimeSpan s_maxAge = TimeSpan.FromDays(2);
 

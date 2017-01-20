@@ -25,6 +25,7 @@ namespace PITCSurveyApp.Models
         private Color _textColor;
         private string _text;
         private string _details;
+        private bool _uploading;
 
         public MySurveysItemViewModel(string filename)
         {
@@ -127,8 +128,18 @@ namespace PITCSurveyApp.Models
         /// </returns>
         public async Task UploadAsync(bool delete)
         {
-            await _response.UploadAsync();
+            _uploading = true;
             Update();
+
+            try
+            {
+                await _response.UploadAsync();
+            }
+            finally
+            {
+                _uploading = false;
+                Update();
+            }
 
             if (delete)
             {
@@ -196,7 +207,7 @@ namespace PITCSurveyApp.Models
         {
             TextColor = _response.Uploaded.HasValue ? Color.Default : Color.Red;
             Text = IsIneligible ? "Ineligible Survey" : $"{Name}, {DateOfBirth}";
-            Details = $"{PrettyPrintLastModified(_lastModified)}, {PrettyPrintUploaded(_response.Uploaded)}";
+            Details = $"{PrettyPrintLastModified(_lastModified)}, {PrettyPrintUploaded(_response.Uploaded, _uploading)}";
         }
 
         private static string PrettyPrintLastModified(DateTime? lastModified)
@@ -210,14 +221,17 @@ namespace PITCSurveyApp.Models
             {
                 return $"Last saved {lastModified.Value.ToString("t", CultureInfo.CurrentCulture)}";
             }
-            else
-            {
-                return $"Last saved {lastModified.Value.ToString("g", CultureInfo.CurrentCulture)}";
-            }
+
+            return $"Last saved {lastModified.Value.ToString("g", CultureInfo.CurrentCulture)}";
         }
 
-        private static string PrettyPrintUploaded(DateTime? uploaded)
+        private static string PrettyPrintUploaded(DateTime? uploaded, bool uploading)
         {
+            if (uploading)
+            {
+                return "Uploading...";
+            }
+
             if (uploaded == null)
             {
                 return "Not yet uploaded";
@@ -227,10 +241,8 @@ namespace PITCSurveyApp.Models
             {
                 return $"Uploaded {uploaded.Value.ToString("t", CultureInfo.CurrentCulture)}";
             }
-            else
-            {
-                return $"Last saved {uploaded.Value.ToString("g", CultureInfo.CurrentCulture)}";
-            }
+
+            return $"Uploaded {uploaded.Value.ToString("g", CultureInfo.CurrentCulture)}";
         }
     }
 }
