@@ -29,7 +29,7 @@ namespace PITCSurveyLib.Models
 		public String InterviewerID { get; set; }
 
 		public DateTimeOffset StartTime { get; set; }
-		public DateTimeOffset EndTime { get; set; }
+		public DateTimeOffset? EndTime { get; set; }
 
 		/// <summary>
 		/// Unique GUID generated client-side for each response.

@@ -46,8 +46,8 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.4.1.0\lib\net462\System.Runtime.dll</HintPath>
+    <Reference Include="System.Runtime, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.4.3.0\lib\net462\System.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -119,6 +119,10 @@
     <Compile Include="Migrations\201701171759483_AddContactInfo.cs" />
     <Compile Include="Migrations\201701171759483_AddContactInfo.Designer.cs">
       <DependentUpon>201701171759483_AddContactInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201701221647010_MakeInterviewCompletedNullable.cs" />
+    <Compile Include="Migrations\201701221647010_MakeInterviewCompletedNullable.Designer.cs">
+      <DependentUpon>201701221647010_MakeInterviewCompletedNullable.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -192,6 +196,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201701171759483_AddContactInfo.resx">
       <DependentUpon>201701171759483_AddContactInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701221647010_MakeInterviewCompletedNullable.resx">
+      <DependentUpon>201701221647010_MakeInterviewCompletedNullable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

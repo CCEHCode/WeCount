@@ -29,7 +29,7 @@ namespace PITCSurveyEntities.Entities
 		public int Volunteer_ID { get; set; }
 
 		public DateTimeOffset InterviewStarted { get; set; }
-		public DateTimeOffset InterviewCompleted { get; set; }
+		public DateTimeOffset? InterviewCompleted { get; set; }
 
 		public DateTimeOffset DateUploaded { get; set; }
 
