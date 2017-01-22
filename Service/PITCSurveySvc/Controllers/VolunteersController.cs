@@ -15,7 +15,7 @@ namespace PITCSurveySvc.Controllers
 
 		// GET: api/Volunteers
 		[SwaggerOperation("GetVolunteer")]
-		[SwaggerResponse(HttpStatusCode.OK, "Volunteer found", typeof(VolunteerModel))]
+		[SwaggerResponse(HttpStatusCode.OK, "Volunteer found.", typeof(VolunteerModel))]
 		[ResponseType(typeof(VolunteerModel))]
 		[AllowAnonymous]
 		public async Task<IHttpActionResult> GetVolunteer(Guid deviceId)
@@ -30,7 +30,7 @@ namespace PITCSurveySvc.Controllers
 
 		// PUT: api/Volunteers
 		[SwaggerOperation("UpdateVolunteer")]
-		[SwaggerResponse(HttpStatusCode.NoContent, "Volunteer updated")]
+		[SwaggerResponse(HttpStatusCode.NoContent, "Volunteer updated.")]
 		[ResponseType(typeof(void))]
 		[AllowAnonymous]
 		public async Task<IHttpActionResult> PutVolunteer(VolunteerModel volunteer, Guid deviceId)

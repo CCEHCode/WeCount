@@ -20,6 +20,12 @@ namespace PITCSurveySvc.Controllers
 
 		protected TelemetryClient telemetry = new TelemetryClient();
 
+		/// <summary>
+		/// Returns the Volunteer record, as found by either their authentication token SID, or if not authenticated, their deviceID.
+		/// If a matching record doesn't exist, one is created.
+		/// </summary>
+		/// <param name="deviceID"></param>
+		/// <returns></returns>
 		protected async Task<Volunteer> GetAuthenticatedVolunteerAsync(Guid? deviceID = null)
 		{
 			Trace.TraceInformation($"User authenticated: {User.Identity.IsAuthenticated}, DeviceID: {deviceID?.ToString()}");

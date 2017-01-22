@@ -86,21 +86,25 @@ namespace PITCSurveySvc.Controllers
 					}
 				}
 				Trace.TraceError("Error processing SurveyResponse: " + evex.ToString());
+				telemetry.TrackException(evex);
 				throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, sb.ToString()));
 			}
 			catch (ArgumentException ae)
 			{
 				Trace.TraceError("Error processing SurveyResponse: " + ae.Message);
+				telemetry.TrackException(ae);
 				throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ae.Message));
 			}
 			catch (FormatException fe)
 			{
 				Trace.TraceError("Error processing SurveyResponse: " + fe.Message);
+				telemetry.TrackException(fe);
 				throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, fe.Message));
 			}
 			catch (Exception ex)
 			{
 				Trace.TraceError("Error processing SurveyResponse: " + ex.ToString());
+				telemetry.TrackException(ex);
 				throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.ToString()));
 			}
 		}

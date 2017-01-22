@@ -28,7 +28,7 @@ namespace PITCSurveySvc.Controllers
 		/// <returns></returns>
 		[SwaggerOperation("GetAllSurveys")]
 		[ResponseType(typeof(IEnumerable<SurveySummaryModel>))]
-		[SwaggerResponse(HttpStatusCode.OK, "All mai Survey are belong 2 u <3", typeof(IEnumerable<SurveySummaryModel>))]
+		[SwaggerResponse(HttpStatusCode.OK, "The survey summaries are being returned.", typeof(IEnumerable<SurveySummaryModel>))]
 		[AllowAnonymous]
 		public async Task<IHttpActionResult> GetSurveys(bool activeOnly = true)
 		{
@@ -62,7 +62,7 @@ namespace PITCSurveySvc.Controllers
 		[SwaggerOperation("GetSurveyByID")]
 		[ResponseType(typeof(SurveyModel))]
 		[SwaggerResponse(HttpStatusCode.NotFound, "A Survey with the specified ID was not found.")]
-		[SwaggerResponse(HttpStatusCode.OK, "U can haz Survey", typeof(SurveyModel))]
+		[SwaggerResponse(HttpStatusCode.OK, "The specified survey is being returned.", typeof(SurveyModel))]
 		[AllowAnonymous]
 		public async Task<IHttpActionResult> GetSurvey(int id)
 		{
@@ -93,7 +93,7 @@ namespace PITCSurveySvc.Controllers
 		/// <returns></returns>
 		[SwaggerOperation("PostSurvey")]
 		[SwaggerResponse(HttpStatusCode.BadRequest)]
-		[SwaggerResponse(HttpStatusCode.NoContent)]
+		[SwaggerResponse(HttpStatusCode.NoContent, "The survey was imported.")]
 		public async Task<IHttpActionResult> PostSurvey(SurveyModel survey)
 		{
 			// We don't use this here, but it ensures the volunteer record is created if it doesn't exist yet.
