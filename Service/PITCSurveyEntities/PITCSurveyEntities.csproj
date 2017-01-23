@@ -124,6 +124,10 @@
     <Compile Include="Migrations\201701221647010_MakeInterviewCompletedNullable.Designer.cs">
       <DependentUpon>201701221647010_MakeInterviewCompletedNullable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201701231515535_AddDateCreatedToVolunteer.cs" />
+    <Compile Include="Migrations\201701231515535_AddDateCreatedToVolunteer.Designer.cs">
+      <DependentUpon>201701231515535_AddDateCreatedToVolunteer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
@@ -199,6 +203,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201701221647010_MakeInterviewCompletedNullable.resx">
       <DependentUpon>201701221647010_MakeInterviewCompletedNullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701231515535_AddDateCreatedToVolunteer.resx">
+      <DependentUpon>201701231515535_AddDateCreatedToVolunteer.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

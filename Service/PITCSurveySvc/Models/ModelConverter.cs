@@ -112,7 +112,7 @@ namespace PITCSurveySvc.Models
 			survey.Description = model.Description;
 			survey.IntroText = model.IntroText;
 
-			survey.LastUpdated = DateTime.UtcNow;
+			survey.LastUpdated = DateTimeOffset.Now;
 			survey.Version += 1;
 
 			// Map the provided IDs to the existing or db-generated questions, to preserve navigation mapping

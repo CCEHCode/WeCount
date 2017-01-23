@@ -44,7 +44,8 @@ namespace PITCSurveySvc.Controllers
 
 					Trace.TraceInformation($"SID: {sid}");
 
-					volunteer = db.Volunteers.Where(v => v.AuthID == sid).SingleOrDefault();
+					// TODO: Investigate why there was a duplicate SID. For now, this will ensure a match is returned even if more than one.
+					volunteer = db.Volunteers.Where(v => v.AuthID == sid).FirstOrDefault();
 
 					if (volunteer == null)
 					{
@@ -54,7 +55,7 @@ namespace PITCSurveySvc.Controllers
 
 						// Volunteer not already recognized, add.
 
-						volunteer = new Volunteer()	{ AuthID = sid, AuthProvider = claimant.FindFirst(identityProvider)?.Value };
+						volunteer = new Volunteer()	{ AuthID = sid, AuthProvider = claimant.FindFirst(identityProvider)?.Value, DateCreated = DateTimeOffset.Now };
 
 						await FillProviderDetails(claimant, volunteer);
 
@@ -94,7 +95,7 @@ namespace PITCSurveySvc.Controllers
 
 						// Volunteer not already recognized, add.
 
-						volunteer = new Volunteer { DeviceId = deviceID.Value };
+						volunteer = new Volunteer { DeviceId = deviceID.Value, DateCreated = DateTimeOffset.Now };
 
 						db.Volunteers.Add(volunteer);
 

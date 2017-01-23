@@ -64,7 +64,7 @@ namespace PITCSurveySvc.Controllers
 
 				response.DeviceId = deviceId.Value;
 
-				response.DateUploaded = DateTime.UtcNow;
+				response.DateUploaded = DateTimeOffset.Now;
 
 				db.SurveyResponses.Add(response);
 

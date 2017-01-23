@@ -25,6 +25,8 @@ namespace PITCSurveyEntities.Entities
 		public string AuthProvider { get; set; }
 		public String AuthID { get; set; }
 
+		public DateTimeOffset DateCreated { get; set; }
+
 		public virtual IList<SurveyResponse> SurveyResponses { get; set; }
 	}
 
