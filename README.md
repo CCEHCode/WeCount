@@ -1,5 +1,9 @@
 # Introduction 
-CCEH Youth Point in Time Count (PITC Survey App) 
+This repo contains the Open Source development assets for We Count, also known as the CCEH Youth Point in Time Count (PITC) Survey App.
+
+The **Connecticut Coalition to End Homelessness** (CCEH) partnered with Microsoft and its IT partner [Nutmeg Consulting](https://www.nutmegit.com/) to develop **We Count**, a mobile cross-platform application for iOS, Android, and Windows devices that volunteers used to conduct the Point-in-Time Count, a major national one-night survey of homeless persons. 
+
+The app was built using [Xamarin.Forms](https://www.xamarin.com/forms) with an [ASP.NET Web API](https://www.asp.net/web-api) back end written in C# and hosted using [Azure App Service](https://azure.microsoft.com/en-us/services/app-service/). read the full technical case study at [http://aka.ms/cceh](http://aka.ms/cceh).
 
 # Getting Started
 TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
