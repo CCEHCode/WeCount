@@ -13,7 +13,7 @@ namespace PITCSurveyApp.ViewModels
         private const int SaveButtonMessageDelay = 3000;
         private const string DefaultSaveButtonText = "Save Profile";
 
-		private IValidationHelper _validationHelper = new ValidationHelper();
+        private IValidationHelper _validationHelper = new ValidationHelper();
 
         private string _saveButtonText = DefaultSaveButtonText;
 
@@ -107,14 +107,14 @@ namespace PITCSurveyApp.ViewModels
                 if (UserSettings.Volunteer.Email != value)
                 {
                     UserSettings.Volunteer.Email = value;
-					OnPropertyChanged();
+                    OnPropertyChanged();
                     SaveProfileCommand.ChangeCanExecute();
                 }
             }
         }
 
 
-		public string MobilePhone
+        public string MobilePhone
         {
             get { return UserSettings.Volunteer?.MobilePhone; }
             set
@@ -122,14 +122,14 @@ namespace PITCSurveyApp.ViewModels
                 if (UserSettings.Volunteer.MobilePhone != value)
                 {
                     UserSettings.Volunteer.MobilePhone = value;
-					OnPropertyChanged();
+                    OnPropertyChanged();
                     SaveProfileCommand.ChangeCanExecute();
                 }
             }
         }
 
 
-		public string HomePhone
+        public string HomePhone
         {
             get { return UserSettings.Volunteer?.HomePhone; }
             set
@@ -251,21 +251,21 @@ namespace PITCSurveyApp.ViewModels
         {        
             // Check if any of the required fields are empty or invalid
             if (string.IsNullOrWhiteSpace(FirstName) ||
-				string.IsNullOrWhiteSpace(LastName) ||
-				string.IsNullOrWhiteSpace(Email) ||
-				string.IsNullOrWhiteSpace(MobilePhone) ||
-				(string.IsNullOrEmpty(Email) || !_validationHelper.IsValidEmail(Email)) ||
-				(string.IsNullOrEmpty(MobilePhone) || !_validationHelper.IsValidPhone(MobilePhone)))
-			{
-				var @continue = await App.DisplayAlertAsync("Profile Incomplete", "The profile information is not complete - do you want to save anyway, or go back to correct it?", "Continue", "Cancel");
-					
-				if (!@continue)
-				{
-					return;
-				}
-			}
+                string.IsNullOrWhiteSpace(LastName) ||
+                string.IsNullOrWhiteSpace(Email) ||
+                string.IsNullOrWhiteSpace(MobilePhone) ||
+                (string.IsNullOrEmpty(Email) || !_validationHelper.IsValidEmail(Email)) ||
+                (string.IsNullOrEmpty(MobilePhone) || !_validationHelper.IsValidPhone(MobilePhone)))
+            {
+                var @continue = await App.DisplayAlertAsync("Profile Incomplete", "The profile information is not complete - do you want to save anyway, or go back to correct it?", "Continue", "Cancel");
+                    
+                if (!@continue)
+                {
+                    return;
+                }
+            }
 
-			try
+            try
             {
                 SaveButtonText = "Saving...";
                 IsBusy = true;

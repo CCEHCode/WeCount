@@ -33,22 +33,22 @@ namespace PITCSurveyApp.Views
             UpdateQuestion();
         }
 
-	    private async void UpdateQuestion()
-	    {
+        private async void UpdateQuestion()
+        {
             // Reset the scroll view content
             AnswerOptionsScrollView.Content = null;
 
             // If the survey is ended, show the survey complete page
             if (_viewModel.IsSurveyEnded)
-	        {
-	            EndSurvey();
+            {
+                EndSurvey();
                 return;
-	        }
+            }
 
             // Otherwise, render the current question
-	        var q = _viewModel.CurrentQuestion;
-	        try
-	        {
+            var q = _viewModel.CurrentQuestion;
+            try
+            {
                 // Update the title and question text
 #if !WINDOWS_UWP
                 Title = $"Survey Question {q.QuestionNum} of {_viewModel.MaximumQuestionNumber}";
@@ -56,13 +56,13 @@ namespace PITCSurveyApp.Views
 #else
                 QuestionLabel.Text = $"{q.QuestionNum}. {q.QuestionText}";
 #endif
-	            HelpTextLabel.Text = q.QuestionHelpText;
+                HelpTextLabel.Text = q.QuestionHelpText;
 
                 // Create a view for each of the answers
-	            var answerOptionsStackLayout = new StackLayout();
+                var answerOptionsStackLayout = new StackLayout();
                 var choices = CreateChoices(q, _viewModel.CurrentAnswers);
-	            foreach (var choice in choices)
-	            {
+                foreach (var choice in choices)
+                {
 #if __ANDROID__
                     // Android buttons support text wrapping, so we don't need to use the custom ContentButton 
                     var view = new SurveyAnswerItemAndroidView(choice);
@@ -70,16 +70,16 @@ namespace PITCSurveyApp.Views
                     var view = new SurveyAnswerItemView(choice);
 #endif
                     var stackLayout = new StackLayout();
-	                stackLayout.Children.Add(view);
+                    stackLayout.Children.Add(view);
                     answerOptionsStackLayout.Children.Add(stackLayout);
-	            }
+                }
 
                 // Add the navigation button stack back to the answers stack layout
                 // The navigation buttons should always come at the end of all the answers
                 // to ensure the volunteer sees all the questions
-	            answerOptionsStackLayout.Children.Add(NavigationButtonStackLayout);
+                answerOptionsStackLayout.Children.Add(NavigationButtonStackLayout);
 
-	            AnswerOptionsScrollView.Content = answerOptionsStackLayout;
+                AnswerOptionsScrollView.Content = answerOptionsStackLayout;
 
                 // Return the scroll position to 0,0 for the answers list
                 if (AnswerOptionsScrollView.ScrollY > 0)
@@ -91,8 +91,8 @@ namespace PITCSurveyApp.Views
             {
                 DependencyService.Get<IMetricsManagerService>().TrackException("SurveyQuestionFailed", ex);
                 await DisplayAlert("Error", "Something went wrong when loading this question.", "OK");
-	        }
-	    }
+            }
+        }
 
         private async void EndSurvey()
         {

@@ -2,11 +2,11 @@
 
 namespace PITCSurveyApp.Views
 {
-	public partial class ContactInfoPage : ContentPage
-	{
-		public ContactInfoPage ()
-		{
-			InitializeComponent ();
-		}
-	}
+    public partial class ContactInfoPage : ContentPage
+    {
+        public ContactInfoPage ()
+        {
+            InitializeComponent ();
+        }
+    }
 }

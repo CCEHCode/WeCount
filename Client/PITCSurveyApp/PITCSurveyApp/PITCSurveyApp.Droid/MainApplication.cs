@@ -7,7 +7,7 @@ using Plugin.CurrentActivity;
 
 namespace PITCSurveyApp.Droid
 {
-	//You can specify additional application information in this attribute
+    //You can specify additional application information in this attribute
     [Application]
     public class MainApplication : Application, Application.IActivityLifecycleCallbacks
     {

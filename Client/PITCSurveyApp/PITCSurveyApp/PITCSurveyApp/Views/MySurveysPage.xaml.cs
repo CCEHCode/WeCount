@@ -3,21 +3,21 @@ using Xamarin.Forms;
 
 namespace PITCSurveyApp.Views
 {
-	public partial class MySurveysPage : ContentPage
-	{
-	    private readonly MySurveysViewModel _viewModel;
+    public partial class MySurveysPage : ContentPage
+    {
+        private readonly MySurveysViewModel _viewModel;
 
-	    public MySurveysPage()
-	        : this(false)
-	    {
-	    }
+        public MySurveysPage()
+            : this(false)
+        {
+        }
 
         public MySurveysPage(bool loadOnly)
         {
-			InitializeComponent();
-		    _viewModel = new MySurveysViewModel(loadOnly);
-		    BindingContext = _viewModel;
-		}
+            InitializeComponent();
+            _viewModel = new MySurveysViewModel(loadOnly);
+            BindingContext = _viewModel;
+        }
 
         protected override async void OnAppearing()
         {

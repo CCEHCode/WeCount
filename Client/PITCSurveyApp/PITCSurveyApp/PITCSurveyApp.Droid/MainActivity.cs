@@ -13,10 +13,10 @@ using PITCSurveyApp.Services;
 namespace PITCSurveyApp.Droid
 {
     [Activity (Label = "We Count", Theme = "@style/MainTheme", Icon = "@drawable/icon", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
-	public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity, IAuthenticate
-	{
+    public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity, IAuthenticate
+    {
         protected override void OnCreate (Bundle bundle)
-		{
+        {
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
@@ -30,7 +30,7 @@ namespace PITCSurveyApp.Droid
             global::Xamarin.Forms.Forms.Init (this, bundle);
             App.Init(this);
             LoadApplication (new PITCSurveyApp.App ());
-		}
+        }
 
         public MobileServiceUser User
         {
@@ -39,13 +39,13 @@ namespace PITCSurveyApp.Droid
         }
 
         public Task<MobileServiceUser> LoginAsync(MobileServiceAuthenticationProvider provider, IDictionary<string, string> parameters)
-	    {
-	        return SurveyCloudService.ApiClient.LoginAsync(this, provider, parameters);
-	    }
+        {
+            return SurveyCloudService.ApiClient.LoginAsync(this, provider, parameters);
+        }
 
-	    public Task<MobileServiceUser> RefreshLoginAsync()
-	    {
-	        return SurveyCloudService.ApiClient.RefreshUserAsync();
+        public Task<MobileServiceUser> RefreshLoginAsync()
+        {
+            return SurveyCloudService.ApiClient.RefreshUserAsync();
         }
 
         public Task LogoutAsync()

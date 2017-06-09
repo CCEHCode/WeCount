@@ -9,32 +9,32 @@ namespace PITCSurveyApp.Helpers
     /// </summary>
     class ValidationHelper: IValidationHelper
     {
-		private readonly IValidationHelper _validationHelper = DependencyService.Get<IValidationHelper>();
+        private readonly IValidationHelper _validationHelper = DependencyService.Get<IValidationHelper>();
 
-		public bool IsValidPhone(string phoneNumber)
-		{
-			try
-			{
-				return _validationHelper.IsValidPhone(phoneNumber);
-			}
-			catch (Exception ex)
-			{
-			    DependencyService.Get<IMetricsManagerService>().TrackException("PhoneValidationFailure", ex);
-				return false;
-			}
-		}
+        public bool IsValidPhone(string phoneNumber)
+        {
+            try
+            {
+                return _validationHelper.IsValidPhone(phoneNumber);
+            }
+            catch (Exception ex)
+            {
+                DependencyService.Get<IMetricsManagerService>().TrackException("PhoneValidationFailure", ex);
+                return false;
+            }
+        }
 
-		public bool IsValidEmail(string emailAddress)
-		{
-			try
-			{
-				return _validationHelper.IsValidEmail(emailAddress);
-			}
-			catch (Exception ex)
-			{
+        public bool IsValidEmail(string emailAddress)
+        {
+            try
+            {
+                return _validationHelper.IsValidEmail(emailAddress);
+            }
+            catch (Exception ex)
+            {
                 DependencyService.Get<IMetricsManagerService>().TrackException("EmailValidationFailure", ex);
                 return false;
-			}
-		}
+            }
+        }
     }
 }

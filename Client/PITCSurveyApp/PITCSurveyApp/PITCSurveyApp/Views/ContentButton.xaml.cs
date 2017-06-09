@@ -4,8 +4,8 @@ using Xamarin.Forms;
 
 namespace PITCSurveyApp.Views
 {
-	public partial class ContentButton : ContentView
-	{
+    public partial class ContentButton : ContentView
+    {
         public ContentButton()
         {
             InitializeComponent();

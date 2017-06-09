@@ -82,10 +82,10 @@ namespace PITCSurveyApp.Services
         {
             try
             {
-				var parameters = new Dictionary<string, string>
-			    {
-				    {"deviceId", UserSettings.VolunteerId},
-			    };
+                var parameters = new Dictionary<string, string>
+                {
+                    {"deviceId", UserSettings.VolunteerId},
+                };
 
                 using (new LatencyMetric("GetVolunteer"))
                 {
@@ -108,10 +108,10 @@ namespace PITCSurveyApp.Services
         /// </returns>
         public static Task SaveVolunteerAsync(VolunteerModel volunteer)
         {
-			var parameters = new Dictionary<string, string>
-			{
-				{"deviceId", UserSettings.VolunteerId},
-			};
+            var parameters = new Dictionary<string, string>
+            {
+                {"deviceId", UserSettings.VolunteerId},
+            };
 
             using (new LatencyMetric("SaveVolunteer"))
             {
@@ -128,18 +128,18 @@ namespace PITCSurveyApp.Services
         /// <returns>
         /// A task to await the contact information.
         /// </returns>
-		public static async Task<ContactInfoModel> GetContactInfoAsync(int surveyId)
-		{
-			var parameters = new Dictionary<string, string>
-			{
-				{ "surveyId", surveyId.ToString() },
-				{ "deviceId", UserSettings.VolunteerId},
-			};
+        public static async Task<ContactInfoModel> GetContactInfoAsync(int surveyId)
+        {
+            var parameters = new Dictionary<string, string>
+            {
+                { "surveyId", surveyId.ToString() },
+                { "deviceId", UserSettings.VolunteerId},
+            };
 
-			using (new LatencyMetric("GetContactInfo"))
-			{
-				return await ApiClient.InvokeApiAsync<ContactInfoModel>("ContactInfo", HttpMethod.Get, parameters);
-			}
-		}
-	}
+            using (new LatencyMetric("GetContactInfo"))
+            {
+                return await ApiClient.InvokeApiAsync<ContactInfoModel>("ContactInfo", HttpMethod.Get, parameters);
+            }
+        }
+    }
 }

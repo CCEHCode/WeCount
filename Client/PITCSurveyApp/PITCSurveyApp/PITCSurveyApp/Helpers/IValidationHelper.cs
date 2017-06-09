@@ -12,7 +12,7 @@
         /// <returns>
         /// <code>true</code> if the phone number is valid, otherwise <code>false</code>.
         /// </returns>
-		bool IsValidPhone(string phoneNumber);
+        bool IsValidPhone(string phoneNumber);
 
         /// <summary>
         /// Checks if the given text is a valid email address.
@@ -21,6 +21,6 @@
         /// <returns>
         /// <code>true</code> if the email address is valid, otherwise <code>false</code>.
         /// </returns>
-		bool IsValidEmail(string emailAddress);
-	}
+        bool IsValidEmail(string emailAddress);
+    }
 }

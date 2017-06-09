@@ -3,13 +3,13 @@ using Xamarin.Forms;
 
 namespace PITCSurveyApp.Views
 {
-	public partial class SurveyAnswerItemView : ContentView
-	{
-		public SurveyAnswerItemView (SurveyAnswerItemViewModel viewModel)
-		{
-			InitializeComponent ();
+    public partial class SurveyAnswerItemView : ContentView
+    {
+        public SurveyAnswerItemView (SurveyAnswerItemViewModel viewModel)
+        {
+            InitializeComponent ();
 
-		    BindingContext = viewModel;
-		}
-	}
+            BindingContext = viewModel;
+        }
+    }
 }

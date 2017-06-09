@@ -8,36 +8,36 @@ using Xamarin.Forms;
 
 namespace PITCSurveyApp.iOS.Helpers
 {
-	class IOSValidationHelper : IValidationHelper
-	{
-		public bool IsValidEmail(string emailAddress)
-		{
-			try
-			{
+    class IOSValidationHelper : IValidationHelper
+    {
+        public bool IsValidEmail(string emailAddress)
+        {
+            try
+            {
 
-				// This is RFC-5322 compliant.
-				var address = new MailAddress(emailAddress);
-				return true;
-			}
-			catch (Exception)
-			{
-				return false;
-			}
-		}
+                // This is RFC-5322 compliant.
+                var address = new MailAddress(emailAddress);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
 
-		public bool IsValidPhone(string phoneNumber)
-		{
-			var util = PhoneNumberUtil.getInstance();
+        public bool IsValidPhone(string phoneNumber)
+        {
+            var util = PhoneNumberUtil.getInstance();
 
-			try
-			{
-				var parsedPhoneNumber = util.parse(phoneNumber, "US");
-				return util.isValidNumber(parsedPhoneNumber);
-			}
-			catch (Exception)
-			{
-				return false;
-			}
-		}
-	}
+            try
+            {
+                var parsedPhoneNumber = util.parse(phoneNumber, "US");
+                return util.isValidNumber(parsedPhoneNumber);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+    }
 }

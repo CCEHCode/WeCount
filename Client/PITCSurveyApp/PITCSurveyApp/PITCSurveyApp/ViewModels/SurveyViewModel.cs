@@ -15,7 +15,7 @@ namespace PITCSurveyApp.ViewModels
 {
     class SurveyViewModel : BaseViewModel
     {
-		private readonly UploadedItem<SurveyResponseModel> _response;
+        private readonly UploadedItem<SurveyResponseModel> _response;
 
         private string _maxQuestion;
         private int _index;

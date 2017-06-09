@@ -8,12 +8,12 @@ using Xamarin.Forms;
 
 namespace PITCSurveyApp.Views
 {
-	public partial class LoginPage : ContentPage
-	{
-		public LoginPage ()
-		{
-			InitializeComponent ();
-		}
+    public partial class LoginPage : ContentPage
+    {
+        public LoginPage ()
+        {
+            InitializeComponent ();
+        }
 
 #if __ANDROID__
         protected override void OnAppearing()

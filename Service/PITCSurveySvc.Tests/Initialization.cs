@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace PITCSurveySvc.Tests
 {
-	[TestClass]
-	public class Initialization
-	{
-		[AssemblyInitialize]
-		static public void AssemblyInit(TestContext context)
-		{
-			Effort.Provider.EffortProviderConfiguration.RegisterProvider();
-		}
-	}
+    [TestClass]
+    public class Initialization
+    {
+        [AssemblyInitialize]
+        static public void AssemblyInit(TestContext context)
+        {
+            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
+        }
+    }
 }

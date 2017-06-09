@@ -8,35 +8,35 @@ namespace PITCSurveyApp.Behaviors
     /// </summary>
     class EmailValidationBehavior : Behavior<Entry>
     {
-		private static readonly IValidationHelper s_validationHelper = new ValidationHelper();
+        private static readonly IValidationHelper s_validationHelper = new ValidationHelper();
 
         /// <summary>
         /// Subscribe to text changed events on text entry component.
         /// </summary>
         /// <param name="bindable">The text entry component.</param>
-		protected override void OnAttachedTo(Entry bindable)
-		{
-			bindable.TextChanged += HandleTextChanged;
+        protected override void OnAttachedTo(Entry bindable)
+        {
+            bindable.TextChanged += HandleTextChanged;
 
-			base.OnAttachedTo(bindable);
-		}
+            base.OnAttachedTo(bindable);
+        }
 
         /// <summary>
         /// Unsubscribe from text changed events on text entry component.
         /// </summary>
         /// <param name="bindable">The text entry component.</param>
-		protected override void OnDetachingFrom(Entry bindable)
-		{
-			bindable.TextChanged -= HandleTextChanged;
+        protected override void OnDetachingFrom(Entry bindable)
+        {
+            bindable.TextChanged -= HandleTextChanged;
 
-			base.OnDetachingFrom(bindable);
-		}
+            base.OnDetachingFrom(bindable);
+        }
 
-		private void HandleTextChanged(object sender, TextChangedEventArgs e)
-		{
-			var isValid = s_validationHelper.IsValidEmail(e.NewTextValue);
+        private void HandleTextChanged(object sender, TextChangedEventArgs e)
+        {
+            var isValid = s_validationHelper.IsValidEmail(e.NewTextValue);
 
-			((Entry)sender).TextColor = isValid ? Color.Default : Color.Red;
-		}
-	}
+            ((Entry)sender).TextColor = isValid ? Color.Default : Color.Red;
+        }
+    }
 }

@@ -22,7 +22,7 @@ namespace PITCSurveyApp.Helpers
         /// </returns>
         public Task<bool> ExistsAsync(string filename)
         {
-			return _fileHelper.ExistsAsync(filename);
+            return _fileHelper.ExistsAsync(filename);
         }
 
         /// <summary>
@@ -34,8 +34,8 @@ namespace PITCSurveyApp.Helpers
         /// </returns>
         public Task<DateTime> LastModifiedAsync(string filename)
         {
-			return _fileHelper.LastModifiedAsync(filename);
-		}
+            return _fileHelper.LastModifiedAsync(filename);
+        }
 
         /// <summary>
         /// Writes text to the given filename.
@@ -43,9 +43,9 @@ namespace PITCSurveyApp.Helpers
         /// <param name="filename">The filename.</param>
         /// <param name="text">The text to write.</param>
         /// <returns>A task to await the write operation.</returns>
-		public Task WriteTextAsync(string filename, string text)
+        public Task WriteTextAsync(string filename, string text)
         {
-			return _fileHelper.WriteTextAsync(filename, text);
+            return _fileHelper.WriteTextAsync(filename, text);
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace PITCSurveyApp.Helpers
         /// </returns>
         public Task<string> ReadTextAsync(string filename)
         {
-			return _fileHelper.ReadTextAsync(filename);
+            return _fileHelper.ReadTextAsync(filename);
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace PITCSurveyApp.Helpers
         /// </returns>
         public Task<IEnumerable<string>> GetFilesAsync()
         {
-			return _fileHelper.GetFilesAsync();
+            return _fileHelper.GetFilesAsync();
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace PITCSurveyApp.Helpers
         /// <returns>A task to await the delete operation.</returns>
         public Task DeleteAsync(string filename)
         {
-			return _fileHelper.DeleteAsync(filename);
+            return _fileHelper.DeleteAsync(filename);
         }
-	}
+    }
 }

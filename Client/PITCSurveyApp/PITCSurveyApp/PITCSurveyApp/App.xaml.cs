@@ -13,10 +13,10 @@ using PITCSurveyLib.Models;
 namespace PITCSurveyApp
 {
     public partial class App : Application
-	{
+    {
         public static SurveyModel LatestSurvey { get; set; }
 
-	    public static IAuthenticate Authenticator;
+        public static IAuthenticate Authenticator;
 
         public static void Init(IAuthenticate authenticator)
         {
@@ -41,7 +41,7 @@ namespace PITCSurveyApp
         }
 
         public App ()
-		{
+        {
             InitializeComponent();
 
             DependencyService.Get<IMetricsManagerService>().TrackEvent("AppStarted");
@@ -68,16 +68,16 @@ namespace PITCSurveyApp
             Current.MainPage = RootPage;
         }
 
-	    public static async Task LoginAsync(MobileServiceAuthenticationProvider provider)
-	    {
-	        try
-	        {
-	            DependencyService.Get<IMetricsManagerService>().TrackEvent("UserLogin");
-	            var properties = provider == MobileServiceAuthenticationProvider.Google
+        public static async Task LoginAsync(MobileServiceAuthenticationProvider provider)
+        {
+            try
+            {
+                DependencyService.Get<IMetricsManagerService>().TrackEvent("UserLogin");
+                var properties = provider == MobileServiceAuthenticationProvider.Google
                     ? new Dictionary<string, string>
-	                {
-	                    { "access_type", "offline" },
-	                }
+                    {
+                        { "access_type", "offline" },
+                    }
                     : new Dictionary<string, string>(0);
 
                 var user = await Authenticator.LoginAsync(provider, properties);
@@ -85,75 +85,75 @@ namespace PITCSurveyApp
                 UserSettings.AuthToken = user?.MobileServiceAuthenticationToken;
                 UserSettings.UserId = user?.UserId;
             }
-	        catch (Exception ex)
-	        {
+            catch (Exception ex)
+            {
                 DependencyService.Get<IMetricsManagerService>().TrackException("UserLoginFailed", ex);
             }
         }
 
-	    public static async Task RefreshLoginAsync()
-	    {
-	        if (!string.IsNullOrEmpty(UserSettings.AuthToken))
-	        {
-	            try
-	            {
-	                DependencyService.Get<IMetricsManagerService>().TrackEvent("UserRefresh");
+        public static async Task RefreshLoginAsync()
+        {
+            if (!string.IsNullOrEmpty(UserSettings.AuthToken))
+            {
+                try
+                {
+                    DependencyService.Get<IMetricsManagerService>().TrackEvent("UserRefresh");
                     Authenticator.User = new MobileServiceUser(UserSettings.UserId)
-	                {
-	                    MobileServiceAuthenticationToken = UserSettings.AuthToken,
-	                };
+                    {
+                        MobileServiceAuthenticationToken = UserSettings.AuthToken,
+                    };
 
                     var user = await Authenticator.RefreshLoginAsync();
                     Authenticator.User = user;
-	                UserSettings.Volunteer = await SurveyCloudService.GetVolunteerAsync();
-	                UserSettings.AuthToken = user?.MobileServiceAuthenticationToken;
-	                UserSettings.UserId = user?.UserId;
-	            }
-	            catch (Exception ex)
-	            {
-	                DependencyService.Get<IMetricsManagerService>().TrackException("UserRefreshFailed", ex);
+                    UserSettings.Volunteer = await SurveyCloudService.GetVolunteerAsync();
+                    UserSettings.AuthToken = user?.MobileServiceAuthenticationToken;
+                    UserSettings.UserId = user?.UserId;
+                }
+                catch (Exception ex)
+                {
+                    DependencyService.Get<IMetricsManagerService>().TrackException("UserRefreshFailed", ex);
                     Authenticator.User = null;
                     UserSettings.Volunteer = new VolunteerModel();
-	                UserSettings.VolunteerId = null;
-	                UserSettings.AuthToken = null;
-	                UserSettings.UserId = null;
-	            }
-	        }
-	        else
-	        {
-	            try
-	            {
+                    UserSettings.VolunteerId = null;
+                    UserSettings.AuthToken = null;
+                    UserSettings.UserId = null;
+                }
+            }
+            else
+            {
+                try
+                {
                     DependencyService.Get<IMetricsManagerService>().TrackEvent("GetAnonymousVolunteer");
                     UserSettings.Volunteer = await SurveyCloudService.GetVolunteerAsync();
-	            }
-	            catch (Exception ex)
-	            {
+                }
+                catch (Exception ex)
+                {
                     DependencyService.Get<IMetricsManagerService>().TrackException("GetAnonymousVolunteerFailed", ex);
                 }
             }
         }
 
-	    public static async Task LogoutAsync()
-	    {
-	        try
-	        {
-	            DependencyService.Get<IMetricsManagerService>().TrackEvent("UserLogout");
-	            await Authenticator.LogoutAsync();
+        public static async Task LogoutAsync()
+        {
+            try
+            {
+                DependencyService.Get<IMetricsManagerService>().TrackEvent("UserLogout");
+                await Authenticator.LogoutAsync();
                 UserSettings.Volunteer = new VolunteerModel();
                 UserSettings.VolunteerId = null;
                 UserSettings.AuthToken = null;
                 UserSettings.UserId = null;
             }
             catch (Exception ex)
-	        {
+            {
                 DependencyService.Get<IMetricsManagerService>().TrackException("UserLogoutFailed", ex);
             }
         }
 
-	    public static Task DisplayAlertAsync(string title, string message, string cancel)
-	    {
-	        return RootPage.DisplayAlert(title, message, cancel);
-	    }
+        public static Task DisplayAlertAsync(string title, string message, string cancel)
+        {
+            return RootPage.DisplayAlert(title, message, cancel);
+        }
 
         public static Task<bool> DisplayAlertAsync(string title, string message, string accept, string cancel)
         {
@@ -161,18 +161,18 @@ namespace PITCSurveyApp
         }
 
         protected override void OnStart ()
-		{
+        {
             // Handle when your app starts
-		}
+        }
 
         protected override void OnSleep ()
-		{
-			// Handle when your app sleeps
-		}
+        {
+            // Handle when your app sleeps
+        }
 
-		protected override void OnResume ()
-		{
-			// Handle when your app resumes
-		}
-	}
+        protected override void OnResume ()
+        {
+            // Handle when your app resumes
+        }
+    }
 }

@@ -3,26 +3,26 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PITCSurveyEntities.Entities
 {
-	public class SurveyResponseAnswer
+    public class SurveyResponseAnswer
     {
-		[Key]
-		public int ID { get; set; }
+        [Key]
+        public int ID { get; set; }
 
-		[ForeignKey("SurveyResponse_ID")]
-		public virtual SurveyResponse SurveyResponse { get; set; }
-		[Required]
-		public int SurveyResponse_ID { get; set; }
+        [ForeignKey("SurveyResponse_ID")]
+        public virtual SurveyResponse SurveyResponse { get; set; }
+        [Required]
+        public int SurveyResponse_ID { get; set; }
 
-		[ForeignKey("Question_ID")]
-		public virtual Question Question { get; set; }
-		[Required]
-		public int Question_ID { get; set; }
+        [ForeignKey("Question_ID")]
+        public virtual Question Question { get; set; }
+        [Required]
+        public int Question_ID { get; set; }
 
-		[ForeignKey("AnswerChoice_ID")]
-		public virtual AnswerChoice AnswerChoice { get; set; }
-		[Required]
-		public int AnswerChoice_ID { get; set; }
+        [ForeignKey("AnswerChoice_ID")]
+        public virtual AnswerChoice AnswerChoice { get; set; }
+        [Required]
+        public int AnswerChoice_ID { get; set; }
 
-		public string AdditionalAnswerData { get; set; }
-	}
+        public string AdditionalAnswerData { get; set; }
+    }
 }

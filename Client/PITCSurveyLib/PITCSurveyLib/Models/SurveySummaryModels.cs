@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace PITCSurveyLib.Models
 {
-	public class SurveySummaryModel
-	{
-		public int ID { get; set; }
-		public String Description { get; set; }
-		public int Version { get; set; }
-		public DateTimeOffset LastUpdated { get; set; }
-	}
+    public class SurveySummaryModel
+    {
+        public int ID { get; set; }
+        public String Description { get; set; }
+        public int Version { get; set; }
+        public DateTimeOffset LastUpdated { get; set; }
+    }
 }

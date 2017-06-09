@@ -4,54 +4,54 @@ using System.Data.Entity;
 
 namespace PITCSurveyEntities.Entities
 {
-	public class PITCSurveyContext: DbContext
+    public class PITCSurveyContext: DbContext
     {
 
-		public PITCSurveyContext()
-			: base()
-		{
-		}
+        public PITCSurveyContext()
+            : base()
+        {
+        }
 
-		public PITCSurveyContext(String NameOrConnectionString)
-			: base(NameOrConnectionString)
-		{
-		}
+        public PITCSurveyContext(String NameOrConnectionString)
+            : base(NameOrConnectionString)
+        {
+        }
 
-		public PITCSurveyContext(DbConnection Connection)
-			: base(Connection, true)
-		{
-		}
+        public PITCSurveyContext(DbConnection Connection)
+            : base(Connection, true)
+        {
+        }
 
-		public DbSet<Volunteer> Volunteers { get; set; }
+        public DbSet<Volunteer> Volunteers { get; set; }
 
-		public DbSet<Survey> Surveys { get; set; }
-		public DbSet<SurveyQuestion> SurveyQuestions { get; set; }
-		public DbSet<SurveyAnswerChoice> SurveyAnswerChoices { get; set; }
+        public DbSet<Survey> Surveys { get; set; }
+        public DbSet<SurveyQuestion> SurveyQuestions { get; set; }
+        public DbSet<SurveyAnswerChoice> SurveyAnswerChoices { get; set; }
 
-		public DbSet<Question> Questions { get; set; }
-		public DbSet<AnswerChoice> AnswerChoices { get; set; }
+        public DbSet<Question> Questions { get; set; }
+        public DbSet<AnswerChoice> AnswerChoices { get; set; }
 
-		public DbSet<SurveyResponse> SurveyResponses { get; set; }
-		public DbSet<SurveyResponseAnswer> SurveyResponseAnswers { get; set; }
-		
-		public DbSet<ContactInfo> ContactInfos { get; set; }
-		public DbSet<Contact> Contacts { get; set; }
+        public DbSet<SurveyResponse> SurveyResponses { get; set; }
+        public DbSet<SurveyResponseAnswer> SurveyResponseAnswers { get; set; }
+        
+        public DbSet<ContactInfo> ContactInfos { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
 
-		protected override void OnModelCreating(DbModelBuilder modelBuilder)
-		{
-			Database.SetInitializer(new MigrateDatabaseToLatestVersion<PITCSurveyContext, Migrations.Configuration>());
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<PITCSurveyContext, Migrations.Configuration>());
 
-			//modelBuilder.Entity<Question>().HasMany(q => q.AnswerChoices).WithMany().Map(m => m.ToTable("QuestionAnswerChoices"));
-			modelBuilder.Entity<SurveyQuestion>().HasMany(q => q.AnswerChoices).WithRequired(a => a.SurveyQuestion).Map(m => m.ToTable("SurveyAnswerChoices"));
+            //modelBuilder.Entity<Question>().HasMany(q => q.AnswerChoices).WithMany().Map(m => m.ToTable("QuestionAnswerChoices"));
+            modelBuilder.Entity<SurveyQuestion>().HasMany(q => q.AnswerChoices).WithRequired(a => a.SurveyQuestion).Map(m => m.ToTable("SurveyAnswerChoices"));
 
-			//modelBuilder.Entity<SurveyQuestion>().HasOptional(q => q.DependentQuestion);
+            //modelBuilder.Entity<SurveyQuestion>().HasOptional(q => q.DependentQuestion);
 
-			modelBuilder.Entity<SurveyQuestion>().HasMany(q => q.DependentQuestionAnswers).WithMany().Map(m => m.ToTable("SurveyQuestionDependentAnswers"));
+            modelBuilder.Entity<SurveyQuestion>().HasMany(q => q.DependentQuestionAnswers).WithMany().Map(m => m.ToTable("SurveyQuestionDependentAnswers"));
 
-			modelBuilder.Entity<SurveyQuestion>().HasRequired(q => q.Question).WithMany().WillCascadeOnDelete(false);
-			modelBuilder.Entity<SurveyQuestion>().HasRequired(q => q.Survey).WithMany(s => s.SurveyQuestions).WillCascadeOnDelete(false);
-		}
-	}
+            modelBuilder.Entity<SurveyQuestion>().HasRequired(q => q.Question).WithMany().WillCascadeOnDelete(false);
+            modelBuilder.Entity<SurveyQuestion>().HasRequired(q => q.Survey).WithMany(s => s.SurveyQuestions).WillCascadeOnDelete(false);
+        }
+    }
 }
 
 /*

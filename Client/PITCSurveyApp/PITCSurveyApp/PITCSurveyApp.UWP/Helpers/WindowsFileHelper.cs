@@ -7,7 +7,8 @@ using Windows.Storage;
 using PITCSurveyApp.Helpers;
 using Xamarin.Forms;
 
-[assembly: Dependency(typeof(PITCSurveyApp.UWP.Helpers.WindowsFileHelper))]
+[assembly: Dependency(typeof(PITCSurveyApp.UWP.Helpers.WindowsFileHelper))]
+
 namespace PITCSurveyApp.UWP.Helpers
 {
     class WindowsFileHelper : IFileHelper
@@ -16,9 +17,9 @@ namespace PITCSurveyApp.UWP.Helpers
         {
             var localFolder = ApplicationData.Current.LocalFolder;
 
-			try
+            try
             {
-				await localFolder.GetFileAsync(filename);
+                await localFolder.GetFileAsync(filename);
             }
             catch (FileNotFoundException)
             {
@@ -63,5 +64,5 @@ namespace PITCSurveyApp.UWP.Helpers
             var storageFile = await localFolder.GetFileAsync(filename);
             await storageFile.DeleteAsync();
         }
-	}
+    }
 }
